@@ -1,0 +1,85 @@
+/***** Part 1 - Conceptual *****
+
+- What is a CSS selector? Please give an example.
+Selects the HTML elements to be styled.
+HTML tag names like a, body and h1 can be selectors.
+
+- What is a CSS Declaration? Please give an example.
+The collection of properties and values used to style selected elements.
+An example is { color: mediumpurple; text-align: center; }
+
+- What is a CSS Property? Please give an example.
+Placed before the colon, the property is the name of the style to be changed.
+Examples are color, text-decoration, font-family, border, display.
+
+- What is a CSS Value? Please give an example.
+Placed after the colon, the value is the desired choice for the property.
+Examples are 1.5rem, cornflowerblue, center, linear-gradient(pink, white).
+
+- What are the three ways to include CSS?
+1. An external CSS file using <link> tag in the <head> element
+2. CSS code in a <style> element
+3. Inline styles in an element's style= attribute
+
+- What is the difference bettwen rgb and rgba?
+rgba adds an alpha channel for transparency
+
+- What is an em?
+A CSS length unit representing the font size of the parent element.
+
+- What are the differences between em and rem?
+rem is also a CSS length unit but it represents the font size of the root element.
+
+- How do you include a google font?
+1. Find a good font choice at fonts.google.com then copy the code needed to use it.
+2. Paste the <link> tag into your HTML or the @import code into your CSS.
+3. Specify it in a font-family property.
+*/
+
+/***** Part 2 - Application *****/
+
+/* Can't use a <link> tag since the exercise instructions say don't modify the HTML. :) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+/* For completeness, here's the <link> tag code:
+<head>
+  ...
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+</head>
+*/
+
+body {
+  /* Change the background color of the entire page to be #d0cfcf */
+  background-color: #d0cfcf;
+
+  /* For the body tag, make sure the font-size is 16 pixels */
+  font-size: 16px;
+}
+
+/* Change the font of all paragraph tags to be Roboto Regular (this is a google font). */
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Remove the default underline in all anchor tags on the page */
+a {
+  text-decoration: none;
+}
+
+/* Using CSS, capitalize all h2 elements on the page */
+h2 {
+  text-transform: capitalize;
+}
+
+/* For all section tags, make sure the font-size is 1.5 ems */
+section {
+  font-size: 1.5em;
+}
+
+/* Add a drop shadow to the h1 tag on the page.  Ensure that there is
+5px of horizontal and vertical offset and 2px of blur radius.
+The color of the drop shadow should be red. */
+h1 {
+  text-shadow: 5px 5px 2px red;
+}

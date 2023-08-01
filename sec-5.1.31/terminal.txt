@@ -1,0 +1,74 @@
+Part I
+
+1. make a directory called first
+mkdir first
+
+2. change directory to the first folder
+cd first
+
+3. create a file called person.txt
+touch person.txt
+
+4. change the name of person.txt to another.txt
+mv person.txt another.txt
+
+5. make a copy of the another.txt file and call it copy.txt
+cp another.txt copy.txt
+
+6. remove the copy.txt file
+rm copy.txt
+
+7. make a copy of the first folder and call it second
+cd .. (to get out of the first folder)
+cp -r first second
+
+8. delete the second folder
+rm -rf second
+
+Part II
+
+1. What does the man command do? Type in man rm. How do you scroll and get out?
+The man command displays a command's manual.
+- Up and down arrow keys to scroll up and down
+- Left and right arrow keys scroll sideways
+- Enter also scrolls down the page
+- PageUp and PageDown keys scroll up and down by a screen of text
+- Home and End keys scroll to the start and end of the manual text
+- Q to quit and return to the terminal
+
+2. Look at the man page for ls. What does the -l flag do? What does the -a flag do?
+ls -l: "use a long listing format"
+ls -a: "do not ignore entries starting with ."
+
+3. How do you jump between words in the terminal?
+Windows: CTRL or ALT + left/right arrow keys
+
+4. How do you get to the end of a line in terminal?
+Windows: CTRL+E or the End key
+
+5. How do you move your cursor to the beginning in terminal?
+Windows: CTRL+A or the Home key
+
+6. How do you delete a word (without pressing backspace multiple times) in terminal?
+CTRL+W deletes to the left
+CTRL+Delete deletes to the right
+
+7. What is the difference between a terminal and shell?
+The terminal is the hardware or software device that provides a command-line interface
+to work with the computer.  A shell processes commands and returns output.
+
+8. What is an absolute path?
+Location of a file or directory starting at root: /dir1/dir2/file.ext
+
+9. What is an relative path?
+Location of a file or directory from the current directory: ../../dir1/dir2/file.ext
+
+10. What is a flag? Give three examples of flags you have used.
+Flags change how a command operates.
+-h or --help tells many commands to display a brief help text
+-r is a common flag to tell commands to process recursively through subdirectories
+--upgradable tells apt list to only show upgradable packages
+
+11. What do the r and f flags do with the rm command?
+-r removes files and directories recursively through subdirectories
+-f tells rm to "just do it" ignoring issues like readonly attributes

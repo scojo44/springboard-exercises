@@ -1,0 +1,35 @@
+1. Create the following variables...
+
+   let name = "Scott";
+   const dayOfBirth = 7;
+
+2. See what happens when you have multiple variables of the same name. Which one takes precedence?
+
+   The first one to be declared takes precedence.
+   The second declaration in the same scope causes an error.
+
+3. Write some JavaScript that prompts the user for their favorite color.  Once the user has
+   submitted a favorite color, log that color to the console along with a friendly message.
+
+   let favoriteColor = prompt("Please enter your favorite color:");
+   console.log(`Great color!  You chose ${favoriteColor}.`);
+
+4. Create a string that contains both single quotes and double quotes.
+
+   let tag = '<img src="snowy-mountains.jpeg">';
+   
+5. What is the difference between null and undefined?
+
+   A variable declared without setting a value is undefined while null means it was intentionally
+   set without a value.  Put another way, undefined is like a blank page, while null is the page
+   that says "This page intentionally left blank."
+
+6. What is NaN in JavaScript? What is the typeof NaN?
+
+   NaN means the result of the numerical operation turned out to be not a number, like dividing
+   by 0 or multiplying four by "abc."
+   "typeof NaN" gives "number" even though it means "not a number."
+
+7. You can declare a variable by typing let thing;. What is the value of thing?
+
+   undefined (because we haven't gotten around to assigning it a value.)
