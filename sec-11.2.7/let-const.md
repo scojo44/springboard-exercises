@@ -13,8 +13,8 @@ Quiz
 ----
 > What is the difference between var and let?
 
-var is function-scoped and let is block-scoped.
-var allows redeclaring variables while let does not.
+var is function-scoped and let is block-scoped.  
+var allows redeclaring variables while let does not.  
 var declarations are hoisted while let's declarations take effect where they appear in code.
 
 > What is the difference between var and const?
