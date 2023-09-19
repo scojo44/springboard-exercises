@@ -9,8 +9,7 @@ const double = arr => {
 // One-liner version
 const doubleOneLiner = arr => arr.map(val => val*2);
 
-/* Refactor the following function to use arrow functions: */
-
+/* Refactor the given function to use arrow functions: */
 const squareAndFindEvens = numbers => {
   var squares = numbers.map(num => num ** 2);
   var evens = squares.filter(square => square % 2 === 0);
