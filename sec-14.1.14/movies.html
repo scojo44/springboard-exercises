@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="movies.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <title>Spoiled Apples</title>
+</head>
+<body>
+  <header>
+    <h1>Spoiled Apples!</h1>
+    <p>Seen a movie?  Rate it here.</p>
+  </header>
+
+  <section>
+    <form id="rating-form">
+      <p id="rating-movie">
+        <label for="in-title">Movie:</label>
+        <input type="text" id="in-title" placeholder="Scary Romance XVII" required autofocus>
+      </p>
+      <div id="rating-slider">
+        <p class="rating-worst">Spoiled Apple</p>
+        <div id="labeled-range">
+          <input type="range" id="in-rating" min="0" max="10" list="rating-markers" required>
+          <datalist id="rating-markers">
+            <option value="0" label="0"></option>
+            <option value="2" label="2"></option>
+            <option value="4" label="4"></option>
+            <option value="6" label="6"></option>
+            <option value="8" label="8"></option>
+            <option value="10" label="10"></option>
+          </datalist>
+        </div>
+        <p class="rating-best">Applesauce</p>
+      </div>
+      <button type="submit" id="rate-button">Rate it!</button>
+    </form>
+  </section>
+
+  <section>
+    <table id="movies">
+      <thead>
+        <tr>
+          <th id="rating" class="sort-none">Rating</th>
+          <th id="title" class="sort-none">Movie</th>
+          <th id="delete"></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p id="no-movies">You haven't rated any movies yet</p>
+  </section>
+  <script src="movies.js"></script>
+</body>
+</html>

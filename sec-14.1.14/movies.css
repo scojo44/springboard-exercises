@@ -1,0 +1,48 @@
+form input {
+  width: 20rem;
+}
+form button {
+  font-size: 2rem;
+  padding: 0 .5em;
+  border-radius: 10px;
+  margin-bottom: 1rem ;
+}
+#rating-movie input {
+  width: 30rem;
+}
+#rating-slider {
+  display: flex;
+  align-items: center;
+}
+#labeled-range {
+  display: inline-block;
+}
+#rating-markers {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 .5rem 0 .7rem;
+}
+#movies th#rating {
+  min-width: 5rem;
+}
+#movies th#title {
+  text-align: left;
+}
+#movies th#delete {
+  min-width: 5rem;
+}
+#movies td.rating {
+  text-align: center;
+}
+#movies td.delete {
+  text-align: right;
+}
+.sort-none::after {
+  content: "";
+}
+.sort-asc::after {
+  content: " \25BC";
+}
+.sort-desc::after {
+  content: " \25B2";
+}
