@@ -18,18 +18,18 @@ Simplify the following big O expressions as much as possible:
 
 Step Two: Calculating Time Complexity
 -------------------------------------
-Determine the time complexities for each of the following functions. If you’re not sure what these functions do, copy and paste them into the console and experiment with different inputs!
+Determine the time complexities for each of the following functions.
 
-- logUpTo() Time Complexity: `O(n)`
-- logAtLeast10() Time Complexity: `O(n)`
-- logAtMost10() Time Complexity: `O(1)`
-- onlyElementsAtEvenIndex() Time Complexity: `O(n)`
-- subtotals() Time Complexity: `O(n^2)`
-- vowelCount() Time Complexity: `O(n)`
+- logUpTo() `O(n)`
+- logAtLeast10() `O(n)`
+- logAtMost10() `O(1)`
+- onlyElementsAtEvenIndex() `O(n)`
+- subtotals() `O(n^2)`
+- vowelCount() `O(n)`
 
 Part 3 - Short Answer
 ---------------------
-Answer the following questions
+Answer the following questions.
 
 1. True or false: n^2 + n is O(n^2). `True`
 2. True or false: n^2 * n is O(n^3). `True`
