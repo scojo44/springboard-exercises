@@ -8,7 +8,9 @@ def vowel_count(phrase):
         {'o': 2, 'a': 3, 'e': 2, 'u': 1, 'i': 1}
     """
     counts = {}
-    for letter in phrase.lower():
+    phrase = phrase.lower()
+
+    for letter in phrase:
         if letter in "aeiou":
             counts[letter] = phrase.count(letter)
     return counts

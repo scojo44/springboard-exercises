@@ -15,6 +15,12 @@ def read_file_list(filename):
 
     It will raise an error if the file cannot be found.
     """
+    file = open(filename)
+
+    for line in file:
+        print("- " + line.strip())
+
+    file.close()
 
     # hint: when you read lines of files, there will be a "newline"
     # (end-of-line character) at the end of each line, and you want to
