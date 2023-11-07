@@ -20,6 +20,8 @@ def partition(lst, fn):
         [['hi', 'bye'], [None, 6]]
     """
     result = [[],[]]
+
     for item in lst:
         result[0 if fn(item) else 1].append(item)
+
     return result

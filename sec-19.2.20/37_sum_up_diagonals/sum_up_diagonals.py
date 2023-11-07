@@ -19,14 +19,9 @@ def sum_up_diagonals(matrix):
         30
     """
     sum = 0
-    x = 0
-    y = 0
 
-    while x < len(matrix):
-        sum += matrix[x][y]
-        sum += matrix[len(matrix)-x-1][y]
-        x += 1
-        y += 1
+    for i in range(len(matrix)):
+        sum += matrix[i][i]
+        sum += matrix[i][-1-i]
 
     return sum
-            

@@ -19,5 +19,3 @@ def find_the_duplicate(nums):
         if x in found:
             return x
         found.add(x)
-
-    return None

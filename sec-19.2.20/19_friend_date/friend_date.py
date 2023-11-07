@@ -16,4 +16,4 @@ def friend_date(a, b):
         >>> friend_date(sauron, gandalf)
         True
     """
-    return bool(set(a[2]).intersection(b[2]))
+    return bool(set(a[2]) & set(b[2]))

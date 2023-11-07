@@ -12,7 +12,9 @@ def mode(nums):
         2
     """
     best = (0,0) # (value, value count)
+
     for x in nums:
         if nums.count(x) > best[1]:
             best = (x, nums.count(x))
+
     return best[0]

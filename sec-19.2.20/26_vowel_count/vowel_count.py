@@ -13,4 +13,5 @@ def vowel_count(phrase):
     for letter in phrase:
         if letter in "aeiou":
             counts[letter] = phrase.count(letter)
+
     return counts

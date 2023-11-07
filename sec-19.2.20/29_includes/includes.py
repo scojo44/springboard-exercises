@@ -32,7 +32,6 @@ def includes(collection, sought, start=None):
     """
     if isinstance(collection, set):
         return sought in collection
-    elif isinstance(collection, dict):
+    if isinstance(collection, dict):
         return sought in collection.values()
-    else:
-        return sought in collection[start::]
+    return sought in collection[start:]

@@ -21,11 +21,9 @@ def find_greater_numbers(nums):
     """
     count = 0
 
-    for x in nums:
-        y = nums.index(x) + 1
-        while y < len(nums):
-            if x < nums[y]:
+    for i in range(len(nums)):
+        for j in range(i+1, len(nums)):
+            if nums[i] < nums[j]:
                 count += 1
-            y += 1
 
     return count

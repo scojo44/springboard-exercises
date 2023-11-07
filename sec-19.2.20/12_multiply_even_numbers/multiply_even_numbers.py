@@ -13,7 +13,9 @@ def multiply_even_numbers(nums):
         1
     """
     total = 1
+
     for x in nums:
         if x % 2 == 0:
             total *= x
+
     return total

@@ -27,10 +27,10 @@ def valid_parentheses(parens):
     for p in parens:
         if p == "(":
             open += 1
-        if p == ")":
-            if open == 0:
-                return False
-            else:
-                open -= 1
+        elif p == ")":
+            open -= 1
+
+        if open < 0:
+            return False
 
     return open == 0

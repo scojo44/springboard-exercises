@@ -22,9 +22,11 @@ def sum_pairs(nums, goal):
         ()
     """
     checked = set()
+
     for x in nums:
         diff = goal - x
         if diff in checked:
             return (diff, x)
         checked.add(x)
+
     return ()
