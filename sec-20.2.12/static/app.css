@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+}
+h1 {
+  color: white;
+  background-color: mediumpurple;
+  margin: 0;
+  padding: .5rem 1rem;
+}
+main {
+  margin: 10px;
+}
+form label {
+  display: inline-block;
+  text-align: right;
+  width: 15ex;
+}
+form button {
+  color: white;
+  background-color: cornflowerblue;
+  border: none;
+  border-radius: .2rem;
+  padding: .5rem;
+  margin-left: 17ex;
+}
+.story {
+  border: 3px solid cornflowerblue;
+  border-radius: 10px;
+  padding: .5rem;
+  width: 80%;
+}

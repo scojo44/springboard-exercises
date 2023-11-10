@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="prompt.html">
+  <p>
+    <label>Pick a story:</label>
+    <select id="story">
+      {% for story in stories %}
+      <option value="{{ story.id }}">{{ story.title }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <button>Go!</button>
+</form>
+<script src="/static/app.js"></script>
+{% endblock %}

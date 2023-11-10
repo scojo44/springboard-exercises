@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ story.title }}</h2>
+<form action="/story" method="post">
+  {% for prompt in story.prompts %}
+  <p>
+    <label for="{{ prompt }}">{{ prompt }}:</label>
+    <input id="{{ prompt }}" name="{{ prompt }}" required>
+  </p>
+  {% endfor %}
+  <input type="hidden" name="id" value="{{ story.id }}">
+  <button>Send Answers</button>
+</form>
+{% endblock %}
