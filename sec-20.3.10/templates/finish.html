@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Thanks for taking the {{ survey.title }}!</h2>
+<p>Here are your responses:</p>
+{% for question in survey.questions %}
+  <p class="question">{{ question.question }}</p>
+  <p class="answer">
+    {% if answers[loop.index0].skipped %}
+      <i>You skipped this question</i>
+    {% else %}
+      {{ answers[loop.index0].answer }}.
+    {% endif %}
+    {% if answers[loop.index0].comment %}
+      &nbsp;<i>"{{ answers[loop.index0].comment }}"</i>
+    {% endif %}
+    <a class="change-link" href="/question/{{ loop.index0 }}?edit=True"><button class="change-button">Change</button></a>
+  </p>
+{% endfor %}
+{% endblock %}
