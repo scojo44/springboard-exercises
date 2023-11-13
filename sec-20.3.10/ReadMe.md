@@ -6,7 +6,7 @@
 - [x] Multiple Surveys
 - [x] Allow Comments for Some Questions
 - [x] Much Nicer Thanks Page
-- [x] Prevent Re-Submission
+- [ ] Prevent Re-Submission
 
 ## Other Ideas
 - [ ] Use Bootstrap

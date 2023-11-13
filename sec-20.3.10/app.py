@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash, session, make_response
+from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import surveys
 
@@ -6,29 +6,27 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "gEoCaChInG123"
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 debug = DebugToolbarExtension(app)
-SURVEY_SESSION_KEY = "survey being taken"
-ANSWERS_SESSION_KEY = "survey answers"
+survey_taken = []
+survey_answers = []
 
 @app.route("/")
 def show_landing():
   """Show the survey landing page."""
-  surveys_completed = {}
-  for key,survey in surveys.items():
-    surveys_completed[key] = request.cookies.get(key) == "done"
-  return render_template("landing.html", surveys=surveys, completed=surveys_completed)
+  return render_template("landing.html", surveys=surveys)
 
 @app.route("/start", methods=["POST"])
 def start_survey():
   """Initializes the survey responses session variable"""
-  session[SURVEY_SESSION_KEY] = request.form["survey"]
-  session[ANSWERS_SESSION_KEY] = []
+  # Store the chosen survey in a list since assignment creates a local variable
+  survey_taken.clear()
+  survey_taken.append(request.form["survey"])
   return redirect("/question/0")
 
 @app.route("/question/<int:id>")
 def ask_question(id):
   """Ask a survey question."""
-  survey = surveys[session[SURVEY_SESSION_KEY]]
-  questions_answered = len(session[ANSWERS_SESSION_KEY])
+  survey = surveys[survey_taken[0]]
+  questions_answered = len(survey_answers)
   editing = request.args.get("edit", False) == "True"
 
   # Processed the last question?  Go to the finish page.
@@ -49,7 +47,6 @@ def save_answer():
 
   question_id = int(request.form.get("q-id"))
   editing = request.form.get("edit", False) == "True"
-  answers = session[ANSWERS_SESSION_KEY]
   answer = {
     "answer": request.form.get("answer"),
     "comment": request.form.get("comment"),
@@ -58,21 +55,14 @@ def save_answer():
 
   # Save the answer
   if editing:
-    answers[question_id] = answer
+    survey_answers[question_id] = answer
   else:
-    answers.append(answer)
-
-  session[ANSWERS_SESSION_KEY] = answers
+    survey_answers.append(answer)
 
   # Go to the next question
-  return redirect(f"/question/{len(answers)}")
+  return redirect(f"/question/{len(survey_answers)}")
 
 @app.route("/finish")
 def thank_user():
   """Thank the user for their time answering the survey."""
-  survey = surveys[session[SURVEY_SESSION_KEY]]
-  answers = session[ANSWERS_SESSION_KEY]
-  html = render_template("finish.html", survey=survey, answers=answers)
-  response = make_response(html)
-  response.set_cookie(session[SURVEY_SESSION_KEY], "done")
-  return response
+  return render_template("finish.html", survey=surveys[survey_taken[0]], answers=survey_answers)

@@ -8,10 +8,7 @@
     
     <form action="/start" method="post">
       <input type="hidden" name="survey" value="{{ key }}">
-      <p><button type="submit" {% if completed[key] %} disabled {% endif %}>Start!</button></p>
-      {% if completed[key] %}
-      <p><i>You already filled out this survey.</i></p>
-      {% endif %}
+      <p><button type="submit">Start!</button></p>
     </form>
   </section>
   {% endfor %}

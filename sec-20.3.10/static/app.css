@@ -38,9 +38,6 @@ form button {
   border-radius: 10%;
   padding: .3rem 2rem;
 }
-form button:disabled {
-  background-color: lightgray;
-}
 .change-button {
   color: white;
   background-color: mediumpurple;
