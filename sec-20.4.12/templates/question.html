@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ question.question }}</h2>
+<form action="/answer" method="post">
+  {% for choice in question.choices %}
+  <p>
+    <input type="radio" id="choice{{ loop.index }}" name="answer" value="{{ choice }}" required>
+    <label for="choice{{ loop.index }}">{{ choice }}</label>
+  </p>
+  {% endfor %}
+  <p>
+    <input type="radio" id="skip" name="answer" value="skip" required>
+    <label for="skip">Skip this question</label>
+  </p>
+  {% if question.allow_text %}
+    <textarea name="comment" id="comment" cols="50" rows="10"></textarea>
+  {% endif %}
+  <input type="hidden" name="q-id" value="{{ question_id }}">
+  <input type="hidden" name="edit" value="{{ editing }}">
+  <p><button type="submit">Next</button></p>
+</form>
+{% endblock %}

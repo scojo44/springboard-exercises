@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for key,survey in surveys.items() %}
+  <section class="survey-info">
+    <h2>{{ survey.title }}</h2>
+    <p>{{ survey.instructions }}</p>
+    
+    <form action="/start" method="post">
+      <input type="hidden" name="survey" value="{{ key }}">
+      <p><button type="submit" {% if completed[key] %} disabled {% endif %}>Start!</button></p>
+      {% if completed[key] %}
+      <p><i>You already filled out this survey.</i></p>
+      {% endif %}
+    </form>
+  </section>
+  {% endfor %}
+{% endblock %}

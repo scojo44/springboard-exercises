@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+}
+h1 {
+  color: white;
+  background-color: cornflowerblue;
+  margin-top: 0;
+  padding: 1rem;
+}
+main {
+  margin-left: 1rem;
+}
+.question {
+  font-weight: bold;
+}
+.answer {
+  margin-left: 2rem;
+}
+
+.flashes {
+  list-style: none;
+}
+.error {
+  background-color: lightpink;
+  padding: .3rem;
+}
+.survey-info {
+  border: 3px solid #EEE;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+form button {
+  color: white;
+  background-color: mediumpurple;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10%;
+  padding: .3rem 2rem;
+}
+form button:disabled {
+  background-color: lightgray;
+}
+.change-button {
+  color: white;
+  background-color: mediumpurple;
+  font-style: italic;
+  border: none;
+  border-radius: 10%;
+  font-size: .7rem;
+  margin: 0 1rem;
+}
