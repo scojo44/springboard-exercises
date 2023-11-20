@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block body %}
+<section>
+<table id="boggle">
+  {% for row in gameboard %}
+  <tr>
+    {% for letter in row %}
+      <td>{{ letter }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+<aside id="stats">
+  <h2>Score: <span id="current-score">0</span>
+    - Best: <span id="best-score">{{ high_score }}</span>
+    - Games: <span id="games-played">{{ games_played }}</span>
+  </h2>
+  <h3>Words Found</h3>
+  <ul id="words-found"></ul>
+</aside>
+</section>
+<hr>
+<form id="guess-form">
+  <p>
+    <label for="guess">Your word:</label>
+    <input id="guess-word" placeholder="lexeme" required autofocus>
+    <button type="submit">Check</button>
+  </p>
+  <p id="result"></p>
+</form>
+{% endblock %} 

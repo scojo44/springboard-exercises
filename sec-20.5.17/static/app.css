@@ -1,0 +1,78 @@
+h1 {
+  text-align: center;
+}
+main {
+  background-color: cornflowerblue;
+  border: .2rem outset cornflowerblue;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding: 0 .5rem;
+  width: fit-content;
+}
+section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+#stats {
+  margin: 0 .5rem 0 1rem;
+}
+#stats h2 {
+  margin-top: .5rem;
+}
+#stats h3 {
+  font-size: 1rem;
+  margin: 0 0 .2rem 0;
+  border-bottom: 2px solid blue;
+}
+#words-found {
+  list-style: none;
+  overflow: scroll;
+  margin: 0;
+  padding: 0;
+  height: 15rem;
+}
+#boggle {
+  border-spacing: .5rem;
+}
+#boggle td {
+  color: white;
+  background-color: mediumpurple;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: .2rem .5ex;
+  border: .2rem outset mediumpurple;
+  border-radius: 10px;
+  text-align: center;
+}
+
+form {
+  text-align: center;
+  width: fit-content;
+  margin: .5rem auto;
+}
+form input {
+  color: white;
+  background-color: mediumpurple;
+  border: .2rem inset mediumpurple;
+  border-radius: 10px;
+  padding: .3rem;
+  margin: 0 .5rem;
+}
+form button {
+  color: white;
+  background-color: mediumpurple;
+  border: .2rem outset mediumpurple;
+  border-radius: 10px;
+  padding: .3rem;
+  margin: 0 .5rem;
+}
+
+.result {
+
+}
+.error {
+  background-color: lightpink;
+  border: 3px solid red;
+}
