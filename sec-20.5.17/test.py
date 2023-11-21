@@ -4,15 +4,14 @@ from flask import session
 from boggle import Boggle
 import json
 
-app.config["TESTING"] = True
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
-
 class FlaskTests(TestCase):
 
     # TODO -- write tests for every view function / feature!
     @classmethod
     def setUpClass(cls):
-        """Create a mock gameboard."""
+        """Set debug settings and create a mock gameboard."""
+        app.config["TESTING"] = True
+        app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
         cls.TEST_BOGGLE_BOARD = [
             [letter for letter in "JIPUL"],
             [letter for letter in "PYCEG"],
