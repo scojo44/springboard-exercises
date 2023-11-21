@@ -17,15 +17,23 @@ debug = DebugToolbarExtension(app)
 boggle_game = Boggle()
 
 @app.route("/")
+def index():
+    return render_template("setup.html")
+
+@app.route("/start", methods=["POST"])
 def setup_game():
     """Create the gameboard and show it."""
-    create_gameboard()
+    rows = int(request.form.get("rows", 5))
+    columns = int(request.form.get("columns", 5))
+    time_limit = int(request.form.get("time-limit", 1))
+    create_gameboard(rows, columns)
     init_stats()
     session[WORDS_FOUND_SKEY] = []
     return render_template("gameboard.html",
                             gameboard=session[GAMEBOARD_SKEY],
                             high_score=session[STATS_SKEY].get(HIGH_SCORE_DKEY, 0),
-                            games_played=session[STATS_SKEY].get(GAMES_PLAYED_DKEY, 0))
+                            games_played=session[STATS_SKEY].get(GAMES_PLAYED_DKEY, 0),
+                            time_limit=time_limit)
 
 def init_stats():
     """Setup the stats object on the session"""
@@ -35,10 +43,9 @@ def init_stats():
             GAMES_PLAYED_DKEY: 0
         }
 
-def create_gameboard():
+def create_gameboard(rows, columns):
     """Create the gameboard and save it to the session."""
-    gameboard = boggle_game.make_board()
-    session[GAMEBOARD_SKEY] = gameboard
+    session[GAMEBOARD_SKEY] = boggle_game.make_board(rows, columns)
 
 @app.route("/guess")
 def guess_word():
@@ -72,4 +79,8 @@ def score_game():
         stats[HIGH_SCORE_DKEY] = new_score
     stats[GAMES_PLAYED_DKEY] += 1
     session[STATS_SKEY] = stats
+    stats["allWords"] = find_all_words()
     return stats
+
+def find_all_words():
+    return [word for word in boggle_game.words if len(word) >= 3 and "ok" == boggle_game.check_valid_word(session[GAMEBOARD_SKEY], word)]

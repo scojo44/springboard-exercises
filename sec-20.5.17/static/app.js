@@ -1,33 +1,19 @@
 class Boggle {
-  constructor() {
+  constructor(timeLimit) {
     this.currentScore = 0;
-    $("#guess-form").on("submit", this.acceptGuess);
+    this.timeLimit = timeLimit;
 
-    // Start a 60-second timer to play the game
-    this.timer = () => setTimeout(async () => {
-      await this.gameOver();
-    }, 60000);
-
-    // Start the timer with the DOM finishes loading
-    $(this.timer)
+    // When the DOM loads, start a timer to play the game (timeLimit in minutes).
+    $(() => setTimeout(this.gameOver, this.timeLimit * 60*1000));
   }
 
-  /** Form submission sends guesses to the server */
-  async acceptGuess(e) {
-    e.preventDefault();
-    const word = $("#guess-word").val();
-    const $result = $("#result");
-    $result.empty();
-    $result.removeClass("error");
-    $("#guess-word").focus().val(""); // Reset the guess input
-
+  async submitGuess(word) {
     try {
       const response = await axios.get("/guess?word=" + word);
-      $result.html(checkGuess(response.data.result, word));
+      Message.show(this.checkGuess(response.data.result, word));
     }
     catch(error) {
-      $result.innerHTML = "Error sending your word to the server: " + error;
-      $result.addClass("error");
+      Message.show("Error sending your word to the server: " + error, "error");
       console.error(error);
     }
   }
@@ -36,8 +22,10 @@ class Boggle {
   checkGuess(result, word) {
     switch(result) {
       case "ok":
-        updateScore(word.length);
-        $("#words-found").prepend(`<li>${word} (${word.length})</li>`);
+        this.updateScore(word.length);
+        $("#words").show();
+        $("#word-separator").show();
+        $("#words-found").append(this.getWordHTML(word));
         return `Good one! ${word} is on the board.<br>You earned ${word.length} points!`;
 
       case "not-on-board":
@@ -51,28 +39,66 @@ class Boggle {
       }
   }
 
+  /** Generate HTML to add a word to the word list. */
+  getWordHTML(word) {
+    return `<li>${word} <span class="word-points">(${word.length})</span></li>`;
+  }
+
   /** Update the score display */
   updateScore(points) {
     this.currentScore += points;
     $("#current-score").text(this.currentScore);
   }
 
-  async gameOver() {
-    $("#result").html(`<h3>Time's up!</h3><p>Way to go!  You scored ${this.currentScore} points.</p>`);
+  gameOver() {
+    Message.show(`<h3>Time's up!</h3><p>Way to go!  You scored ${this.currentScore} points.</p>`);
     $("#guess-word").prop("disabled", true);
     $("#guess-form button").prop("disabled", true);
+    $("#all-words").show();
+    $("#all-words ul").append("<li>Getting all possible words.  This takes a while...</li>")
 
-    try {
-      const response = await axios.post("/finish", {score: this.currentScore});
-      $("#best-score").text(response.data.highScore);
-      $("#games-played").text(response.data.gamesPlayed);
-    }
-    catch(error) {
-      $result.innerHTML = "Error sending your score to the server: " + error;
-      $result.addClass("error");
-      console.error(error);
-    }
+    // A 1ms setTimeout here will allow the above UI changes to happen before calling the API.
+    setTimeout(async function() {
+      try {
+        const response = await axios.post("/finish", {score: this.currentScore});
+        $("#best-score").text(response.data.highScore);
+        $("#games-played").text(response.data.gamesPlayed);
+        $("#all-words ul").empty();
+        for(let word of response.data.allWords)
+          $("#all-words ul").append(game.getWordHTML(word));
+      }
+      catch(error) {
+        Message.show("Error sending your score to the server: " + error, "error");
+        console.error(error);
+      }
+    }, 1)
   }
 }
 
-const game = new Boggle();
+class Message {
+  /** Show a message to the player */
+  static show(message, severity="") {
+    this.clear();
+    $("#result").html(message);
+    if(severity)
+      $("#result").addClass(severity);
+  }
+
+  /** Clear the messages */
+  static clear() {
+    $("#result").empty();
+    $("#result").removeClass();
+  }
+}
+
+const game = new Boggle($("#gameboard").data("timeLimit"));
+
+/** Form submission sends guesses to the server */
+async function acceptGuess(e) {
+  e.preventDefault();
+  const word = $("#guess-word").val();
+  await game.submitGuess(word);
+  $("#guess-word").focus().val(""); // Reset the guess input
+}
+
+$("#guess-form").on("submit", acceptGuess);

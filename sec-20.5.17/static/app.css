@@ -9,33 +9,15 @@ main {
   padding: 0 .5rem;
   width: fit-content;
 }
-section {
+#boggle, #stats {
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
-#stats {
-  margin: 0 .5rem 0 1rem;
-}
-#stats h2 {
-  margin-top: .5rem;
-}
-#stats h3 {
-  font-size: 1rem;
-  margin: 0 0 .2rem 0;
-  border-bottom: 2px solid blue;
-}
-#words-found {
-  list-style: none;
-  overflow: scroll;
-  margin: 0;
-  padding: 0;
-  height: 15rem;
-}
-#boggle {
+#gameboard {
   border-spacing: .5rem;
 }
-#boggle td {
+#gameboard td {
   color: white;
   background-color: mediumpurple;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -46,11 +28,45 @@ section {
   border-radius: 10px;
   text-align: center;
 }
+#words {
+  display: none;
+  margin: 0 .5rem 0 1rem;
+}
+#stats h2 {
+  margin: .5rem;
+}
+#stats h3 {
+  font-size: 1rem;
+  margin: .8rem 0 .2rem 0;
+  border-bottom: 2px solid mediumpurple;
+}
+#word-separator {
+  display: none;
+}
+#words ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 .5rem 0;
+}
+#words li {
+  display: inline;
+  margin-left: .6rem;
+}
+.word-points {
+  color: darkgray;
+}
+#all-words {
+  display: none;
+}
 
 form {
-  text-align: center;
   width: fit-content;
   margin: .5rem auto;
+}
+#guess-form,
+#setup-form h2,
+#setup-form .button-row {
+  text-align: center;
 }
 form input {
   color: white;
@@ -60,19 +76,21 @@ form input {
   padding: .3rem;
   margin: 0 .5rem;
 }
-form button {
+form input[type="number"] {
+  width: 3rem;
+}
+button {
   color: white;
   background-color: mediumpurple;
+  font-weight: bold;
   border: .2rem outset mediumpurple;
   border-radius: 10px;
-  padding: .3rem;
+  padding: .5rem 1rem;
   margin: 0 .5rem;
 }
 
-.result {
-
-}
 .error {
   background-color: lightpink;
   border: 3px solid red;
+  padding: .5rem 1rem;
 }
