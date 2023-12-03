@@ -1,0 +1,26 @@
+CREATE TABLE regions (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+  subdomain VARCHAR(30) UNIQUE NOT NULL
+);
+CREATE TABLE categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(30) UNIQUE NOT NULL,
+  description TEXT,
+  parent_category INT REFERENCES categories ON DELETE CASCADE
+);
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(30) UNIQUE NOT NULL,
+  password_hash CHAR(72) NOT NULL,
+  preferred_region INT REFERENCES regions ON DELETE SET NULL
+);
+CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(30) NOT NULL,
+  text TEXT NOT NULL,
+  location VARCHAR(30),
+  region INT REFERENCES regions NOT NULL ON DELETE CASCADE,
+  category INT REFERENCES categories NOT NULL ON DELETE SET NULL,
+  user INT REFERENCES users NOT NULL ON DELETE CASCADE
+);
