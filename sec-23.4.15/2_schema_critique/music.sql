@@ -1,6 +1,5 @@
 -- from the terminal run:
 -- psql < music.sql
-
 DROP DATABASE IF EXISTS music;
 CREATE DATABASE music;
 \c music

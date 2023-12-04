@@ -1,6 +1,5 @@
 -- from the terminal run:
 -- psql < outer_space.sql
-
 DROP DATABASE IF EXISTS outer_space;
 CREATE DATABASE outer_space;
 \c outer_space
