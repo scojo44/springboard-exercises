@@ -1,0 +1,8 @@
+{% macro input(label, name, placeholder, value="", maxlength="") %}
+<p>
+  <label for="{{ name }}">{{ label }}: </label>
+  <input type="{{ type }}" id="{{ name }}" name="{{ name }}" placeholder="{{ placeholder }}"
+  {% if maxlength %} maxlength="{{ maxlength }}"{% endif %}
+  {% if value %} value="{{ value }}"{% endif %}>
+</p>
+{% endmacro %}

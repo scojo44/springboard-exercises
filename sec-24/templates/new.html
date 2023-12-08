@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% import "macros/labeled_input.html" as forms %}
+{% block title %}Add User{% endblock %}
+
+{% block content %}
+  <form action="/users/new" method="post">
+    {{ forms.input(label='First Name', name='first', placeholder='John', maxlength=30) }}
+    {{ forms.input(label='Last Name', name='last', placeholder='Doe', maxlength=30) }}
+    {{ forms.input(label='Image URL', name='image', placeholder='https://example.com/john-doe.png') }}
+    <p><button type="submit">Add</button></p>
+  </form>
+{% endblock %}
