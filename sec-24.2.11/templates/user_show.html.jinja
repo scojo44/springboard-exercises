@@ -1,0 +1,21 @@
+{% extends 'base.html.jinja' %}
+{% block title %}User {{ user.full_name }}{% endblock %}
+
+{% block content %}
+  <h1>{{ user.full_name }}</h1>
+  <img src="{{ user.image_url }}" alt="{{ user.full_name }}">
+  <p>
+    <form action="/users/{{ user.id }}/delete" method="post">
+      <a href="/users/{{ user.id }}/edit"><button type="button">Edit</button></a>
+      - 
+      <button type="submit">Delete</button>
+    </form>
+  </p>
+  <h2>Posts</h2>
+  <ul>
+    {% for post in user.posts %}
+    <li><a href="/posts/{{ post.id }}">{{ post.title }}</a> <i>{{ post.friendly_date }}</i></li>
+    {% endfor %}
+  </ul>
+  <p><a href="/users/{{ user.id }}/posts/new"><button type="button">Add Post</button></a></p>
+{% endblock %}

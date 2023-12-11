@@ -1,0 +1,12 @@
+{% extends 'base.html.jinja' %}
+{% import "macros/labeled_input.html.jinja" as forms %}
+{% block title %}Add User{% endblock %}
+
+{% block content %}
+  <form action="/users/new" method="post">
+    {{ forms.input(label="First Name", input_name="first", placeholder="John", options="maxlength=30 required") }}
+    {{ forms.input(label="Last Name", input_name="last", placeholder="Doe", options="maxlength=30 required") }}
+    {{ forms.input(label="Image URL", input_name="image", placeholder="https://example.com/john-doe.png") }}
+    <p><button type="submit">Add</button></p>
+  </form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% macro input(label, input_name, placeholder, value="", options="") %}
+<p>
+  <label for="{{ name }}">{{ label }}:</label>
+  <input id="{{ input_name }}" name="{{ input_name }}"
+  {% if placeholder %}
+    placeholder="{{ placeholder }}"
+  {% endif %}
+  {% if value %}
+    value="{{ value }}"
+  {% endif %}
+  {{ options }}>
+</p>
+{% endmacro %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.jinja' %}
+{% import "macros/labeled_input.html.jinja" as forms %}
+{% block title %}
+  Edit "{{ post.title }}"
+{% endblock %}
+
+{% block content %}
+  <h1>Edit Post</h1>
+  <form action="/posts/{{ post.id }}/edit" method="post">
+    {{ forms.input(label="Title", input_name="title", value=post.title, options="maxlength=50 required") }}
+    <label for="content">Content:</label>
+    <br>
+    <textarea id="content" name="content" cols="50" rows="30" required>{{ post.content }}</textarea>
+    <p>
+      <a href="/posts/{{ post.id }}"><button type="button">Cancel</button></a>
+      <button type="submit">Save</button>
+    </p>
+  </form>
+{% endblock %}
