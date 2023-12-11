@@ -66,7 +66,7 @@ def delete_user(id):
         return redirect(f"/users")
     else:
         flash("Error deleting user: " + user.get_last_error(), "error")
-        return redirect(f"/users/{user.id}/edit")
+        return redirect(f"/users/{user.id}")
 
 def get_user_form_data(form):
     first = form.get("first")
