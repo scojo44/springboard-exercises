@@ -15,7 +15,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.String(30))
+    first_name = db.Column(db.String(30), nullable=False)
     last_name = db.Column(db.String(30))
     image_url = db.Column(db.String(200), default=DEFAULT_IMAGE_URL)
     last_error = None
