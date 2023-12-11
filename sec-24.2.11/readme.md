@@ -17,6 +17,7 @@ Part 2
 
 - [x] Make a homepage
 - [x] Show human-friendly dates like April 1, 2024, 10:30 AM
+- [x] Use flash messages
 - [x] Add a [custom 404 page](https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/)
 - [x] When deleting users, [cascade delete](https://docs.sqlalchemy.org/en/20/orm/cascades.html) their posts
 

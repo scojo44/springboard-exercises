@@ -14,7 +14,7 @@
   <h2>Posts</h2>
   <ul>
     {% for post in user.posts %}
-    <li><a href="/posts/{{ post.id }}">{{ post.title }}</a> <i>{{ post.friendly_date }}</i></li>
+    <li><a href="/posts/{{ post.id }}">{{ post.title }}</a> <small><i>{{ post.friendly_date }}</i></small></li>
     {% endfor %}
   </ul>
   <p><a href="/users/{{ user.id }}/posts/new"><button type="button">Add Post</button></a></p>

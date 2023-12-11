@@ -6,7 +6,7 @@
   {% for post in posts %}
   <h2>{{ post.title }}</h2>
   <pre>{{ post.content }}</pre>
-  by <a href="/users/{{ post.user.id }}">{{ post.user.full_name }}</a> <i>{{ post.friendly_date }}</i></li>
+  by <a href="/users/{{ post.user.id }}">{{ post.user.full_name }}</a> <small><i>{{ post.friendly_date }}</i></small></li>
   <hr>
   {% endfor %}
 {% endblock %}
