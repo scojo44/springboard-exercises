@@ -4,9 +4,9 @@
 
 {% block content %}
   <form action="/users/{{ user.id }}/edit" method="post">
-    {{ forms.input(label="First Name", input_name="first", options="maxlength=30 required") }}
-    {{ forms.input(label="Last Name", input_name="last", options="maxlength=30 required") }}
-    {{ forms.input(label="Image URL", input_name="image") }}
+    {{ forms.input(label="First Name", input_name="first", value=user.first_name, options="maxlength=30 required") }}
+    {{ forms.input(label="Last Name", input_name="last", value=user.last_name, options="maxlength=30 required") }}
+    {{ forms.input(label="Image URL", input_name="image", value=user.image_url) }}
     <p>
       <a href="/users"><button type="button">Cancel</button></a>
       <button type="submit">Save</button>
