@@ -1,7 +1,7 @@
 SQLAlchemy Blogly Exercises
 ==========================
 
-Part 1
+[Part 1](../sec-24.1.22)
 ------
 
 ### Further Study
