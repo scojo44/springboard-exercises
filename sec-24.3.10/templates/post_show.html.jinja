@@ -1,0 +1,25 @@
+{% extends 'base.html.jinja' %}
+{% block title %}
+  {{ post.title }} by {{ post.user.full_name }}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.content }}</p>
+  <p class="author">by <a href="/users/{{ post.user.id }}">{{ post.user.full_name }}</a> - <i><small>{{ post.friendly_date }}</small></i></p>
+  <p>
+    <strong>Tags:</strong>
+    {% for tag in post.tags %}
+      <span class="tag">{{ tag.name }}</span>
+    {% endfor %}
+  </p>
+
+  <form>
+    <p>
+      <a href="/users/{{ post.user.id }}"><button type="button">Done</button></a>
+      <a href="/posts/{{ post.id }}/edit"><button type="button">Edit</button></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="submit" formaction="/posts/{{ post.id }}/delete" formmethod="post">Delete</button>
+    </p>
+  </form>
+{% endblock %}

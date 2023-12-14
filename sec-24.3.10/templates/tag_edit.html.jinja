@@ -1,0 +1,21 @@
+{% extends 'base.html.jinja' %}
+{% import "macros/labeled_input.html.jinja" as forms %}
+{% block title %}Edit Tag {{ tag.name }}{% endblock %}
+
+{% block content %}
+  <form action="/tags/{{ tag.id }}/edit" method="post">
+    {{ forms.input(label="Name", input_name="name", value=tag.name, options="maxlength=30 required") }}
+    <ul id="checkbox-posts">
+      {% for post in posts %}
+      <li>
+        <input type="checkbox" id="post-{{ post.id }}" name="posts" value="{{ post.id }}" {% if post in tag.posts %}checked{% endif %}>
+        <label for="post-{{ post.id }}"><i>{{ post.title }}</i> by {{ post.user.full_name }}</label>
+      </li>
+      {% endfor %}
+    </ul>
+    <p>
+      <a href="/tags"><button type="button">Cancel</button></a>
+      <button type="submit">Save</button>
+    </p>
+  </form>
+{% endblock %}
