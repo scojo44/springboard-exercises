@@ -1,0 +1,16 @@
+{% extends "base.html.jinja" %}
+
+{% block main %}
+<h1>{{ pet.name }}</h1>
+
+{% include "partials/pet_details.html.jinja" %}
+<hr>
+
+<h2>Edit {{ pet.name }} <small>(Admins only!)</small></h2>
+
+<form method="post">
+  <p>{{ form.available }} {{ form.available.label }}{{ get_errors(form.available) }}</p>
+  {% include "partials/pet_form.html.jinja" %}
+  <p><button type="submit" class="btn btn-primary">Update</button></p>
+</form>
+{% endblock %}

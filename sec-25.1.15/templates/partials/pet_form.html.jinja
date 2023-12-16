@@ -1,0 +1,5 @@
+{{ form.hidden_tag() }}
+<p class="row">{{ form.photo_url.label(class_="form-label") }} {{ form.photo_url(class_="form-control") }}{{ get_errors(form.photo_url) }}</p>
+{{ form.notes.label(class_="form-label") }}{{ get_errors(form.notes) }}
+<br>
+{{ form.notes(cols=70, rows=20, class_="form-control") }}

@@ -1,0 +1,14 @@
+{% extends "base.html.jinja" %}
+
+{% block main %}
+<h1>Add a Pet</h1>
+<form method="post" class="container-fluid">
+    <p class="row">{{ form.name.label(class_="form-label") }} {{ form.name(class_="form-control") }}{{ get_errors(form.name) }}</p>
+    <div class="row">
+      <p class="col">{{ form.species.label(class_="form-label") }} {{ form.species(class_="form-control") }}{{ get_errors(form.species) }}</p>
+      <p class="col">{{ form.age.label(class_="form-label") }} {{ form.age(class_="form-control") }}{{ get_errors(form.age) }}</p>
+    </div>
+    {% include "partials/pet_form.html.jinja" %}
+    <p><button type="submit" class="btn btn-primary">Add Pet</button></p>
+</form>
+{% endblock %}

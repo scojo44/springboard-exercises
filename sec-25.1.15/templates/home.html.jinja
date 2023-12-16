@@ -1,0 +1,27 @@
+{% extends "base.html.jinja" %}
+
+{% block main %}
+<h2>Pets Available for Adoption</h2>
+<div class="container-fluid">
+  <div class="row">
+    {% for pet in pets if pet.available %}
+    <div class="col">
+      <h3><a href="/{{ pet.id }}">{{ pet.name }}</a></h3>
+      {% include "partials/pet_details.html.jinja" %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<h2>Other Pets</h2>
+<div class="container-fluid">
+  <div class="row">
+    {% for pet in pets if not pet.available %}
+    <div class="col">
+      <h3><a href="/{{ pet.id }}">{{ pet.name }}</a></h3>
+      {% include "partials/pet_details.html.jinja" %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

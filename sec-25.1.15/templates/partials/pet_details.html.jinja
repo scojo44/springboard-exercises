@@ -1,0 +1,17 @@
+{% if pet.photo_url %}
+<a href="/{{ pet.id }}">
+  <img src="{{ pet.image_url }}" alt="{{ pet.species }}:{{ pet.name }} (Available? {{ pet.available }})">
+</a>
+<br>
+{% endif %}
+<p>Species: {{ pet.species }}
+{% if pet.age %}
+<br>Age: {{ pet.age }}
+{% endif %}
+<br>Available?
+  {% if pet.available %}
+    <span class="available">Yes!</span>
+  {% else %}
+    No
+  {% endif %}
+</p>
