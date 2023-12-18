@@ -1,0 +1,18 @@
+{{ form.hidden_tag() }} <!--add type=hidden form fields -->
+
+{% for field in form
+        if field.widget.input_type != 'hidden' %}
+  {% if loop.length > 1 %}
+  <p>
+  {% endif %}
+    {{ field.label }}
+    {{ field }}
+
+    {% for error in field.errors %}
+      {{ error }}
+    {% endfor %}
+  {% if loop.length > 1 %}
+  </p>
+  {% endif %}
+
+{% endfor %}
