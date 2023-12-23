@@ -1,0 +1,11 @@
+{% extends "base.html.jinja" %}
+{% block title %}Update Feedback from {{ user.username }}{% endblock %}
+
+{% block content %}
+  <h1 class="my-2">Update Feedback</h1>
+  <p class="lead">Add more details, fix typos, etc.</p>
+  <form method="post" class="form">
+    {% include "partials/form.html.jinja" %}
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+{% endblock %}

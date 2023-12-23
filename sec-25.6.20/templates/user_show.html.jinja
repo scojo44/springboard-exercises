@@ -1,0 +1,45 @@
+{% extends "base.html.jinja" %}
+{% block title %}User: {{ user.username }}{% endblock %}
+
+{% block content %}
+  <h1 class="my-2">{{ user.username }}</h1>
+
+  <p>{{ user.first_name }} {{ user.last_name }}</p>
+  <p>{{ user.email }}</p>
+  {% if user.username == session.get("username") or admin_logged_in %}
+  <p class="col mb-0">
+    <button type="submit" form="delete-form" formaction="/users/{{ user.username }}/delete" formmethod="post" class="btn btn-outline-danger btn-sm">Delete</button>
+  </p>
+  {% endif %}
+
+  <hr class="mt-0 w-75">
+
+  <h2>Feedback</h2>
+
+  {% for fb in user.feedback %}
+  <div class="container-fluid">
+  <div class="row align-items-center">
+    <p class="col mb-0">
+      <strong>{{ fb.title }}</strong>
+      <br>{{ fb.content }}
+
+      {% if user.username == session.get("username") or admin_logged_in %}
+    </p>
+    <p class="col mb-0">
+      <a href="/feedback/{{ fb.id }}/update"><button type="buton" class="btn btn-outline-primary btn-sm">Edit</button></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="submit" form="delete-form" formaction="/feedback/{{ fb.id }}/delete" formmethod="post" class="btn btn-outline-danger btn-sm">Delete</button>
+      {% endif %}
+    </p>
+  </div>
+  </div>
+
+  <hr class="mt-0 w-75">
+
+  {% endfor %}
+
+  {% if user.username == session.get("username") or admin_logged_in %}
+    <p><a href="/users/{{ user.username }}/feedback/add">Add Feedback</a></p>
+    <form id="delete-form"></form>
+  {% endif %}
+{% endblock %}
