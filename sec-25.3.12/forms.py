@@ -1,4 +1,4 @@
-from  flask_wtf import FlaskForm
+from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, URLField
 from wtforms.validators import InputRequired, URL, Optional, Length, NumberRange
 

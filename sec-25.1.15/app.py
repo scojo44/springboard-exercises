@@ -23,7 +23,7 @@ def list_pets():
 
 @app.route("/<int:id>", methods=["GET", "POST"])
 def show_pet(id):
-    """Show pet details and an for to edit the pet's info.  Also processes the pet update."""
+    """Show pet details and a form to edit the pet's info.  Also processes the pet update."""
     pet = Pet.query.get_or_404(id)
     form = EditPetForm(obj=pet)
 
