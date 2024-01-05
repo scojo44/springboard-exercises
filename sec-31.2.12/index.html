@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Facts</title>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+</head>
+<body>
+  <h1>Javascript Promises</h1>
+
+  <section>
+    <h2>Part 1: Number Facts</h2>
+
+    <h4>1. Make a request to the Numbers API to get a fact about your favorite number</h4>
+    <p id="favorite-number" class="output">Loading Number Facts...</p>
+
+    <h4>2. Figure out how to get data on multiple numbers in a single request.</h4>
+    <p id="multiple-numbers" class="output"></p>
+    
+    <h4>3. Use the API to get 4 facts on your favorite number.</h4>
+    <p id="four-facts" class="output"></p>
+
+    <h2>Part 2: Deck of Cards</h2>
+    
+    <h4>1. Make a request to the Deck of Cards API to request a single card from a newly shuffled deck.</h4>
+    <p id="draw-card" class="output">Shuffling deck...</p>
+    
+    <h4>2. Request a single card from a newly shuffled deck.  Once you have the card, request one more card from the same deck.</h4>
+    <p id="draw-two-cards" class="output">Drawing cards</p>
+    
+    <h4>3. Build an HTML page that lets you draw cards from a deck.</h4>
+    <p>
+      <button id="draw-card-button" type="button" class="btn btn-primary">
+        Draw a Card <span id="cards-left" class="badge text-bg-secondary"></span>
+      </button>
+    </p>
+    <p id="discard-pile"></p>
+    
+    <h2>Further Study: Fun With Pokemon</h2>
+
+    <h4>1. Get the names and URLs for every pokemon in the database with a single request.</h4>
+    <p id="pokezoo" class="output">Catching them all...</p>
+
+    <h4>2. Pick three at random and request their URLs, console.logging the data for each pokemon.</h4>
+    <p id="pokemon-chosen" class="output">I choose...</p>
+
+    <h4>3. Continuing from #2, console.log the pokemon's name, species and species description.</h4>
+    <p id="pokemon-species" class="output">Loading species info...</p>
+
+    <h4>4. <strong>BONUS:</strong> Build a UI to display the name, image, and species description from three randomly chosen pokemon
+    cards.</h4>
+
+    <p><button id="pokemon-button" type="button" class="btn btn-primary" disabled>Catch 3 Pokemon!</button></p>
+
+    <div id="pokemon-cards" class="output row"></div>
+  </section>
+  <script src="numbers.js"></script>
+<!--<script src="cards.js"></script>-->
+  <script src="pokemon.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+body {
+  color: white;
+  background-color: black;
+}
+section {
+  padding: 5px;
+}
+h1 {
+  color: white;
+  background-color: indigo;
+  margin: 0;
+  padding: 5px;
+}
+h2 {
+  margin: 1rem 0 0 5px;
+  padding: 0 0 3px 5px;
+  border-left: 3px solid rebeccapurple;
+  border-bottom: 5px solid rebeccapurple;
+  border-radius: 5px;
+}
+h4 {
+  margin-top: 1rem;
+}
+h5 {
+  margin-top: .5rem;
+}
+.output {
+  border: 3px solid cornflowerblue;
+  border-radius: 3px;
+  padding: 0 8px;
+  margin: 0 3%;
+}
+#discard-pile img {
+  width: 100px;
+}
+#pokezoo {
+  max-height: 8em;
+  overflow-y: auto;
+}
+#pokemon-cards {
+  max-height: 800px;
+  overflow-y: auto;
+}
+.pokemon-card {
+  background-color: darkslateblue;
+  text-align: center;
+  width: 200px;
+  margin: 10px;
+  border: 5px solid cornflowerblue;
+  border-radius: 8px;
+}
+.pokemon-card p {
+  max-height: 150px;
+  overflow-y: auto;
+}
+.pokemon-card img {
+  max-width: 96px;
+}
