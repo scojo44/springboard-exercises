@@ -13,7 +13,7 @@ axios.get(`${CARDS_API_URL}/new/shuffle/?deck_count=1&jokers_enabled=true`)
     const out = new OutPut("draw-card");
     out.append(`Drew a card: ${card.value} of ${card.suit}`);
   })
-  .catch(error => console.log(error.response.data.error));
+  .catch(error => console.log("1. Error drawing a card: ", error.response?.data?.error || error.response?.data || error));
 
 // 2. Request a single card from a newly shuffled deck.
 // Once you have the card, request one more card from the same deck.
@@ -39,7 +39,7 @@ axios.get(`${CARDS_API_URL}/new/shuffle/?deck_count=1&jokers_enabled=true`)
     for(let card of hand)
       out.appendLine(`${card.value} of ${card.suit}`);
   })
-  .catch(error => console.log(error));
+  .catch(error => console.log("2. Error drawing two cards: ", error.response?.data?.error || error.response?.data || error));
 
 // 3. Build an HTML page that lets you draw cards from a deck.
 class DeckOfCards {
@@ -47,23 +47,27 @@ class DeckOfCards {
     this.API_URL = "https://deckofcardsapi.com/api/deck";
     this.deckCount = deckCount;
     this.hasJokers = withJokers;
-    if(!this.getDeckID())
-      this.shuffle();
-  }
 
-  shuffle(){
-    this.shufflePromise = axios.get(`${this.API_URL}/new/shuffle/?deck_count=${this.deckCount}&jokers_enabled=${this.hasJokers}`)
-      .then(res => {
-        this.setDeckID(res.data.deck_id);
-        this.setCardsLeft(res.data.remaining);
-      })
-      .catch(error => console.log(error));
+    if(this.getDeckID())
+      console.log("3. Using existing deck of cards: #" + this.getDeckID);
+    else
+      this.shuffle();
   }
 
   getDeckID = () => localStorage["deckID"];
   setDeckID = id => localStorage["deckID"] = id;
   getCardsLeft = () => localStorage["cardsLeft"];
   setCardsLeft = cl => localStorage["cardsLeft"] = cl;
+
+  shuffle(){
+    this.shufflePromise = axios.get(`${this.API_URL}/new/shuffle/?deck_count=${this.deckCount}&jokers_enabled=${this.hasJokers}`)
+      .then(res => {
+        this.setDeckID(res.data.deck_id);
+        this.setCardsLeft(res.data.remaining);
+        console.log("3. New shuffled deck of cards: #" + this.getDeckID);
+      })
+      .catch(error => console.log("3. Error getting a new deck of cards: ", error.response?.data || error));
+  }
 
   draw(count = 1){
     if(!this.getCardsLeft())
@@ -74,7 +78,10 @@ class DeckOfCards {
       this.setCardsLeft(res.data.remaining);
       return res.data.cards;
     })
-    .catch(error => console.log(error.response.data.error));  // Check this
+    .catch(error => {
+      console.log("3. Error drawing a card: ", error.response?.data?.error || error)
+      return [false]; // An array will be expected.
+    });
   }
 }
 
@@ -86,7 +93,7 @@ cardsLeft.innerText = theDeck.getCardsLeft();
 
 drawButton.addEventListener("click", e => {
   theDeck.draw().then(cards => {
-    const myCard = cards[0];
+    const [myCard] = cards;
     img = document.createElement("img");
     img.src = myCard.image;
     discard.append(img);

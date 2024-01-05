@@ -42,12 +42,17 @@ function getRandomNumber(max) {
 }
 
 // 1. Make a request to the Numbers API to get a fact about your favorite number
-axios.get(new NumbersAPI(FAV_NUMBER).getURL())
-  .then(res => {
-    const output = new OutPut("favorite-number");
-    output.append(`<strong>${res.data.type}:</strong>  ${res.data.text}`);
-  })
-  .catch(error => console.log("1. Error getting a number fact: ", error));
+async function getFavNumberFact() {
+  try {
+    const res = await axios.get(new NumbersAPI(FAV_NUMBER).getURL())
+    const out = new OutPut("favorite-number");
+    out.append(`<strong>${res.data.type}:</strong>  ${res.data.text}`);
+  }
+  catch(error) {
+    console.log("1. Error getting a number fact: ", error);
+  }
+}
+getFavNumberFact();
 
 // 2. Figure out how to get data on multiple numbers in a single request.
 function getSomeNumbers(max){
@@ -65,28 +70,39 @@ function getSomeNumbers(max){
   return numbers;
 }
 
-const numAPI2 = new NumbersAPI(...getSomeNumbers(400));
+async function getFactsOnManyNumbers() {
+  const numAPI2 = new NumbersAPI(...getSomeNumbers(400));
 
-axios.get(numAPI2.getURL())
-  .then(res => {
-    const output = new OutPut("multiple-numbers");
-    
-    output.append(`<h5>${numAPI2.type} facts</h5>`)
+  try {
+    const res = await axios.get(numAPI2.getURL())
+    const out = new OutPut("multiple-numbers");
+    out.append(`<h5>${numAPI2.type} facts</h5>`)
     for(fact in res.data)
-      output.appendLine(`${res.data[fact]}`);
-  })
-  .catch(error => console.log("2. Error getting facts on many numbers: ", error));
+      out.appendLine(`${res.data[fact]}`);
+  }
+  catch(error) {
+    console.log("2. Error getting facts on many numbers: ", error);
+  }
+}
+getFactsOnManyNumbers();
 
 // 3. Use the API to get 4 facts on your favorite number. Once you have them all, put them on the page.
-Promise.all([
-  axios.get(new NumbersAPI(44).getURL("trivia")),
-  axios.get(new NumbersAPI(44).getURL("math")),
-  axios.get(new NumbersAPI(44).getURL("date")),
-  axios.get(new NumbersAPI(44).getURL("year"))
-]).then(responses => {
-    const output = new OutPut("four-facts");
+async function getFourFacts(number) {
+  try {
+    const responses = await Promise.all([
+      axios.get(new NumbersAPI(number).getURL("trivia")),
+      axios.get(new NumbersAPI(number).getURL("math")),
+      axios.get(new NumbersAPI(number).getURL("date")),
+      axios.get(new NumbersAPI(number).getURL("year"))
+    ])
+
+    const out = new OutPut("four-facts");
     for(r of responses){
-      output.appendLine(`<strong>${r.data.type}:</strong>  ${r.data.text}`);
+      out.appendLine(`<strong>${r.data.type}:</strong>  ${r.data.text}`);
     }
-  })
-  .catch(error => console.log("3. Error getting four facts on a number: ", error));
+  }
+  catch(error) {
+    console.log("3. Error getting four facts on a number: ", error);
+  }
+}
+getFourFacts(FAV_NUMBER);
