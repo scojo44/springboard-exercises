@@ -1,6 +1,6 @@
 /** Further Study: Fun With Pokemon */
 POKEMON_API = "https://pokeapi.co/api/v2/pokemon/";
-POKEMON_COUNT = 10;//1302;
+POKEMON_COUNT = 1302;
 
 const catchButton = document.getElementById("pokemon-button");
 let pokezoo;
