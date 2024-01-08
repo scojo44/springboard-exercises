@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.exceptions import Unauthorized
 from models import connect_db, User, Feedback
-from forms import LoginForm, RegisterForm, FeedbackForm
+from forms import LoginForm, RegisterForm, FeedbackForm, DeleteForm
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///feedback'
@@ -71,7 +71,7 @@ def login_user():
             flash("Welcome back!", "success")
             return redirect(f"/users/{user.username}")
         else:
-            flash("Incorrect username and/or password.", "danger")
+            form.username.errors.append("Incorrect username and/or password.")
 
     return render_template("login.html.jinja", form=form)
 
@@ -87,10 +87,11 @@ def logout_user():
 def show_user(username):
     """Display a user's info and feedback."""
     user_logged_in = get_logged_in_user()
+    form = DeleteForm()
 
     if user_logged_in:
         user = User.query.get_or_404(username)
-        return render_template("user_show.html.jinja", user=user, admin_logged_in=user_logged_in.is_admin)
+        return render_template("user_show.html.jinja", form=form, user=user, admin_logged_in=user_logged_in.is_admin)
     else:
         flash("You must be logged in to view user info.", "danger")
         return redirect("/login")
@@ -100,8 +101,12 @@ def delete_user(username):
     """Delete the user and redirect depending on the type user."""
     user_logged_in = get_logged_in_user()
     user_to_delete = User.query.get_or_404(username)
+    form = DeleteForm()
 
     if user_logged_in.username == username or user_logged_in.is_admin:
+        if not form.validate_on_submit():
+            return Unauthorized()
+
         if user_to_delete.delete():
             if user_logged_in.is_admin:
                 flash(f"User {user_to_delete.username} and their feedback have been deleted.", "success")
@@ -196,8 +201,12 @@ def delete_feedback(id):
     """Delete the unwanted feedback."""
     user_logged_in = get_logged_in_user()
     fb = Feedback.query.get_or_404(id)
+    form = DeleteForm()
 
     if user_logged_in.username == fb.username or user_logged_in.is_admin:
+        if not form.validate_on_submit():
+            return Unauthorized()
+
         if fb.delete():
             flash(f"Feedback '{fb.title}' was successfully deleted.", "success")
         else:

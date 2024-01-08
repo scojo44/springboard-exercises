@@ -19,3 +19,6 @@ class FeedbackForm(FlaskForm):
     """Form for adding or updating feedback posts."""
     title = StringField("Title:", validators=[InputRequired(), Length(max=100)])
     content = StringField("Content:", validators=[InputRequired()])
+
+class DeleteForm(FlaskForm):
+    """Form for deleting users and feedback.  No fields; just for the CSRF protection."""
