@@ -19,9 +19,9 @@ async function getOneCard() {
   try {
     // Draw one card
     const res = await axios.get(`${CARDS_API_URL}/${deckID}/draw/?count=1`);
-    const card = res.data.cards[0];
+    const {suit, value} = res.data.cards[0];
     const out = new OutPut("draw-card");
-    out.append(`1. Drew a card: ${card.value} of ${card.suit}`);
+    out.append(`1. Drew a card: ${value} of ${suit}`);
   }
   catch(error) {
     console.log("1. Error drawing a card: ", error.response?.data?.error || error);
@@ -63,8 +63,8 @@ async function getTwoCards() {
   // Display the cards
   const out = new OutPut("draw-two-cards");
   out.appendLine("Here's my cards:")
-  for(let card of hand)
-    out.appendLine(`${card.value} of ${card.suit}`);
+  for(let {suit, value} of hand)
+    out.appendLine(`${value} of ${suit}`);
 }
 getTwoCards();
 
