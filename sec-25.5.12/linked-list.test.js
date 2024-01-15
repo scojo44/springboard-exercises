@@ -1,4 +1,4 @@
-// const LinkedList = require("./linked-list");
+const LinkedList = require("./linked-list");
 
 describe("LL.push", function() {
   it("appends node and increments length", function() {
@@ -172,6 +172,8 @@ describe("LL.reverse", function() { // Added
     expect(lst.toArray()).toEqual([9, 6, 7, 1, 1, 3, 2]);
   });
 });
+
+const combineSortedLists = require("./combine-sorted-lists");
 
 describe("combineSortedLists(ll1, ll2)", function() { // Added
   it("combines two sorted lists", function() {

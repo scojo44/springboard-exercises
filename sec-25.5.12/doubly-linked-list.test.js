@@ -1,4 +1,4 @@
-// const DoublyLinkedList = require("./linked-list");
+const DoublyLinkedList = require("./doubly-linked-list");
 
 describe("DLL.push", function() {
   it("appends node and increments length", function() {
@@ -187,6 +187,8 @@ describe("DLL.reverse", function() { // Added
     expect(lst.toArray()).toEqual([9, 6, 7, 1, 1, 3, 2]);
   });
 });
+
+const combineSortedLists = require("./combine-sorted-lists");
 
 describe("combineSortedLists(dll1, dll2)", function() { // Added
   it("combines two sorted lists", function() {

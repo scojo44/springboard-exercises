@@ -396,4 +396,4 @@ class DoublyLinkedList {
   }
 }
 
-// module.exports = LinkedList;
+module.exports = DoublyLinkedList;
