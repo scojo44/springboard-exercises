@@ -1,4 +1,4 @@
-// const findRotationCount = require("./find-rotation-count")
+const findRotationCount = require("./find-rotation-count")
 
 function findRotatedIndex(nums, x) {
   console.log("Looking for", x, "in", nums)
@@ -47,4 +47,4 @@ function binarySearch(nums, x) {
   return index;
 }
 
-// module.exports = findRotatedIndex
+module.exports = findRotatedIndex

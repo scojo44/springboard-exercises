@@ -23,4 +23,4 @@ function findRotationCount(nums) {
   return pivot
 }
 
-// module.exports = findRotationCount
+module.exports = findRotationCount

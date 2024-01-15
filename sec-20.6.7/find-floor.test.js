@@ -1,4 +1,4 @@
-// const findFloor = require("./find-floor")
+const findFloor = require("./find-floor")
 
 describe("#findFloor", function(){
   it("returns the floor or -1", function(){

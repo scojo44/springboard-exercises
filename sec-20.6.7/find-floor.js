@@ -34,4 +34,4 @@ function findFloor(nums, x) {
   return nums[floor];
 }
 
-// module.exports = findFloor
+module.exports = findFloor

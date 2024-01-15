@@ -1,4 +1,4 @@
-// const countZeroes = require("./count-zeroes")
+const countZeroes = require("./count-zeroes")
 
 describe("#countZeroes", function(){
   it("counts the number of zeroes", function(){

@@ -1,4 +1,4 @@
-// const sortedFrequency = require("./sorted-frequency")
+const sortedFrequency = require("./sorted-frequency")
 
 describe("#sortedFrequency", function(){
   it("returns the frequency", function(){

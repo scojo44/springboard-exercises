@@ -48,4 +48,4 @@ function sortedFrequency(nums, x) {
     return xend - xstart;
 }
 
-// module.exports = sortedFrequency
+module.exports = sortedFrequency

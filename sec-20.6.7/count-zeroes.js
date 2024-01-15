@@ -23,4 +23,4 @@ function countZeroes(binary) {
   return binary.length - middle;
 }
 
-// module.exports = countZeroes
+module.exports = countZeroes
