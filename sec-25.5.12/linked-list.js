@@ -18,21 +18,22 @@ class LinkedList {
     for (let val of vals) this.push(val);
   }
 
-  /** dump(): visualize the whole list. */
+  /** printList(): visualize the whole list. */
 
-  dump(){
+  printList(){
     if(!this.length) { console.log("List is empty!"); return; };
     if(!this.head)   { console.log("Head is null!"); return; };
     if(!this.tail)   { console.log("Tail is null!"); return; };
 
     let output = `[Head:${this.head.val}] > `;
     let current = this.head.next;
-    let safety = 0;
+    let loop = 1;
 
-    while(current && safety < this.length){
-      output += `[${current.val}] > `;
-      current = current.next;
-    }
+    if(this.length > 1)
+      while(current && loop++ < this.length){
+        output += `[${current.val}] > `;
+        current = current.next;
+      }
 
     output = output.replace(/\] > $/, ":Tail]")
     console.log(" LL", output, "Length:"+this.length);
@@ -43,9 +44,9 @@ class LinkedList {
   toArray() {
     const array = [];
     let current = this.head;
-    let safety = 0;
+    let loop = 0;
 
-    while(current && safety < this.length){
+    while(current && loop++ < this.length){
       array.push(current.val);
       current = current.next;
     }
@@ -284,8 +285,9 @@ class LinkedList {
     // Get a sum of all node values.
     let current = this.head;
     let total = 0;
+    let loop = 0;
 
-    while(current){
+    while(current && loop++ < this.length){
       total += current.val;
       current = current.next;
     }

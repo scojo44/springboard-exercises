@@ -16,12 +16,13 @@ class DoublyLinkedList {
     this.tail = null;
     this.length = 0;
 
-    for (let val of vals) this.push(val);
+    for (let val of vals)
+      this.push(val);
   }
 
-  /** dump(): visualize the whole list. */
+  /** printList(): visualize the whole list. */
 
-  dump(){
+  printList(){
     if(!this.length) { console.log("List is empty!"); return; };
     if(!this.head)   { console.log("Head is null!"); return; };
     if(!this.tail)   { console.log("Tail is null!"); return; };
@@ -29,22 +30,25 @@ class DoublyLinkedList {
     // Write out the chain of next nodes.
     let output = `[Head:${this.head.val}] > `;
     let fromHead = this.head.next;
-    let safety = 0;
     
-    while(fromHead && safety++ < this.length){
-      output += `[${fromHead.val}] > `;
-      fromHead = fromHead.next;
-    }
+    if(this.length > 1)
+      while(fromHead && fromHead !== this.head){
+        output += `[${fromHead.val}] > `;
+        fromHead = fromHead.next;
+      }
 
     output = output.replace(/\] > $/, ":Tail]")
     console.log("DLL", output, "Length:"+this.length);
 
+    // Skip the previous node chain if only one node.
+    if(this.length === 1)
+      return;
+
     // Write out the chain of previous nodes.
     output = `    [Head:${this.head.val}]`;
     fromHead = this.head.next;
-    safety = 0;
 
-    while(fromHead.next && safety++ < this.length){
+    while(fromHead.next && fromHead.next !== this.head){
       output += ` < [${fromHead.val}]`;
       fromHead = fromHead.next;
     }
@@ -58,9 +62,8 @@ class DoublyLinkedList {
   toArray() {
     const array = [];
     let current = this.head;
-    let safety = 0;
 
-    while(current && safety < this.length){
+    while(current.next && current.next !== this.head){
       array.push(current.val);
       current = current.next;
     }
@@ -364,7 +367,7 @@ class DoublyLinkedList {
     let current = this.tail;
     let sum = 0;
 
-    while(current){
+    while(current.next && current.next !== this.head){
       sum += current.val;
       current = current.prev;
     }

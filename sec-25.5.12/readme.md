@@ -11,4 +11,5 @@ Further Study
   - [x] Also on doubly linked list
 - [ ] Pivot around value in a linked list
   - [ ] Also on doubly linked list
-- [ ] Circular abstract data type
+- [x] Circular Linked List abstract data type
+- [ ] Circular Array abstract data type
