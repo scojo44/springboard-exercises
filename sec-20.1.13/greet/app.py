@@ -2,10 +2,10 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route("/welcome")
+@app.get("/welcome")
 def welcome():
   return "welcome"
 
-@app.route("/welcome/<place>")
+@app.get("/welcome/<place>")
 def welcome_here(place):
   return "welcome " + place

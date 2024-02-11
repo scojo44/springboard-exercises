@@ -3,25 +3,25 @@ import operations
 
 app = Flask(__name__)
 
-@app.route("/add")
+@app.get("/add")
 def sum():
   """Returns sum of a and b"""
   a,b = get_a_b()
   return f"{a} + {b} = {operations.add(a,b)}"
 
-@app.route("/sub")
+@app.get("/sub")
 def diff():
   """Returns the difference between a and b"""
   a,b = get_a_b()
   return f"{a} - {b} = {operations.sub(a,b)}"
 
-@app.route("/mult")
+@app.get("/mult")
 def proliferate():
   """Returns the product of a and b"""
   a,b = get_a_b()
   return f"{a} * {b} = {operations.mult(a,b)}"
 
-@app.route("/div")
+@app.get("/div")
 def partition():
   """Returns a divided by b"""
   a,b = get_a_b()
