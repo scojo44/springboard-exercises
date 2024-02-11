@@ -6,17 +6,17 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "ABC123-xyz-789"
 debug = DebugToolbarExtension(app)
 
-@app.route("/")
+@app.get("/")
 def index():
   return render_template("index.html", stories=stories)
 
-@app.route("/prompt/<id>")
+@app.get("/prompt/<id>")
 def prompt(id):
   """Ask the user for words"""
   story = get_story_by_id(id)
   return render_template("prompts.html", story=story)
 
-@app.route("/story", methods=["POST"])
+@app.post("/story")
 def generate_story():
   """Show the story with the user's answers"""
   id = request.form.get("id", 1)
