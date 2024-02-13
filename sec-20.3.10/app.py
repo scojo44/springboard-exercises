@@ -9,12 +9,12 @@ debug = DebugToolbarExtension(app)
 survey_taken = []
 survey_answers = []
 
-@app.route("/")
+@app.get("/")
 def show_landing():
   """Show the survey landing page."""
   return render_template("landing.html", surveys=surveys)
 
-@app.route("/start", methods=["POST"])
+@app.post("/start")
 def start_survey():
   """Initializes the survey responses session variable"""
   # Store the chosen survey in a list since assignment creates a local variable
@@ -22,7 +22,7 @@ def start_survey():
   survey_taken.append(request.form["survey"])
   return redirect("/question/0")
 
-@app.route("/question/<int:id>")
+@app.get("/question/<int:id>")
 def ask_question(id):
   """Ask a survey question."""
   survey = surveys[survey_taken[0]]
@@ -41,7 +41,7 @@ def ask_question(id):
   question = survey.questions[id]
   return render_template("question.html", survey=survey, question_id=id, question=question, editing=editing)
 
-@app.route("/answer", methods=["POST"])
+@app.post("/answer")
 def save_answer():
   """Save the user's answers."""
 
@@ -62,7 +62,7 @@ def save_answer():
   # Go to the next question
   return redirect(f"/question/{len(survey_answers)}")
 
-@app.route("/finish")
+@app.get("/finish")
 def thank_user():
   """Thank the user for their time answering the survey."""
   return render_template("finish.html", survey=surveys[survey_taken[0]], answers=survey_answers)

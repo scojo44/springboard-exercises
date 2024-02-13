@@ -13,3 +13,4 @@
 - [x] Allow skipping questions
 - [x] Allow going back to change answers
 - [ ] Web interface to create surveys
+- [x] Migrate to Flask 3.0.2
