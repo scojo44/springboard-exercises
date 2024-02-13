@@ -9,7 +9,7 @@ debug = DebugToolbarExtension(app)
 SURVEY_SESSION_KEY = "survey being taken"
 ANSWERS_SESSION_KEY = "survey answers"
 
-@app.route("/")
+@app.get("/")
 def show_landing():
   """Show the survey landing page."""
   surveys_completed = {}
@@ -17,14 +17,14 @@ def show_landing():
     surveys_completed[key] = request.cookies.get(key) == "done"
   return render_template("landing.html", surveys=surveys, completed=surveys_completed)
 
-@app.route("/start", methods=["POST"])
+@app.post("/start")
 def start_survey():
   """Initializes the survey responses session variable"""
   session[SURVEY_SESSION_KEY] = request.form["survey"]
   session[ANSWERS_SESSION_KEY] = []
   return redirect("/question/0")
 
-@app.route("/question/<int:id>")
+@app.get("/question/<int:id>")
 def ask_question(id):
   """Ask a survey question."""
   survey = surveys[session[SURVEY_SESSION_KEY]]
@@ -43,7 +43,7 @@ def ask_question(id):
   question = survey.questions[id]
   return render_template("question.html", survey=survey, question_id=id, question=question, editing=editing)
 
-@app.route("/answer", methods=["POST"])
+@app.post("/answer")
 def save_answer():
   """Save the user's answers."""
 
@@ -67,7 +67,7 @@ def save_answer():
   # Go to the next question
   return redirect(f"/question/{len(answers)}")
 
-@app.route("/finish")
+@app.get("/finish")
 def thank_user():
   """Thank the user for their time answering the survey."""
   survey = surveys[session[SURVEY_SESSION_KEY]]
