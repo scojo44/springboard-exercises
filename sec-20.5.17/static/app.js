@@ -51,7 +51,7 @@ class Boggle {
   }
 
   gameOver() {
-    Message.show(`<h3>Time's up!</h3><p>Way to go!  You scored ${this.currentScore} points.</p>`);
+    Message.show(`<h3>Time's up!</h3><p>Way to go!  You scored ${game.currentScore} points.</p>`);
     $("#guess-word").prop("disabled", true);
     $("#guess-form button").prop("disabled", true);
     $("#all-words").show();
@@ -60,7 +60,7 @@ class Boggle {
     // A 1ms setTimeout here will allow the above UI changes to happen before calling the API.
     setTimeout(async function() {
       try {
-        const response = await axios.post("/finish", {score: this.currentScore});
+        const response = await axios.post("/finish", {score: game.currentScore});
         $("#best-score").text(response.data.highScore);
         $("#games-played").text(response.data.gamesPlayed);
         $("#all-words ul").empty();
