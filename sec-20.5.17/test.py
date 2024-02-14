@@ -1,12 +1,12 @@
 from unittest import TestCase
-from app import app, GAMEBOARD_SKEY, STATS_SKEY, HIGH_SCORE_DKEY, GAMES_PLAYED_DKEY
+from app import app, GAMEBOARD_SKEY, STATS_SKEY, HIGH_SCORE_DKEY, GAMES_PLAYED_DKEY, WORDS_FOUND_SKEY
 from flask import session
 from boggle import Boggle
 import json
 
 class FlaskTests(TestCase):
+    """Tests for the Boggle app"""
 
-    # TODO -- write tests for every view function / feature!
     @classmethod
     def setUpClass(cls):
         """Set debug settings and create a mock gameboard."""
@@ -23,16 +23,17 @@ class FlaskTests(TestCase):
     def test_create_gameboard(self):
         """Check that HTML for a gameboard was returned."""
         with app.test_client() as client:
-            resp = client.get("/")
+            post_data = {"rows": "3", "columns": "3", "time-limit": "5"}
+            resp = client.post("/start", data=post_data) # Initialize game and session
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('<table id="boggle">', html)
+            self.assertIn('<table id="gameboard" data-time-limit="5">', html)
 
     def test_setup_game(self):
         """Make sure a 5x5 gameboard was saved to the session."""
         with app.test_client() as client:
-            resp = client.get("/")
-            html = resp.get_data(as_text=True)
+            post_data = {"rows": "5", "columns": "5", "time-limit": "5"}
+            resp = client.post("/start", data=post_data) # Initialize game and session
             self.assertEqual(resp.status_code, 200)
             # Check that the gameboard is a 5x5 matrix
             self.assertIsNotNone(session[GAMEBOARD_SKEY])
@@ -50,6 +51,7 @@ class FlaskTests(TestCase):
         """Make sure words are checked correctly."""
         b = self.TEST_BOGGLE_BOARD
         game = Boggle()
+        game.make_board()
         self.assertEqual("ok", game.check_valid_word(b, "python"))
         self.assertEqual("not-on-board", game.check_valid_word(b, "cake"))
         self.assertEqual("not-word", game.check_valid_word(b, "jylos")) # Appears on the board
@@ -60,6 +62,7 @@ class FlaskTests(TestCase):
         with app.test_client() as client:
             with client.session_transaction() as change_session:
                 change_session[GAMEBOARD_SKEY] = self.TEST_BOGGLE_BOARD
+                change_session[WORDS_FOUND_SKEY] = []
             # Try a guess that appears on the board
             resp = client.get("/guess?word=python")
             js = resp.get_data(as_text=True)
@@ -72,11 +75,9 @@ class FlaskTests(TestCase):
     def test_finish(self):
         """Finish should save the score and increment the game count."""
         with app.test_client() as client:
+            client.post("/start") # Initialize game and session
             with client.session_transaction() as change_session:
-                change_session[STATS_SKEY] = {
-                    HIGH_SCORE_DKEY: 0,
-                    GAMES_PLAYED_DKEY: 0
-                }
+                change_session[GAMEBOARD_SKEY] = self.TEST_BOGGLE_BOARD
             # Finish some games, (score, high score, games played)
             self.send_finish_request(client, 45, 45, 1)
             self.send_finish_request(client, 99, 99, 2)
@@ -84,7 +85,9 @@ class FlaskTests(TestCase):
 
     def send_finish_request(self, client, new_score, high_score, games_played):
         """Send request with finished game score."""
+        print("Sending request to finish.  Finding all the words will take awhile...")
         resp = client.post("/finish", json={"score": new_score})
         js = json.loads(resp.get_data(as_text=True))
         self.assertEqual(js[HIGH_SCORE_DKEY], high_score)
         self.assertEqual(js[GAMES_PLAYED_DKEY], games_played)
+        self.assertIn("python", js["allWords"])
