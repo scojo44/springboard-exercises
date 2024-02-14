@@ -9,3 +9,4 @@
 ## Other Ideas
 - [ ] Show timer
 - [x] Show all valid words when time's up
+- [x] Migrate to Flask 3.0.2

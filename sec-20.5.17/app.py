@@ -16,11 +16,11 @@ app.config["SECRET_KEY"] = "FlaskDebugTB-Key"
 debug = DebugToolbarExtension(app)
 boggle_game = Boggle()
 
-@app.route("/")
+@app.get("/")
 def index():
     return render_template("setup.html")
 
-@app.route("/start", methods=["POST"])
+@app.post("/start")
 def setup_game():
     """Create the gameboard and show it."""
     rows = int(request.form.get("rows", 5))
@@ -47,7 +47,7 @@ def create_gameboard(rows, columns):
     """Create the gameboard and save it to the session."""
     session[GAMEBOARD_SKEY] = boggle_game.make_board(rows, columns)
 
-@app.route("/guess")
+@app.get("/guess")
 def guess_word():
     """Accept a guessed word and check if it can be found on the gameboard."""
     word = request.args.get("word")
@@ -69,7 +69,7 @@ def guess_word():
 
     return {"result": result}
 
-@app.route("/finish", methods=["POST"])
+@app.post("/finish")
 def score_game():
     """After the game ends, save the score and keep track of how many games played."""
     new_score = request.json.get("score", 0)
