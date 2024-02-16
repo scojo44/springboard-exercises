@@ -1,14 +1,19 @@
 """Models for Blogly."""
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
-db = SQLAlchemy()
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
+
+class Base(DeclarativeBase):
+    pass
+
+db = SQLAlchemy(model_class=Base)
 
 def connect_db(app):
     """Connect to database."""
-    db.app = app
     db.init_app(app)
-    db.create_all()
+    with app.app_context():
+        db.create_all()
 
 class User(db.Model):
     """User model class."""
@@ -32,8 +37,8 @@ class User(db.Model):
     def save(self):
         """Save the user to the database.  Returns whether the save was successful.
         When False, find out what happened with get_last_error()."""
-        db.session.add(self)
         try:
+            db.session.add(self)
             db.session.commit()
             return True
         except Exception as error:
@@ -44,8 +49,8 @@ class User(db.Model):
     def delete(self):
         """Delete a user from the database.  Returns whether the delete was successful.
         When False, find out what happened with get_last_error()."""
-        User.query.filter_by(id=self.id).delete()
         try:
+            db.session.delete(self)
             db.session.commit()
             return True
         except Exception as error:

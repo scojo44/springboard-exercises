@@ -1,37 +1,42 @@
+import os
+os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
+
 from unittest import TestCase
 from app import app
 from models import db, User
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///blogly_test'
-app.config['SQLALCHEMY_ECHO'] = False
-app.config["TESTING"] = True # Have Flask return real errors w/o HTML
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
+app.testing = True
 
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 class UserViewTests(TestCase):
     """Tests for views with Users."""
 
     def setUp(self):
         """Add sample users"""
-        User.query.delete()
+        with app.app_context():
+            # Clear users table
+            for user in db.session.scalars(db.select(User)):
+                db.session.delete(user)
+            db.session.commit()
 
-        aerith = User(first_name="Aerith", last_name="Gainsborough", image_url="https://upload.wikimedia.org/wikipedia/en/2/2f/Aerith_Gainsborough.png")
-        tifa = User(first_name="Tifa", last_name="Lockhart", image_url="https://upload.wikimedia.org/wikipedia/en/6/61/Tifa_Lockhart_art.png")
-        cloud = User(first_name="Cloud", last_name="Strife", image_url="https://upload.wikimedia.org/wikipedia/en/1/16/Princess_Peach_Stock_Art.png")
-        zelda = User(first_name="Princess", last_name="Zelda", image_url="https://upload.wikimedia.org/wikipedia/en/6/6e/Link_to_the_Past_Zelda.png")
-        db.session.add(aerith)
-        db.session.add(tifa)
-        db.session.add(cloud)
-        db.session.commit()
-        self.aerith_id = aerith.id
-        self.tifa_id = tifa.id
-        self.cloud_id = cloud.id
+            # Create sample users
+            aerith = User(first_name="Aerith", last_name="Gainsborough", image_url="https://upload.wikimedia.org/wikipedia/en/2/2f/Aerith_Gainsborough.png")
+            tifa = User(first_name="Tifa", last_name="Lockhart", image_url="https://upload.wikimedia.org/wikipedia/en/6/61/Tifa_Lockhart_art.png")
+            cloud = User(first_name="Cloud", last_name="Strife", image_url="https://upload.wikimedia.org/wikipedia/en/1/16/Princess_Peach_Stock_Art.png")
+            db.session.add_all([aerith, tifa, cloud])
+            db.session.commit()
+
+            self.aerith_id = aerith.id
+            self.tifa_id = tifa.id
+            self.cloud_id = cloud.id
 
     def tearDown(self):
         """Clear any incomplete transactions."""
-        db.session.rollback()
+        with app.app_context():
+            db.session.rollback()
 
     def test_list_users(self):
         """See that all test users are listed."""
@@ -54,9 +59,12 @@ class UserViewTests(TestCase):
 
     def test_edit_user(self):
         """Make sure editing an existing user works."""
+        with app.app_context():
+            aeris = db.session.get(User, self.aerith_id)
+            self.assertEqual(aeris.first_name, "Aerith")
+
         with app.test_client() as client:
             # Change Aerith's first name to her name in the english version of FF7 in 1997.
-            aeris = User.query.filter_by(first_name="Aerith").first()
             post_data = {"first":"Aeris", "last":aeris.last_name, "image":aeris.image_url}
             resp = client.post(f"/users/{aeris.id}/edit", data=post_data, follow_redirects=True)
             html = resp.get_data(as_text=True)
