@@ -18,7 +18,7 @@ class UserViewTests(TestCase):
         """Add sample users"""
         with app.app_context():
             # Clear users table
-            for user in db.session.scalars(db.select(User)):
+            for user in User.get_all():
                 db.session.delete(user)
             db.session.commit()
 
@@ -60,7 +60,7 @@ class UserViewTests(TestCase):
     def test_edit_user(self):
         """Make sure editing an existing user works."""
         with app.app_context():
-            aeris = db.session.get(User, self.aerith_id)
+            aeris = User.get(self.aerith_id)
             self.assertEqual(aeris.first_name, "Aerith")
 
         with app.test_client() as client:

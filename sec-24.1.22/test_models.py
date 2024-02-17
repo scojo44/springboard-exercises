@@ -18,7 +18,7 @@ class UserTests(TestCase):
         """Add sample users"""
         # Clear users table
         with app.app_context():
-            for user in db.session.scalars(db.select(User)):
+            for user in User.get_all():
                 db.session.delete(user)
             db.session.commit()
 
@@ -40,7 +40,7 @@ class UserTests(TestCase):
         with app.app_context():
             result = self.good_user.save()
             self.assertTrue(result)
-            user = db.session.get(User, self.good_user.id)
+            user = User.get(self.good_user.id)
         self.assertEqual(user.first_name, "Charlie")
         self.assertEqual(user.last_name, "Brown")
         self.assertEqual(user.image_url, DEFAULT_IMAGE_URL)
@@ -60,7 +60,7 @@ class UserTests(TestCase):
             self.assertTrue(result)
             result = self.good_user.delete()
             self.assertTrue(result)
-            self.assertIsNone(db.session.get(User, self.good_user.id))
+            self.assertIsNone(User.get(self.good_user.id))
 
     def test_get_last_error(self):
         """Make sure last_error is set on failures and returned."""

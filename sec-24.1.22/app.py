@@ -17,7 +17,7 @@ def redirect_to_list():
 
 @app.get("/users")
 def list_users():
-    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name)).all()
+    users = User.get_all(db.select(User).order_by(User.last_name, User.first_name))
     return render_template("list.html.jinja", users=users)
 
 @app.get("/users/new")
@@ -37,17 +37,15 @@ def save_new_user():
 
 @app.get("/users/<int:id>")
 def show_info_form(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
-    return render_template("info.html.jinja", user=user)
+    return render_template("info.html.jinja", user=User.get_or_404(id))
 
 @app.get("/users/<int:id>/edit")
 def show_edit_form(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
-    return render_template("edit.html.jinja", user=user)
+    return render_template("edit.html.jinja", user=User.get_or_404(id))
 
 @app.post("/users/<int:id>/edit")
 def update_user(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
+    user = User.get_or_404(id)
     (user.first_name, user.last_name, user.image_url) = get_user_form_data(request.form)
     if(user.save()):
         flash(f"User {user.full_name} updated successfully", "success")
@@ -58,7 +56,7 @@ def update_user(id):
 
 @app.post("/users/<int:id>/delete")
 def delete_user(id):
-    user = db.get_or_404(User, id)
+    user = User.get_or_404(id)
     if(user.delete()):
         flash(f"User {user.full_name} deleted successfully", "success")
         return redirect(f"/users")
