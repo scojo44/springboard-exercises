@@ -19,7 +19,7 @@ class BaseModelTest(TestCase):
         """Add sample users"""
         with app.app_context():
             # Clear users table
-            for user in db.session.scalars(db.select(User)):
+            for user in User.get_all():
                 db.session.delete(user)
             db.session.commit()
 
@@ -98,7 +98,7 @@ class PostTests(BaseModelTest):
             # Now try saving post
             result = self.good_post.save()
             self.assertTrue(result)
-            post = db.session.get(Post, self.good_post.id)
+            post = Post.get(self.good_post.id)
             self.assertEqual(post.user.full_name, "Charlie Brown")
             self.assertEqual(post.title, "Good Grief")
             self.assertIn("Lucy", post.content)

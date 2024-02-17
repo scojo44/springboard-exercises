@@ -18,7 +18,7 @@ class UserViewTests(TestCase):
         """Add sample users"""
         with app.app_context():
             # Clear users table
-            for user in db.session.scalars(db.select(User)):
+            for user in User.get_all():
                 db.session.delete(user)
             db.session.commit()
 
@@ -100,7 +100,7 @@ class UserViewTests(TestCase):
     def test_edit_user(self):
         """Make sure editing an existing user works."""
         with app.app_context():
-            aeris = db.session.get(User, self.aerith_id)
+            aeris = User.get(self.aerith_id)
             self.assertEqual(aeris.first_name, "Aerith")
 
         with app.test_client() as client:
@@ -137,7 +137,7 @@ class UserViewTests(TestCase):
     def test_edit_post(self):
         """Make sure editing an existing post works."""
         with app.app_context():
-            level = db.session.get(Post, self.level_id)
+            level = Post.get(self.level_id)
             self.assertEqual(level.title, "Level Up!")
             self.assertEqual(level.content, "Level 14: Learned Curaga")
 

@@ -16,7 +16,8 @@ connect_db(app)
 
 @app.get("/")
 def show_recent_posts():
-    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc())).fetchmany(5)
+    select = db.select(Post).order_by(Post.created_at.desc()).limit(5)
+    recent = Post.get_all(select)
     return render_template("index.html.jinja", posts=recent)
 
 @app.errorhandler(404)
@@ -29,12 +30,13 @@ def show_not_found(e):
 # Show user
 @app.get("/users")
 def list_users():
-    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name)).all()
+    select = db.select(User).order_by(User.last_name, User.first_name)
+    users = User.get_all(select)
     return render_template("user_list.html.jinja", users=users)
 
 @app.get("/users/<int:id>")
 def show_user_info(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
+    user = User.get_or_404(id)
     return render_template("user_show.html.jinja", user=user)
 
 # Create user
@@ -57,12 +59,12 @@ def save_new_user():
 # Edit user
 @app.get("/users/<int:id>/edit")
 def show_edit_user_form(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
+    user = User.get_or_404(id)
     return render_template("user_edit.html.jinja", user=user)
 
 @app.post("/users/<int:id>/edit")
 def update_user(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
+    user = User.get_or_404(id)
     (user.first_name, user.last_name, user.image_url) = get_user_form_data(request.form)
 
     if(user.save()):
@@ -75,7 +77,7 @@ def update_user(id):
 # Delete user
 @app.post("/users/<int:id>/delete")
 def delete_user(id):
-    user = db.get_or_404(User, id, description="User doesn't exist")
+    user = User.get_or_404(id)
 
     if(user.delete()):
         flash(f"User {user.full_name} deleted successfully", "success")
@@ -97,13 +99,13 @@ def get_user_form_data(form):
 # Show post
 @app.get("/posts/<int:id>")
 def show_post(id):
-    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    post = Post.get_or_404(id)
     return render_template("post_show.html.jinja", post=post)
 
 # Create post
 @app.get("/users/<int:user_id>/posts/new")
 def show_new_post_form(user_id):
-    user = db.get_or_404(User, user_id, description="User doesn't exist")
+    user = User.get_or_404(user_id)
     return render_template("post_new.html.jinja", user=user)
 
 @app.post("/users/<int:user_id>/posts/new")
@@ -121,12 +123,12 @@ def save_new_post(user_id):
 # Edit post
 @app.get("/posts/<int:id>/edit")
 def show_edit_post_form(id):
-    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    post = Post.get_or_404(id)
     return render_template("post_edit.html.jinja", post=post)
 
 @app.post("/posts/<int:id>/edit")
 def update_post(id):
-    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    post = Post.get_or_404(id)
     (post.title, post.content) = get_post_form_data(request.form)
 
     if(post.save()):
@@ -139,7 +141,7 @@ def update_post(id):
 # Delete post
 @app.post("/posts/<int:id>/delete")
 def delete_post(id):
-    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    post = Post.get_or_404(id)
 
     if(post.delete()):
         flash(f"Post '{post.title}' deleted successfully", "success")
