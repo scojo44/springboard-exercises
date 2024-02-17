@@ -8,11 +8,6 @@ DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-
 ##################################################
 class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
-
-    # This line tells SQLAlchemy to not treat this base class as another model.
-    # https://stackoverflow.com/questions/9606551/sqlalchemy-avoiding-multiple-inheritance-and-having-abstract-base-class
-    __abstract__ = True 
-
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
         When False, find out what happened with get_last_error()."""

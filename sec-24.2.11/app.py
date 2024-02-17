@@ -16,7 +16,7 @@ connect_db(app)
 
 @app.get("/")
 def show_recent_posts():
-    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc()).limit(5))
+    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc())).fetchmany(5)
     return render_template("index.html.jinja", posts=recent)
 
 @app.errorhandler(404)
@@ -29,7 +29,7 @@ def show_not_found(e):
 # Show user
 @app.get("/users")
 def list_users():
-    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name))
+    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name)).all()
     return render_template("user_list.html.jinja", users=users)
 
 @app.get("/users/<int:id>")

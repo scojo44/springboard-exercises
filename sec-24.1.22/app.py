@@ -17,7 +17,7 @@ def redirect_to_list():
 
 @app.get("/users")
 def list_users():
-    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name))
+    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name)).all()
     return render_template("list.html.jinja", users=users)
 
 @app.get("/users/new")

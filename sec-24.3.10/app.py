@@ -16,7 +16,7 @@ connect_db(app)
 
 @app.get("/")
 def show_recent_posts():
-    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc()).limit(5))
+    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc())).fetchmany(5)
     return render_template("index.html.jinja", posts=recent)
 
 @app.errorhandler(404)
@@ -29,7 +29,7 @@ def show_not_found(e):
 # Show user
 @app.get("/users")
 def list_users():
-    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name))
+    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name)).all()
     return render_template("user_list.html.jinja", users=users)
 
 @app.get("/users/<int:id>")
@@ -108,7 +108,7 @@ def show_post(id):
 @app.get("/users/<int:user_id>/posts/new")
 def show_new_post_form(user_id):
     user = db.get_or_404(User, user_id, description="User doesn't exist")
-    tags = db.session.scalars(db.select(Tag))
+    tags = db.session.scalars(db.select(Tag)).all()
     return render_template("post_new.html.jinja", user=user, tags=tags)
 
 @app.post("/users/<int:user_id>/posts/new")
@@ -128,7 +128,7 @@ def save_new_post(user_id):
 @app.get("/posts/<int:id>/edit")
 def show_edit_post_form(id):
     post = db.get_or_404(Post, id, description="Post doesn't exist")
-    tags = db.session.scalars(db.select(Tag))
+    tags = db.session.scalars(db.select(Tag)).all()
     return render_template("post_edit.html.jinja", post=post, tags=tags)
 
 @app.post("/posts/<int:id>/edit")
@@ -174,13 +174,13 @@ def show_tag(id):
 
 @app.get("/tags")
 def list_tags():
-    tags = db.session.scalars(db.select(Tag))
+    tags = db.session.scalars(db.select(Tag)).all()
     return render_template("tag_list.html.jinja", tags=tags)
 
 # Create tag
 @app.get("/tags/new")
 def show_new_tag_form():
-    posts = db.session.scalars(db.select(Post))
+    posts = db.session.scalars(db.select(Post)).all()
     return render_template("tag_new.html.jinja", posts=posts)
 
 @app.post("/tags/new")
@@ -205,7 +205,7 @@ def save_new_tag():
 @app.get("/tags/<int:id>/edit")
 def show_edit_tag_form(id):
     tag = db.get_or_404(Tag, id, description="Tag doesn't exist")
-    posts = db.session.scalars(db.select(Post))
+    posts = db.session.scalars(db.select(Post)).all()
     return render_template("tag_edit.html.jinja", tag=tag, posts=posts)
 
 @app.post("/tags/<int:id>/edit")
