@@ -131,7 +131,7 @@ class Cupcakes {
     }
   }
 
-  async deleteCupcake(cakeID){
+  async deleteCupcake(e, cakeID){
     try{
       const response = await axios.delete("/api/cupcakes/" + cakeID);
   
@@ -156,7 +156,7 @@ class Cupcakes {
 
     switch(e.target.textContent){
       case "Edit":  this.fillEditCupcakeForm(cake);  break;
-      case "Delete":  await this.deleteCupcake(cake.id); break;
+      case "Delete":  await this.deleteCupcake(e, cake.id); break;
       default:  console.log("No button clicked in cupcakeClicked().");
     }
   }
