@@ -1,0 +1,6 @@
+SQLALCHEMY_DATABASE_URI = 'postgresql:///cupcakes_test'
+SQLALCHEMY_ECHO = false
+TESTING = true # Make Flask errors be real errors, sans HTML
+SECRET_KEY = 'FlaskDebugTB-Key-751xyi'
+DEBUG_TB_HOSTS = ["dont-show-debug-toolbar"]
+WTF_CSRF_ENABLED = false

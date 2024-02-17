@@ -1,15 +1,13 @@
 """Flask app for Cupcakes"""
+import os, tomllib
 from flask import Flask, request, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, Cupcake
+from models import db, connect_db, Cupcake
 from forms import CupcakeForm, SearchCupcakesForm
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///cupcakes'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "FlaskDebugTB-Key-751xyi"
-app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
+config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
+app.config.from_file(config_file, load=tomllib.load, text=False)
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -25,24 +23,23 @@ def go_home():
 CUPCAKE_API_PATH = "/api/cupcakes"
 
 # List
-@app.route(CUPCAKE_API_PATH)
+@app.get(CUPCAKE_API_PATH)
 def get_cupcakes():
-    cupcakes = Cupcake.query.all()
-    return {"cupcakes": [cake.serialize() for cake in cupcakes]}
+    return {"cupcakes": [cake.serialize() for cake in Cupcake.get_all()]}
 
-@app.route(CUPCAKE_API_PATH + "/search/<query>")
+@app.get(CUPCAKE_API_PATH + "/search/<query>")
 def search_cupcakes(query):
-    cupcakes = Cupcake.query.filter(Cupcake.flavor.ilike(f"%{query}%")).all()
+    select = db.select(Cupcake).where(Cupcake.flavor.ilike(f"%{query}%"))
+    cupcakes = Cupcake.get_all(select)
     return {"query": query, "cupcakes": [cake.serialize() for cake in cupcakes]}
 
 # Read
-@app.route(CUPCAKE_API_PATH + "/<int:id>")
+@app.get(CUPCAKE_API_PATH + "/<int:id>")
 def get_cupcake(id):
-    cake = Cupcake.query.get_or_404(id)
-    return {"cupcake": cake.serialize()}
+    return {"cupcake": Cupcake.get_or_404(id).serialize()}
 
 # Create
-@app.route(CUPCAKE_API_PATH, methods=["POST"])
+@app.post(CUPCAKE_API_PATH)
 def add_new_cupcake():
     cake_data = {k:v for k,v in request.json.items()}
     new_cake = Cupcake(**cake_data)
@@ -53,9 +50,9 @@ def add_new_cupcake():
         return {"error": new_cake.get_last_error()}, 500
     
 # Update
-@app.route(CUPCAKE_API_PATH + "/<int:id>", methods=["PATCH"])
+@app.patch(CUPCAKE_API_PATH + "/<int:id>")
 def update_cupcake(id):
-    cake = Cupcake.query.get_or_404(id)
+    cake = Cupcake.get_or_404(id)
     cake.flavor = request.json.get("flavor", cake.flavor)
     cake.size   = request.json.get("size",   cake.size)
     cake.rating = request.json.get("rating", cake.rating)
@@ -67,9 +64,9 @@ def update_cupcake(id):
         return {"error": cake.get_last_error()}, 500
 
 # Delete
-@app.route(CUPCAKE_API_PATH + "/<int:id>", methods=["DELETE"])
+@app.delete(CUPCAKE_API_PATH + "/<int:id>")
 def delete_cupcake(id):
-    cake = Cupcake.query.get_or_404(id)
+    cake = Cupcake.get_or_404(id)
 
     if cake.delete():
         return {"cupcake": cake.serialize(), "deleted": True}

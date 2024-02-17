@@ -1,21 +1,26 @@
 """Models for Cupcake app."""
 from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-def connect_db(app):
-    """Connect to database."""
-    db.app = app
-    db.init_app(app)
-    db.create_all()
+from sqlalchemy.orm import DeclarativeBase
 
 #######################################
-class BaseModel(db.Model):
+class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
+    @classmethod
+    def get(cls, primary_key):
+        """Return one instance of a model using the primary key or None if it doesn't exist."""
+        return db.session.get(cls, primary_key)
 
-    # This line tells SQLAlchemy to not treat this base class as another model.
-    # https://stackoverflow.com/questions/9606551/sqlalchemy-avoiding-multiple-inheritance-and-having-abstract-base-class
-    __abstract__ = True
+    @classmethod
+    def get_or_404(cls, primary_key):
+        """Return one instance of a model using the primary key or a 404 error if it doesn't exist."""
+        return db.get_or_404(cls, primary_key, description=f"{cls.__name__} {primary_key} doesn't exist.")
+
+    @classmethod
+    def get_all(cls, select = None):
+        """Return all instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).all()
 
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
@@ -50,8 +55,17 @@ class BaseModel(db.Model):
         return error
 
 #######################################
-class Cupcake(BaseModel):
-    """Model as a yummy cupcake."""
+db = SQLAlchemy(model_class=BaseModel)
+
+def connect_db(app):
+    """Connect to database."""
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+#######################################
+class Cupcake(db.Model):
+    """Model of a yummy cupcake."""
     __tablename__ = "cupcakes"
     GENERIC_CUPCAKE_IMAGE = "https://tinyurl.com/demo-cupcake"
 
