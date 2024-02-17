@@ -34,5 +34,6 @@ Other Tasks
 -----------
 
 - [ ] Add CSS styling
-- [ ] Convert SQLAlchemy 1.x deprecated APIs to 2.0
-
+- [x] Migrate to Flask 3.0.2
+- [ ] Migrate to Flask-SQLAlchemy 3.1.1 and SQLAlchemy 2.0.27
+- [x] Use a TOML file for app config

@@ -1,0 +1,4 @@
+SQLALCHEMY_DATABASE_URI = 'postgresql:///blogly'
+SQLALCHEMY_ECHO = false
+SECRET_KEY = "FlaskDebugTB-Key"
+DEBUG_TB_INTERCEPT_REDIRECTS = false

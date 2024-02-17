@@ -1,14 +1,12 @@
 """Blogly application."""
+import os, tomllib
 from flask import Flask, request, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, User, Post, Tag
+from models import db, connect_db, User, Post, Tag
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = "FlaskDebugTB-Key"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
+app.config.from_file(config_file, load=tomllib.load, text=False)
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
@@ -16,9 +14,9 @@ connect_db(app)
 #######################################
 # Home routes
 
-@app.route("/")
+@app.get("/")
 def show_recent_posts():
-    recent = Post.query.order_by(Post.created_at.desc()).limit(5)
+    recent = db.session.scalars(db.select(Post).order_by(Post.created_at.desc()).limit(5))
     return render_template("index.html.jinja", posts=recent)
 
 @app.errorhandler(404)
@@ -29,29 +27,30 @@ def show_not_found(e):
 # User routes
 
 # Show user
-@app.route("/users")
+@app.get("/users")
 def list_users():
-    users = User.query.order_by(User.last_name, User.first_name).all()
+    users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name))
     return render_template("user_list.html.jinja", users=users)
 
-@app.route("/users/<int:id>")
+@app.get("/users/<int:id>")
 def show_user(id):
-    return render_template("user_show.html.jinja", user=User.query.get_or_404(id))
+    user = db.get_or_404(User, id, description="User doesn't exist")
+    return render_template("user_show.html.jinja", user=user)
 
 # Create user
-@app.route("/users/new")
+@app.get("/users/new")
 def show_new_user_form():
     return render_template("user_new.html.jinja")
 
-@app.route("/users/new", methods=["POST"])
+@app.post("/users/new")
 def save_new_user():
     first, last, image = get_user_form_data(request.form)
     new_user = User(first_name=first, last_name=last, image_url=image)
-    existing_user = User.query.filter_by(first_name=first, last_name=last).one_or_none()
+    existing_user = db.session.scalar(db.select(User).where(User.first_name == first, User.last_name == last))
 
     if existing_user:
         flash(f"User {new_user} already exists.  Here it is.", "error")
-        return redirect(f"/tags/{existing_user.id}")
+        return redirect(f"/users/{existing_user.id}")
 
     if new_user.save():
         flash(f"User {new_user.full_name} added successfully", "success")
@@ -61,13 +60,13 @@ def save_new_user():
         return redirect("/users/new")
 
 # Edit user
-@app.route("/users/<int:id>/edit")
+@app.get("/users/<int:id>/edit")
 def show_edit_user_form(id):
     return render_template("user_edit.html.jinja", user=User.query.get_or_404(id))
 
-@app.route("/users/<int:id>/edit", methods=["POST"])
+@app.post("/users/<int:id>/edit")
 def update_user(id):
-    user = User.query.get_or_404(id)
+    user = db.get_or_404(User, id, description="User doesn't exist")
     user.first_name, user.last_name, user.image_url = get_user_form_data(request.form)
 
     if user.save():
@@ -78,9 +77,9 @@ def update_user(id):
         return redirect(f"/users/{user.id}/edit")
 
 # Delete user
-@app.route("/users/<int:id>/delete", methods=["POST"])
+@app.post("/users/<int:id>/delete")
 def delete_user(id):
-    user = User.query.get_or_404(id)
+    user = db.get_or_404(User, id, description="User doesn't exist")
 
     if user.delete():
         flash(f"User {user.full_name} deleted successfully", "success")
@@ -100,20 +99,23 @@ def get_user_form_data(form):
 # Post routes
 
 # Show post
-@app.route("/posts/<int:id>")
+@app.get("/posts/<int:id>")
 def show_post(id):
-    return render_template("post_show.html.jinja", post=Post.query.get_or_404(id))
+    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    return render_template("post_show.html.jinja", post=post)
 
 # Create post
-@app.route("/users/<int:user_id>/posts/new")
+@app.get("/users/<int:user_id>/posts/new")
 def show_new_post_form(user_id):
-    return render_template("post_new.html.jinja", user=User.query.get_or_404(user_id), tags=Tag.query.all())
+    user = db.get_or_404(User, user_id, description="User doesn't exist")
+    tags = db.session.scalars(db.select(Tag))
+    return render_template("post_new.html.jinja", user=user, tags=tags)
 
-@app.route("/users/<int:user_id>/posts/new", methods=["POST"])
+@app.post("/users/<int:user_id>/posts/new")
 def save_new_post(user_id):
     title, content = get_post_form_data(request.form)
     new_post = Post(title=title, content=content, user_id=user_id)
-    new_post.tags = Tag.query.filter(Tag.id.in_(request.form.getlist("tags"))).all()
+    new_post.tags = db.session.scalars(db.select(Tag).where(Tag.id.in_(request.form.getlist("tags")))).all()
 
     if new_post.save():
         flash(f"Post '{new_post.title}' added successfully", "success")
@@ -123,15 +125,18 @@ def save_new_post(user_id):
         return redirect(f"/users/{user_id}/posts/new")
 
 # Edit post
-@app.route("/posts/<int:id>/edit")
+@app.get("/posts/<int:id>/edit")
 def show_edit_post_form(id):
-    return render_template("post_edit.html.jinja", post=Post.query.get_or_404(id), tags=Tag.query.all())
+    post = db.get_or_404(Post, id, description="Post doesn't exist")
+    tags = db.session.scalars(db.select(Tag))
+    return render_template("post_edit.html.jinja", post=post, tags=tags)
 
-@app.route("/posts/<int:id>/edit", methods=["POST"])
+@app.post("/posts/<int:id>/edit")
 def update_post(id):
-    post = Post.query.get_or_404(id)
+    post = db.get_or_404(Post, id, description="Post doesn't exist")
     post.title, post.content = get_post_form_data(request.form)
-    post.tags = Tag.query.filter(Tag.id.in_(request.form.getlist("tags"))).all()
+    post.tags = db.session.scalars(db.select(Tag).where(Tag.id.in_(request.form.getlist("tags")))).all()
+    # post.tags = Tag.query.filter(Tag.id.in_(request.form.getlist("tags"))).all()
 
     if post.save():
         flash(f"Post '{post.title}' updated successfully", "success")
@@ -141,9 +146,9 @@ def update_post(id):
         return redirect(f"/posts/{post.id}/edit")
 
 # Delete post
-@app.route("/posts/<int:id>/delete", methods=["POST"])
+@app.post("/posts/<int:id>/delete")
 def delete_post(id):
-    post = Post.query.get_or_404(id)
+    post = db.get_or_404(Post, id, description="Post doesn't exist")
 
     if post.delete():
         flash(f"Post '{post.title}' deleted successfully", "success")
@@ -162,29 +167,32 @@ def get_post_form_data(form):
 # Tag routes
 
 # Show tag
-@app.route("/tags/<int:id>")
+@app.get("/tags/<int:id>")
 def show_tag(id):
-    return render_template("tag_show.html.jinja", tag=Tag.query.get_or_404(id))
+    tag = db.get_or_404(Tag, id, description="Tag doesn't exist")
+    return render_template("tag_show.html.jinja", tag=tag)
 
-@app.route("/tags")
+@app.get("/tags")
 def list_tags():
-    return render_template("tag_list.html.jinja", tags=Tag.query.all())
+    tags = db.session.scalars(db.select(Tag))
+    return render_template("tag_list.html.jinja", tags=tags)
 
 # Create tag
-@app.route("/tags/new")
+@app.get("/tags/new")
 def show_new_tag_form():
-    return render_template("tag_new.html.jinja", posts=Post.query.all())
+    posts = db.session.scalars(db.select(Post))
+    return render_template("tag_new.html.jinja", posts=posts)
 
-@app.route("/tags/new", methods=["POST"])
+@app.post("/tags/new")
 def save_new_tag():
     new_tag = Tag(name=request.form.get("name"))
-    existing_tag = Tag.query.filter_by(name=new_tag.name).one_or_none()
+    existing_tag = db.session.scalar(db.select(Tag).where(Tag.name == new_tag.name))
 
     if existing_tag:
         flash(f"Tag '{new_tag}' already exists.  Here it is.", "error")
         return redirect(f"/tags/{existing_tag.id}")
 
-    new_tag.posts = Post.query.filter(Post.id.in_(request.form.getlist("posts"))).all()
+    new_tag.posts = db.session.scalars(db.select(Post).where(Post.id.in_(request.form.getlist("posts")))).all()
 
     if new_tag.save():
         flash(f"Tag '{new_tag.name}' added successfully", "success")
@@ -194,15 +202,17 @@ def save_new_tag():
         return redirect("/tags/new")
 
 # Edit tag
-@app.route("/tags/<int:id>/edit")
+@app.get("/tags/<int:id>/edit")
 def show_edit_tag_form(id):
-    return render_template("tag_edit.html.jinja", tag=Tag.query.get_or_404(id), posts=Post.query.all())
+    tag = db.get_or_404(Tag, id, description="Tag doesn't exist")
+    posts = db.session.scalars(db.select(Post))
+    return render_template("tag_edit.html.jinja", tag=tag, posts=posts)
 
-@app.route("/tags/<int:id>/edit", methods=["POST"])
+@app.post("/tags/<int:id>/edit")
 def update_tag(id):
-    tag = Tag.query.get_or_404(id)
+    tag = db.get_or_404(Tag, id, description="Tag doesn't exist")
     tag.name = request.form.get("name")
-    tag.posts = Post.query.filter(Post.id.in_(request.form.getlist("posts"))).all()
+    tag.posts = db.session.scalars(db.select(Post).where(Post.id.in_(request.form.getlist("posts")))).all()
 
     if tag.save():
         flash(f"Tag '{tag.name}' updated successfully", "success")
@@ -212,9 +222,9 @@ def update_tag(id):
         return redirect(f"/tags/{id}/edit")
 
 # Delete tag
-@app.route("/tags/<int:id>/delete", methods=["POST"])
+@app.post("/tags/<int:id>/delete")
 def delete_tag(id):
-    tag = Tag.query.get_or_404(id)
+    tag = db.get_or_404(Tag, id, description="Tag doesn't exist")
 
     if tag.delete():
         flash(f"Tag '{tag.name}' deleted successfully", "success")

@@ -1,0 +1,6 @@
+SQLALCHEMY_DATABASE_URI = 'postgresql:///blogly_test_24.3'
+SQLALCHEMY_ECHO = false
+SECRET_KEY = "FlaskDebugTB-Key"
+DEBUG_TB_INTERCEPT_REDIRECTS = false
+TESTING = true # Have Flask return real errors w/o HTML
+DEBUG_TB_HOSTS = ["dont-show-debug-toolbar"]

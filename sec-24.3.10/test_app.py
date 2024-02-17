@@ -1,50 +1,58 @@
+import os
+os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
+
 from unittest import TestCase
 from app import app
 from models import db, User, Post, Tag, PostTag
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///blogly_test'
-app.config['SQLALCHEMY_ECHO'] = False
-app.config["TESTING"] = True # Have Flask return real errors w/o HTML
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
+app.testing = True
 
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 ##################################################
 class UserViewTests(TestCase):
     """Tests for views with Users."""
     def setUp(self):
         """Add sample data"""
-        PostTag.query.delete()
-        Tag.query.delete()
-        Post.query.delete()
-        User.query.delete()
+        with app.app_context():
+            # Clear users table
+            for tag in db.session.scalars(db.select(Tag)):
+                db.session.delete(tag)
+            for user in db.session.scalars(db.select(User)):
+                db.session.delete(user)
+            db.session.commit()
 
-        aerith = User(first_name="Aerith", last_name="Gainsborough", image_url="https://upload.wikimedia.org/wikipedia/en/2/2f/Aerith_Gainsborough.png")
-        tifa = User(first_name="Tifa", last_name="Lockhart", image_url="https://upload.wikimedia.org/wikipedia/en/6/61/Tifa_Lockhart_art.png")
-        cloud = User(first_name="Cloud", last_name="Strife", image_url="https://upload.wikimedia.org/wikipedia/en/1/16/Princess_Peach_Stock_Art.png")
-        aerith.save()
-        tifa.save()
-        cloud.save()
+            # Create sample users
+            aerith = User(first_name="Aerith", last_name="Gainsborough", image_url="https://upload.wikimedia.org/wikipedia/en/2/2f/Aerith_Gainsborough.png")
+            tifa = User(first_name="Tifa", last_name="Lockhart", image_url="https://upload.wikimedia.org/wikipedia/en/6/61/Tifa_Lockhart_art.png")
+            cloud = User(first_name="Cloud", last_name="Strife", image_url="https://upload.wikimedia.org/wikipedia/en/1/16/Princess_Peach_Stock_Art.png")
+            aerith.save()
+            tifa.save()
+            cloud.save()
 
-        level = Post(title="Level Up!", content="Level 14: Learned Curaga", user_id=aerith.id)
-        treasure = Post(title="Found a Vermillion Cloak", content="45DEF, Adds Refresh effect", user_id=aerith.id)
-        level.save()
-        treasure.save()
+            # Create sample posts
+            level = Post(title="Level Up!", content="Level 14: Learned Curaga", user_id=aerith.id)
+            treasure = Post(title="Found a Vermillion Cloak", content="45DEF, Adds Refresh effect", user_id=aerith.id)
+            level.save()
+            treasure.save()
 
-        ff7 = Tag(name="FFVII")
-        ff7.save()
+            # Create sample tags
+            ff7 = Tag(name="FFVII")
+            ff7.save()
 
-        self.aerith_id = aerith.id
-        self.tifa_id = tifa.id
-        self.cloud_id = cloud.id
-        self.level_id = level.id
-        self.treasure_id = treasure.id
-        self.ff7_id = ff7.id
+            self.aerith_id = aerith.id
+            self.tifa_id = tifa.id
+            self.cloud_id = cloud.id
+            self.level_id = level.id
+            self.treasure_id = treasure.id
+            self.ff7_id = ff7.id
 
     def tearDown(self):
         """Clear any incomplete transactions."""
-        db.session.rollback()
+        with app.app_context():
+            db.session.rollback()
 
     # Home Tests
     def test_show_recent_posts(self):
@@ -98,9 +106,12 @@ class UserViewTests(TestCase):
 
     def test_edit_user(self):
         """Make sure editing an existing user works."""
+        with app.app_context():
+            aeris = db.session.get(User, self.aerith_id)
+            self.assertEqual(aeris.first_name, "Aerith")
+
         with app.test_client() as client:
             # Change Aerith's first name to her name in the english version of FF7 in 1997.
-            aeris = User.query.get(self.aerith_id)
             post_data = {"first":"Aeris", "last":aeris.last_name, "image":aeris.image_url}
             resp = client.post(f"/users/{aeris.id}/edit", data=post_data, follow_redirects=True)
             html = resp.get_data(as_text=True)
@@ -128,19 +139,23 @@ class UserViewTests(TestCase):
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<h1>Punch</h1>", html)
-            self.assertIn("<pre>Kick</pre>", html)
+            self.assertIn("<p>Kick</p>", html)
             self.assertIn("FFVII", html)
 
     def test_edit_post(self):
         """Make sure editing an existing post and adding a tag works."""
+        with app.app_context():
+            level = db.session.get(Post, self.level_id)
+            self.assertEqual(level.title, "Level Up!")
+            self.assertEqual(level.content, "Level 14: Learned Curaga")
+
         with app.test_client() as client:
-            level = Post.query.get(self.level_id)
             post_data = {"title":"Level Up Again!", "content":"Level 15: Learned Raise", "tags":self.ff7_id}
             resp = client.post(f"/posts/{level.id}/edit", data=post_data, follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<h1>Level Up Again!</h1>", html)
-            self.assertIn("<pre>Level 15:", html)
+            self.assertIn("<p>Level 15:", html)
             self.assertIn("FFVII", html)
 
     def test_delete_post(self):
@@ -168,8 +183,11 @@ class UserViewTests(TestCase):
 
     def test_edit_tag(self):
         """Make sure editing an existing tag and assigning a post works."""
+        with app.app_context():
+            ff7 = db.session.get(Tag, self.ff7_id)
+            self.assertEqual(ff7.name, "FFVII")
+
         with app.test_client() as client:
-            ff7 = Tag.query.get(self.ff7_id)
             post_data = {"name":"FF7", "posts":self.level_id}
             resp = client.post(f"/tags/{ff7.id}/edit", data=post_data, follow_redirects=True)
             html = resp.get_data(as_text=True)
