@@ -1,18 +1,12 @@
 """Models for Blogly."""
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
-db = SQLAlchemy()
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
 
-def connect_db(app):
-    """Connect to database."""
-    db.app = app
-    db.init_app(app)
-    db.create_all()
-
 ##################################################
-class BaseModel(db.Model):
+class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
 
     # This line tells SQLAlchemy to not treat this base class as another model.
@@ -22,8 +16,8 @@ class BaseModel(db.Model):
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
         When False, find out what happened with get_last_error()."""
-        db.session.add(self)
         try:
+            db.session.add(self)
             db.session.commit()
             return True
         except Exception as error:
@@ -31,11 +25,11 @@ class BaseModel(db.Model):
             self.last_error = error
             return False
         
-    def delete(self, query):
+    def delete(self):
         """Delete a model instance from the database.  Returns whether the delete was successful.
         When False, find out what happened with get_last_error()."""
-        query.filter_by(id=self.id).delete()
         try:
+            db.session.delete(self)
             db.session.commit()
             return True
         except Exception as error:
@@ -52,7 +46,16 @@ class BaseModel(db.Model):
         return error
 
 ##################################################
-class User(BaseModel):
+db = SQLAlchemy(model_class=BaseModel)
+
+def connect_db(app):
+    """Connect to database."""
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+##################################################
+class User(db.Model):
     """Model of a Blogly user."""
     __tablename__ = "users"
 
@@ -72,11 +75,8 @@ class User(BaseModel):
         """Return a nicer description of User"""
         return f"<User #{self.id}: {self.first_name} {self.last_name} {self.image_url}>"
     
-    def delete(self):
-        return super().delete(User.query)
-
 ##################################################
-class Post(BaseModel):
+class Post(db.Model):
     """Model of a Blogly posting."""
     __tablename__ = "posts"
 
@@ -96,6 +96,3 @@ class Post(BaseModel):
     def __repr__(self):
         """Return a nicer description of Post"""
         return f"<Post #{self.id}: {self.title[:50]} {self.content[:50]} {self.created_at}>"
-
-    def delete(self):
-        return super().delete(Post.query)

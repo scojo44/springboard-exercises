@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blogly - {% block title %}{% endblock %}</title>
+  <title>Blogly - {% block title required %}{% endblock %}</title>
 </head>
 <body>
 <p>
@@ -21,6 +21,6 @@
   </ul>
   {% endif %}
 {% endwith %}
-{% block content %}{% endblock %}
+{% block content required %}{% endblock %}
 </body>
 </html>
