@@ -1,31 +1,35 @@
+import os
+os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
+
 from unittest import TestCase
 from app import app
 from models import db, Pet
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///adoptpets_test'
-app.config['SQLALCHEMY_ECHO'] = False
-app.config["TESTING"] = True # Have Flask return real errors w/o HTML
-app.config["WTF_CSRF_ENABLED"] = False
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
+app.testing = True
 
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 #######################################
 class PetViewTests(TestCase):
     """Tests for pet adoption views."""
     def setUp(self):
         """Add sample data."""
-        Pet.query.delete()
+        with app.app_context():
+            # Clear pets table
+            for pet in db.session.scalars(db.select(Pet)):
+                db.session.delete(pet)
 
-        kitty = Pet(name="Garfield", species="cat", age=4)
-        kitty.save()
-
-        self.kitty_id = kitty.id
+            # Create a sample pet
+            kitty = Pet(name="Garfield", species="cat", age=4)
+            kitty.save()
+            self.kitty_id = kitty.id
 
     def tearDown(self):
         """Clear any incomplete transactions."""
-        db.session.rollback()
+        with app.app_context():
+            db.session.rollback()
 
     def test_list_pets(self):
         """See that pets appear on the home page."""
@@ -58,8 +62,10 @@ class PetViewTests(TestCase):
 
     def test_show_pet(self):
         """Make sure showing an existing pet works."""
+        with app.app_context():
+            kitty = db.get_or_404(Pet, self.kitty_id)
+
         with app.test_client() as client:
-            kitty = Pet.query.get(self.kitty_id)
             resp = client.get(f"/{kitty.id}")
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
@@ -68,8 +74,10 @@ class PetViewTests(TestCase):
 
     def test_edit_pet(self):
         """Make sure editing an existing pet works."""
+        with app.app_context():
+            kitty = db.get_or_404(Pet, self.kitty_id)
+
         with app.test_client() as client:
-            kitty = Pet.query.get(self.kitty_id)
             post_data = {"notes":"Garfield loves lasagna."}
             resp = client.post(f"/{kitty.id}", data=post_data, follow_redirects=True)
             html = resp.get_data(as_text=True)

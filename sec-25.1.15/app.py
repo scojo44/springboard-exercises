@@ -1,30 +1,29 @@
 """WTForms:  Pet Adoption Agency"""
-from flask import Flask, request, redirect, render_template, flash
+import os, tomllib
+from flask import Flask, redirect, render_template, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, Pet
+from models import db, connect_db, Pet
 from forms import AddPetForm, EditPetForm
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///adoptpets'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "FlaskDebugTB-Key-751xyi"
-app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
+config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
+app.config.from_file(config_file, load=tomllib.load, text=False)
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
 #######################################
 # Routes
-@app.route("/")
+@app.get("/")
 def list_pets():
     """List all pets on the home page."""
-    return render_template("home.html.jinja", pets=Pet.query.all())
+    pets = db.session.scalars(db.select(Pet)).all()
+    return render_template("home.html.jinja", pets=pets)
 
 @app.route("/<int:id>", methods=["GET", "POST"])
 def show_pet(id):
     """Show pet details and a form to edit the pet's info.  Also processes the pet update."""
-    pet = Pet.query.get_or_404(id)
+    pet = db.get_or_404(Pet, id, description="We don't have that pet")
     form = EditPetForm(obj=pet)
 
     if form.validate_on_submit():

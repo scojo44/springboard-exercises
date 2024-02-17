@@ -1,0 +1,4 @@
+SQLALCHEMY_DATABASE_URI = 'postgresql:///adoptpets'
+SQLALCHEMY_ECHO = false
+SECRET_KEY = 'FlaskDebugTB-Key-751xyi'
+DEBUG_TB_INTERCEPT_REDIRECTS = false

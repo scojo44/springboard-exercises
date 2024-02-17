@@ -1,28 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-def connect_db(app):
-    """Connect to database."""
-    db.app = app
-    db.init_app(app)
-    db.create_all()
+from sqlalchemy.orm import DeclarativeBase
 
 known_species = ["cat", "dog", "horse", "bird", "fish", "porcupine"]
 
 #######################################
-class BaseModel(db.Model):
+class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
-
-    # This line tells SQLAlchemy to not treat this base class as another model.
-    # https://stackoverflow.com/questions/9606551/sqlalchemy-avoiding-multiple-inheritance-and-having-abstract-base-class
-    __abstract__ = True
 
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
         When False, find out what happened with get_last_error()."""
-        db.session.add(self)
         try:
+            db.session.add(self)
             db.session.commit()
             return True
         except Exception as error:
@@ -51,7 +40,16 @@ class BaseModel(db.Model):
         return error
 
 #######################################
-class Pet(BaseModel):
+db = SQLAlchemy(model_class=BaseModel)
+
+def connect_db(app):
+    """Connect to database."""
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+#######################################
+class Pet(db.Model):
     """Model of a lovable pet waiting to be adopted."""
     __tablename__ = "pets"
     GENERIC_PET_IMAGE = "https://mylostpetalert.com/wp-content/themes/mlpa-child/images/nophoto.gif"
