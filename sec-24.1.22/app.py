@@ -18,11 +18,11 @@ def redirect_to_list():
 @app.get("/users")
 def list_users():
     users = db.session.scalars(db.select(User).order_by(User.last_name, User.first_name))
-    return render_template("list.html", users=users)
+    return render_template("list.html.jinja", users=users)
 
 @app.get("/users/new")
 def show_new_form():
-    return render_template("new.html")
+    return render_template("new.html.jinja")
 
 @app.post("/users/new")
 def save_new_user():
@@ -38,12 +38,12 @@ def save_new_user():
 @app.get("/users/<int:id>")
 def show_info_form(id):
     user = db.get_or_404(User, id, description="User doesn't exist")
-    return render_template("info.html", user=user)
+    return render_template("info.html.jinja", user=user)
 
 @app.get("/users/<int:id>/edit")
 def show_edit_form(id):
     user = db.get_or_404(User, id, description="User doesn't exist")
-    return render_template("edit.html", user=user)
+    return render_template("edit.html.jinja", user=user)
 
 @app.post("/users/<int:id>/edit")
 def update_user(id):
