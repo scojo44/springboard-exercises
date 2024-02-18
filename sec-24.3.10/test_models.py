@@ -18,8 +18,10 @@ class BaseModelTest(TestCase):
     def setUp(self):
         """Add sample data"""
         with app.app_context():
-            # Clear users table
-            for user in db.session.scalars(db.select(User)):
+            # Clear the tables
+            for tag in Tag.get_all():
+                db.session.delete(tag)
+            for user in User.get_all():
                 db.session.delete(user)
             db.session.commit()
 
@@ -101,7 +103,7 @@ class PostTests(BaseModelTest):
             # Now try saving post
             result = self.good_post.save()
             self.assertTrue(result)
-            post = db.session.get(Post, self.good_post.id)
+            post = Post.get(self.good_post.id)
             self.assertEqual(post.user.full_name, "Charlie Brown")
             self.assertEqual(post.title, "Good Grief")
             self.assertIn("Lucy", post.content)
@@ -125,7 +127,7 @@ class TagTests(BaseModelTest):
         with app.app_context():
             result = self.good_tag.save()
             self.assertTrue(result)
-            tag = db.session.get(Tag, self.good_tag.id)
+            tag = Tag.get(self.good_tag.id)
             self.assertEqual(tag.name, "Peanuts")
 
     def test_save_fail(self):
