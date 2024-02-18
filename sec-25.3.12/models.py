@@ -16,6 +16,13 @@ class BaseModel(DeclarativeBase):
         return db.get_or_404(cls, primary_key, description=f"{cls.__name__} {primary_key} doesn't exist.")
 
     @classmethod
+    def get_first(cls, select = None):
+        """Return the first of several instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).first()
+
+    @classmethod
     def get_all(cls, select = None):
         """Return all instances of a model."""
         if select is None:
