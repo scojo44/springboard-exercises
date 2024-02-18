@@ -41,7 +41,7 @@ class CupcakeViewsTestCase(TestCase):
     def setUp(self):
         """Make demo data."""
         with app.app_context():
-            # Clear users table
+            # Clear the cupcake table
             for cupcake in Cupcake.get_all():
                 db.session.delete(cupcake)
             db.session.commit()
