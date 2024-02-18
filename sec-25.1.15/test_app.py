@@ -18,7 +18,7 @@ class PetViewTests(TestCase):
         """Add sample data."""
         with app.app_context():
             # Clear pets table
-            for pet in db.session.scalars(db.select(Pet)):
+            for pet in Pet.get_all():
                 db.session.delete(pet)
 
             # Create a sample pet
@@ -63,7 +63,7 @@ class PetViewTests(TestCase):
     def test_show_pet(self):
         """Make sure showing an existing pet works."""
         with app.app_context():
-            kitty = db.get_or_404(Pet, self.kitty_id)
+            kitty = Pet.get(self.kitty_id)
 
         with app.test_client() as client:
             resp = client.get(f"/{kitty.id}")
@@ -75,7 +75,7 @@ class PetViewTests(TestCase):
     def test_edit_pet(self):
         """Make sure editing an existing pet works."""
         with app.app_context():
-            kitty = db.get_or_404(Pet, self.kitty_id)
+            kitty = Pet.get(self.kitty_id)
 
         with app.test_client() as client:
             post_data = {"notes":"Garfield loves lasagna."}

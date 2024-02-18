@@ -17,13 +17,12 @@ connect_db(app)
 @app.get("/")
 def list_pets():
     """List all pets on the home page."""
-    pets = db.session.scalars(db.select(Pet)).all()
-    return render_template("home.html.jinja", pets=pets)
+    return render_template("home.html.jinja", pets=Pet.get_all())
 
 @app.route("/<int:id>", methods=["GET", "POST"])
 def show_pet(id):
     """Show pet details and a form to edit the pet's info.  Also processes the pet update."""
-    pet = db.get_or_404(Pet, id, description="We don't have that pet")
+    pet = Pet.get_or_404(id)
     form = EditPetForm(obj=pet)
 
     if form.validate_on_submit():

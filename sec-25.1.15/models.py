@@ -6,6 +6,29 @@ known_species = ["cat", "dog", "horse", "bird", "fish", "porcupine"]
 #######################################
 class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
+    @classmethod
+    def get(cls, primary_key):
+        """Return one instance of a model using the primary key or None if it doesn't exist."""
+        return db.session.get(cls, primary_key)
+
+    @classmethod
+    def get_or_404(cls, primary_key):
+        """Return one instance of a model using the primary key or a 404 error if it doesn't exist."""
+        return db.get_or_404(cls, primary_key, description=f"{cls.__name__} {primary_key} doesn't exist.")
+
+    @classmethod
+    def get_first(cls, select = None):
+        """Return the first of several instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).first()
+
+    @classmethod
+    def get_all(cls, select = None):
+        """Return all instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).all()
 
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
