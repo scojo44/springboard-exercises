@@ -1,22 +1,20 @@
+import os, tomllib
 from flask import Flask, redirect, render_template, request, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug.exceptions import Unauthorized
-from models import connect_db, User, Feedback
+from models import db, connect_db, User, Feedback
 from forms import LoginForm, RegisterForm, FeedbackForm, DeleteForm
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///feedback'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "FlaskDebugTB-Key-751xyi"
-app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
+config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
+app.config.from_file(config_file, load=tomllib.load, text=False)
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
 #######################################
 # Home Routes
-@app.route("/")
+@app.get("/")
 def go_home():
     """Show the home page."""
     return redirect("/login")
@@ -75,7 +73,7 @@ def login_user():
 
     return render_template("login.html.jinja", form=form)
 
-@app.route("/logout", methods=["POST"])
+@app.post("/logout")
 def logout_user():
     session.pop("username")
     flash("You have logged out.  Thanks for playing!", "success")
@@ -83,24 +81,24 @@ def logout_user():
 
 #######################################
 # User Routes
-@app.route("/users/<username>")
+@app.get("/users/<username>")
 def show_user(username):
     """Display a user's info and feedback."""
     user_logged_in = get_logged_in_user()
     form = DeleteForm()
 
     if user_logged_in:
-        user = User.query.get_or_404(username)
+        user = User.get_or_404(username)
         return render_template("user_show.html.jinja", form=form, user=user, admin_logged_in=user_logged_in.is_admin)
     else:
         flash("You must be logged in to view user info.", "danger")
         return redirect("/login")
 
-@app.route("/users/<username>/delete", methods=["POST"])
+@app.post("/users/<username>/delete")
 def delete_user(username):
     """Delete the user and redirect depending on the type user."""
     user_logged_in = get_logged_in_user()
-    user_to_delete = User.query.get_or_404(username)
+    user_to_delete = User.get_or_404(username)
     form = DeleteForm()
 
     if user_logged_in.username == username or user_logged_in.is_admin:
@@ -128,7 +126,7 @@ def delete_user(username):
         raise Unauthorized()
         # return redirect(f"/users/{username}")
 
-@app.route("/secret")
+@app.get("/secret")
 def show_secret():
     """Test page to confirm login works."""
     if session.get("username"):
@@ -137,7 +135,7 @@ def show_secret():
 
 def get_logged_in_user():
     """Helper function to get the logged in user."""
-    return User.query.get(session.get("username"))
+    return User.get(session.get("username"))
 
 #######################################
 # Feedback Routes
@@ -145,7 +143,7 @@ def get_logged_in_user():
 def add_feedback(username):
     """Show the add feedback form and record the user's feedback."""
     user_logged_in = get_logged_in_user()
-    user_with_fb = User.query.get_or_404(username)
+    user_with_fb = User.get_or_404(username)
 
     if user_logged_in.username == username or user_logged_in.is_admin:
         form = FeedbackForm()
@@ -172,7 +170,7 @@ def add_feedback(username):
 def update_feedback(id):
     """Show the update feedback form and save the updated feedback."""
     user_logged_in = get_logged_in_user()
-    fb = Feedback.query.get_or_404(id)
+    fb = Feedback.get_or_404(id)
 
     if user_logged_in.username == fb.username or user_logged_in.is_admin:
         form = FeedbackForm(obj=fb)
@@ -196,11 +194,11 @@ def update_feedback(id):
     else: # Send them to their own user page
         return redirect(f"/users/{session.get('username')}")
 
-@app.route("/feedback/<int:id>/delete", methods=["POST"])
+@app.post("/feedback/<int:id>/delete")
 def delete_feedback(id):
     """Delete the unwanted feedback."""
     user_logged_in = get_logged_in_user()
-    fb = Feedback.query.get_or_404(id)
+    fb = Feedback.get_or_404(id)
     form = DeleteForm()
 
     if user_logged_in.username == fb.username or user_logged_in.is_admin:

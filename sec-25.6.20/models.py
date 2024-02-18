@@ -1,22 +1,36 @@
 """Models for Flask Feedback"""
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
-db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-def connect_db(app):
-    db.app = app
-    db.init_app(app)
-    db.create_all()
-
 #######################################
-class BaseModel(db.Model):
+class BaseModel(DeclarativeBase):
     """Common database methods.  Only make instances with subclasses."""
+    @classmethod
+    def get(cls, primary_key):
+        """Return one instance of a model using the primary key or None if it doesn't exist."""
+        return db.session.get(cls, primary_key)
 
-    # This line tells SQLAlchemy to not treat this base class as another model.
-    # https://stackoverflow.com/questions/9606551/sqlalchemy-avoiding-multiple-inheritance-and-having-abstract-base-class
-    __abstract__ = True
+    @classmethod
+    def get_or_404(cls, primary_key):
+        """Return one instance of a model using the primary key or a 404 error if it doesn't exist."""
+        return db.get_or_404(cls, primary_key, description=f"{cls.__name__} {primary_key} doesn't exist.")
+
+    @classmethod
+    def get_first(cls, select = None):
+        """Return the first of several instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).first()
+
+    @classmethod
+    def get_all(cls, select = None):
+        """Return all instances of a model."""
+        if select is None:
+            select = db.select(cls)
+        return db.session.scalars(select).all()
 
     def save(self):
         """Save the model instance to the database.  Returns whether the save was successful.
@@ -51,7 +65,15 @@ class BaseModel(db.Model):
         return error
 
 #######################################
-class User(BaseModel):
+db = SQLAlchemy(model_class=BaseModel)
+
+def connect_db(app):
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+#######################################
+class User(db.Model):
     """Model of a user of the app"""
     __tablename__ = "users"
 
@@ -59,7 +81,7 @@ class User(BaseModel):
     def register(cls, username, password, email, first, last, is_admin=False):
         """Register new user with hashed password and return the user."""
         # Return False if user exists
-        if User.query.filter_by(username=username).first():
+        if User.get(username):
             raise Exception("That username is already taken.")
 
         hash = bcrypt.generate_password_hash(password).decode("utf8")
@@ -71,7 +93,7 @@ class User(BaseModel):
         
         Returns the authenticated user or False.
         """
-        user = User.query.filter_by(username=username).first()
+        user = User.get(username)
 
         if user and bcrypt.check_password_hash(user.password, password):
             return user
@@ -97,7 +119,7 @@ class User(BaseModel):
         return f"<User {self.username}: {self.first_name} {self.last_name} - {self.email}>"
 
 #######################################
-class Feedback(BaseModel):
+class Feedback(db.Model):
     """Model of a feedback of the app"""
     __tablename__ = "feedback"
 

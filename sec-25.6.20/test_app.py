@@ -1,16 +1,16 @@
 """Flask Feedback Tests"""
+import os
+os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
+
 from unittest import TestCase
 from app import app
 from models import db, User, Feedback
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql:///feedback_test'
-app.config['SQLALCHEMY_ECHO'] = False
-app.config["TESTING"] = True # Have Flask return real errors w/o HTML
-app.config["WTF_CSRF_ENABLED"] = False
-app.config["DEBUG_TB_HOSTS"] = ["dont-show-debug-toolbar"]
+app.testing = True
 
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 #######################################
 class FeedbackViewTests(TestCase):
@@ -18,26 +18,31 @@ class FeedbackViewTests(TestCase):
 
     def setUp(self):
         """Add sample data."""
-        for user in User.query.all():
-            db.session.delete(user)
+        with app.app_context():
+            # Clear the tables
+            for user in User.get_all():
+                db.session.delete(user)
 
-        kitty = User.register(username="garfield", password="lasagna9", email="thecat@garfield.com", first="Garfield", last="The Cat")
-        admin = User.register(username="jon", password="garfield", email="jon@garfield.com", first="Jon", last="Arbuckle", is_admin=True)
-        kitty.save()
-        admin.save()
+            # Add sample users
+            kitty = User.register(username="garfield", password="lasagna9", email="thecat@garfield.com", first="Garfield", last="The Cat")
+            admin = User.register(username="jon", password="garfield", email="jon@garfield.com", first="Jon", last="Arbuckle", is_admin=True)
+            kitty.save()
+            admin.save()
 
-        fb1 = Feedback(title="I love lasagna!", content="Burp!", username=kitty.username)
-        fb2 = Feedback(title="Odie", content="It's fun to push him off the table.", username=kitty.username)
-        fb1.save()
-        fb2.save()
+            # Add sample feedback
+            fb1 = Feedback(title="I love lasagna!", content="Burp!", username=kitty.username)
+            fb2 = Feedback(title="Odie", content="It's fun to push him off the table.", username=kitty.username)
+            fb1.save()
+            fb2.save()
 
-        self.kitty_username = kitty.username
-        self.fb1_id = fb1.id
-        self.fb2_id = fb2.id
+            self.kitty_username = kitty.username
+            self.fb1_id = fb1.id
+            self.fb2_id = fb2.id
 
     def tearDown(self):
         """Clear any incomplete transactions."""
-        db.session.rollback()
+        with app.app_context():
+            db.session.rollback()
 
     def test_register_user_form(self):
         """Make sure the register form loads."""
