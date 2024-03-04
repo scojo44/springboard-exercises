@@ -51,7 +51,7 @@ stories = [
     ),
     Story(4, "The Fact",
         ["verb", "noun"],
-        """The fact that no one {verb}s you doens't mean you're a {noun}"""
+        """The fact that no one {verb}s you doesn't mean you're a {noun}"""
     ),
     Story(5, "How I Grew Up",
         ["plural_noun", "verb", "noun"],
