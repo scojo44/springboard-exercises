@@ -1,22 +1,19 @@
-from flask import Flask, request, render_template
-from flask_debugtoolbar import DebugToolbarExtension
-from stories import stories
+from flask import Blueprint, request, render_template
+from .stories import stories
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "ABC123-xyz-789"
-debug = DebugToolbarExtension(app)
+home_bp = Blueprint("home_bp", __name__)
 
-@app.get("/")
+@home_bp.get("/")
 def index():
   return render_template("index.html", stories=stories)
 
-@app.get("/prompt/<id>")
+@home_bp.get("/prompt/<id>")
 def prompt(id):
   """Ask the user for words"""
   story = get_story_by_id(id)
   return render_template("prompts.html", story=story)
 
-@app.post("/story")
+@home_bp.post("/story")
 def generate_story():
   """Show the story with the user's answers"""
   id = request.form.get("id", 1)
