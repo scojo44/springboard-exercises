@@ -18,7 +18,7 @@ boggle_game = Boggle()
 
 @app.get("/")
 def index():
-    return render_template("setup.html")
+    return render_template("setup.html.jinja")
 
 @app.post("/start")
 def setup_game():
@@ -29,7 +29,7 @@ def setup_game():
     create_gameboard(rows, columns)
     init_stats()
     session[WORDS_FOUND_SKEY] = []
-    return render_template("gameboard.html",
+    return render_template("gameboard.html.jinja",
                             gameboard=session[GAMEBOARD_SKEY],
                             high_score=session[STATS_SKEY].get(HIGH_SCORE_DKEY, 0),
                             games_played=session[STATS_SKEY].get(GAMES_PLAYED_DKEY, 0),
