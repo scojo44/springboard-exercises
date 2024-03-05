@@ -15,7 +15,7 @@ def show_landing():
   surveys_completed = {}
   for key,survey in surveys.items():
     surveys_completed[key] = request.cookies.get(key) == "done"
-  return render_template("landing.html", surveys=surveys, completed=surveys_completed)
+  return render_template("landing.html.jinja", surveys=surveys, completed=surveys_completed)
 
 @app.post("/start")
 def start_survey():
@@ -41,7 +41,7 @@ def ask_question(id):
 
   # Setup the next question
   question = survey.questions[id]
-  return render_template("question.html", survey=survey, question_id=id, question=question, editing=editing)
+  return render_template("question.html.jinja", survey=survey, question_id=id, question=question, editing=editing)
 
 @app.post("/answer")
 def save_answer():
@@ -72,7 +72,7 @@ def thank_user():
   """Thank the user for their time answering the survey."""
   survey = surveys[session[SURVEY_SESSION_KEY]]
   answers = session[ANSWERS_SESSION_KEY]
-  html = render_template("finish.html", survey=survey, answers=answers)
+  html = render_template("finish.html.jinja", survey=survey, answers=answers)
   response = make_response(html)
   response.set_cookie(session[SURVEY_SESSION_KEY], "done")
   return response
