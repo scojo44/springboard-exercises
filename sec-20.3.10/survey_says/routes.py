@@ -8,7 +8,7 @@ survey_answers = []
 @survey_bp.get("/")
 def show_landing():
     """Show the survey landing page."""
-    return render_template("landing.html", surveys=surveys)
+    return render_template("landing.html.jinja", surveys=surveys)
 
 @survey_bp.post("/start")
 def start_survey():
@@ -35,7 +35,7 @@ def ask_question(id):
 
     # Setup the next question
     question = survey.questions[id]
-    return render_template("question.html", survey=survey, question_id=id, question=question, editing=editing)
+    return render_template("question.html.jinja", survey=survey, question_id=id, question=question, editing=editing)
 
 @survey_bp.post("/answer")
 def save_answer():
@@ -61,4 +61,4 @@ def save_answer():
 @survey_bp.get("/finish")
 def thank_user():
     """Thank the user for their time answering the survey."""
-    return render_template("finish.html", survey=surveys[survey_taken[0]], answers=survey_answers)
+    return render_template("finish.html.jinja", survey=surveys[survey_taken[0]], answers=survey_answers)
