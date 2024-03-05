@@ -14,3 +14,5 @@
 - [x] Allow going back to change answers
 - [ ] Web interface to create surveys
 - [x] Migrate to Flask 3.0.2
+- [x] Use the Application Factory pattern
+- [x] Use Blueprints
