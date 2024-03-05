@@ -1,2 +1,2 @@
-from flask_jinja import create_app
+from madlibs import create_app
 app = create_app()

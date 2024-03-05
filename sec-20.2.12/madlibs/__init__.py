@@ -4,7 +4,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 debug_toolbar = DebugToolbarExtension()
 
 def create_app():
-    """Initialize the application."""
+    """Initialize the Madlibs application."""
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "ABC123-xyz-789"
 
