@@ -1,5 +1,7 @@
-from app import app
 import unittest
+from calc import create_app
+
+app = create_app()
 
 class TestCalculator(unittest.TestCase):
     def setUp(self):

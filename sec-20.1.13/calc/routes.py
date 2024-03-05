@@ -1,31 +1,32 @@
-from flask import Flask, request
-import operations
+"""Routes for the calc exercise."""
+from flask import Blueprint, request
+from .operations import add, sub, mult, div
 
-app = Flask(__name__)
+calc_bp = Blueprint("calc", __name__)
 
-@app.get("/add")
+@calc_bp.get("/add")
 def sum():
   """Returns sum of a and b"""
   a,b = get_a_b()
-  return f"{a} + {b} = {operations.add(a,b)}"
+  return f"{a} + {b} = {add(a,b)}"
 
-@app.get("/sub")
+@calc_bp.get("/sub")
 def diff():
   """Returns the difference between a and b"""
   a,b = get_a_b()
-  return f"{a} - {b} = {operations.sub(a,b)}"
+  return f"{a} - {b} = {sub(a,b)}"
 
-@app.get("/mult")
+@calc_bp.get("/mult")
 def proliferate():
   """Returns the product of a and b"""
   a,b = get_a_b()
-  return f"{a} * {b} = {operations.mult(a,b)}"
+  return f"{a} * {b} = {mult(a,b)}"
 
-@app.get("/div")
+@calc_bp.get("/div")
 def partition():
   """Returns a divided by b"""
   a,b = get_a_b()
-  return f"{a} / {b} = {operations.div(a,b)}"
+  return f"{a} / {b} = {div(a,b)}"
 
 def get_a_b():
   """Extracts a and b from the query string"""
@@ -34,15 +35,15 @@ def get_a_b():
   return (a,b)
 
 # Further Study
-@app.route("/math/<op>")
+@calc_bp.route("/math/<op>")
 def calc(op):
   """Returns the result of an arithmetic operation on a and b
   - op: add, sub, mult or div"""
   ACTIONS = {
-    "add": operations.add,
-    "sub": operations.sub,
-    "mult": operations.mult,
-    "div": operations.div
+    "add": add,
+    "sub": sub,
+    "mult": mult,
+    "div": div
   }
   a,b = get_a_b()
   op = op.lower()

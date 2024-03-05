@@ -1,5 +1,7 @@
-from app import app
 import unittest
+from greet import create_app
+
+app = create_app()
 
 class TestSimpleRoutes(unittest.TestCase):
 
