@@ -4,6 +4,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 debug_toolbar = DebugToolbarExtension()
 
 def create_app():
+    """Initialize the Survey Says application."""
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "gEoCaChInG123"
     app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
