@@ -1,26 +1,13 @@
-from flask import Flask, request, render_template, session
-from flask_debugtoolbar import DebugToolbarExtension
-from boggle import Boggle
+from flask import current_app as app, Blueprint, request, render_template, session
+from flaskle import boggle_game, GAMEBOARD_SKEY, STATS_SKEY, HIGH_SCORE_DKEY, GAMES_PLAYED_DKEY, WORDS_FOUND_SKEY
 
-# Session Keys
-GAMEBOARD_SKEY = "boggle_gameboard"
-STATS_SKEY = "boggle_stats"
-WORDS_FOUND_SKEY = "words_found"
-# Dictionary Keys
-HIGH_SCORE_DKEY = "highScore"
-GAMES_PLAYED_DKEY = "gamesPlayed"
+boggle_bp = Blueprint("boggle_bp", __name__)
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "FlaskDebugTB-Key"
-# app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
-debug = DebugToolbarExtension(app)
-boggle_game = Boggle()
-
-@app.get("/")
+@boggle_bp.get("/")
 def index():
     return render_template("setup.html.jinja")
 
-@app.post("/start")
+@boggle_bp.post("/start")
 def setup_game():
     """Create the gameboard and show it."""
     rows = int(request.form.get("rows", 5))
@@ -47,7 +34,7 @@ def create_gameboard(rows, columns):
     """Create the gameboard and save it to the session."""
     session[GAMEBOARD_SKEY] = boggle_game.make_board(rows, columns)
 
-@app.get("/guess")
+@boggle_bp.get("/guess")
 def guess_word():
     """Accept a guessed word and check if it can be found on the gameboard."""
     word = request.args.get("word")
@@ -69,7 +56,7 @@ def guess_word():
 
     return {"result": result}
 
-@app.post("/finish")
+@boggle_bp.post("/finish")
 def score_game():
     """After the game ends, save the score and keep track of how many games played."""
     new_score = request.json.get("score", 0)

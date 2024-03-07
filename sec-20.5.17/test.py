@@ -1,8 +1,10 @@
 from unittest import TestCase
-from app import app, GAMEBOARD_SKEY, STATS_SKEY, HIGH_SCORE_DKEY, GAMES_PLAYED_DKEY, WORDS_FOUND_SKEY
 from flask import session
-from boggle import Boggle
+from flaskle import create_app, GAMEBOARD_SKEY, STATS_SKEY, HIGH_SCORE_DKEY, GAMES_PLAYED_DKEY, WORDS_FOUND_SKEY
+from flaskle.boggle import Boggle
 import json
+
+app = create_app()
 
 class FlaskTests(TestCase):
     """Tests for the Boggle app"""
