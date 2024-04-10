@@ -1,30 +1,23 @@
-"""Blogly application."""
-import os, tomllib
-from flask import Flask, request, redirect, render_template, flash
-from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from flask import Blueprint, request, redirect, render_template, flash
+from .extensions import db
+from .models.user import User
 
-app = Flask(__name__)
-config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
-app.config.from_file(config_file, load=tomllib.load, text=False)
-debug = DebugToolbarExtension(app)
+blogly_bp = Blueprint("blogly_bp", __name__)
 
-connect_db(app)
-
-@app.get("/")
+@blogly_bp.get("/")
 def redirect_to_list():
     return redirect("/users")
 
-@app.get("/users")
+@blogly_bp.get("/users")
 def list_users():
     users = User.get_all(db.select(User).order_by(User.last_name, User.first_name))
     return render_template("list.html.jinja", users=users)
 
-@app.get("/users/new")
+@blogly_bp.get("/users/new")
 def show_new_form():
     return render_template("new.html.jinja")
 
-@app.post("/users/new")
+@blogly_bp.post("/users/new")
 def save_new_user():
     (first, last, image) = get_user_form_data(request.form)
     new_user = User(first_name=first, last_name=last, image_url=image)
@@ -35,15 +28,15 @@ def save_new_user():
         flash("Error adding user: " + new_user.get_last_error(), "error")
         return redirect("/users/new")
 
-@app.get("/users/<int:id>")
+@blogly_bp.get("/users/<int:id>")
 def show_info_form(id):
     return render_template("info.html.jinja", user=User.get_or_404(id))
 
-@app.get("/users/<int:id>/edit")
+@blogly_bp.get("/users/<int:id>/edit")
 def show_edit_form(id):
     return render_template("edit.html.jinja", user=User.get_or_404(id))
 
-@app.post("/users/<int:id>/edit")
+@blogly_bp.post("/users/<int:id>/edit")
 def update_user(id):
     user = User.get_or_404(id)
     (user.first_name, user.last_name, user.image_url) = get_user_form_data(request.form)
@@ -54,7 +47,7 @@ def update_user(id):
         flash("Error updating user: " + user.get_last_error(), "error")
         return redirect(f"/users/{user.id}/edit")
 
-@app.post("/users/<int:id>/delete")
+@blogly_bp.post("/users/<int:id>/delete")
 def delete_user(id):
     user = User.get_or_404(id)
     if(user.delete()):

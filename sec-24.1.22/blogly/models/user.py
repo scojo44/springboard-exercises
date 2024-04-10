@@ -1,19 +1,7 @@
 """Models for Blogly."""
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from ..extensions import db
 
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
-
-class Base(DeclarativeBase):
-    pass
-
-db = SQLAlchemy(model_class=Base)
-
-def connect_db(app):
-    """Connect to database."""
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
 
 class User(db.Model):
     """User model class."""

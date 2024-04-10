@@ -2,9 +2,11 @@ import os
 os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
 
 from unittest import TestCase
-from app import app
-from models import db, User, DEFAULT_IMAGE_URL
+from blogly import create_app
+from blogly.extensions import db
+from blogly.models.user import User, DEFAULT_IMAGE_URL
 
+app = create_app()
 app.testing = True
 
 with app.app_context():
