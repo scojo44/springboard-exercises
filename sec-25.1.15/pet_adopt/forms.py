@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField, TextAreaField, SelectField, URLField, FileField
 from wtforms.validators import InputRequired, URL, NumberRange, AnyOf, Optional
-from models import known_species
+from .models import known_species
 
 class CommonPetFields(FlaskForm):
     """Fields common to both Add and Edit Pet forms."""
