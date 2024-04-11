@@ -18,9 +18,7 @@ def create_app():
         db.create_all()
 
         # Register blueprints
-        from .blueprints.home import bp as home_bp
-        from .blueprints.user import bp as user_bp
-        from .blueprints.post import bp as post_bp
+        from .blueprints import home_bp, user_bp, post_bp
         app.register_blueprint(home_bp)
         app.register_blueprint(user_bp)
         app.register_blueprint(post_bp)
