@@ -2,9 +2,10 @@ import os
 os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
 
 from unittest import TestCase
-from app import app
-from models import db, Cupcake
+from cupcakes import create_app
+from cupcakes.models import db, Cupcake
 
+app = create_app()
 app.testing = True
 
 # Start with a clean database

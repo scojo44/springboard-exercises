@@ -1,10 +1,7 @@
-"""Models for Cupcake app."""
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from . import db
 
-#######################################
-class BaseModel(DeclarativeBase):
-    """Common database methods.  Only make instances with subclasses."""
+class DBHelperMixin:
+    """Database methods common to all models.  Only make instances with subclasses."""
     @classmethod
     def get(cls, primary_key):
         """Return one instance of a model using the primary key or None if it doesn't exist."""
@@ -60,33 +57,3 @@ class BaseModel(DeclarativeBase):
         error = self.last_error
         self.last_error = None
         return error
-
-#######################################
-db = SQLAlchemy(model_class=BaseModel)
-
-def connect_db(app):
-    """Connect to database."""
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-
-#######################################
-class Cupcake(db.Model):
-    """Model of a yummy cupcake."""
-    __tablename__ = "cupcakes"
-    GENERIC_CUPCAKE_IMAGE = "https://tinyurl.com/demo-cupcake"
-
-    id     = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    flavor = db.Column(db.String(30), nullable=False)
-    size   = db.Column(db.String(30), nullable=False)
-    rating = db.Column(db.Float, nullable=False)
-    image  = db.Column(db.Text, nullable=False, default=GENERIC_CUPCAKE_IMAGE)
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "flavor": self.flavor,
-            "size": self.size,
-            "rating": self.rating,
-            "image": self.image
-        }

@@ -1,9 +1,7 @@
-from app import app
-from models import db, Cupcake
-
+from cupcakes.models import db, Cupcake
 
 # db.drop_all()
-# db.create_all()
+db.create_all()
 
 c1 = Cupcake(
     flavor="cherry",

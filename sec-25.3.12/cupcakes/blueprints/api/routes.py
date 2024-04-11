@@ -1,45 +1,25 @@
-"""Flask app for Cupcakes"""
-import os, tomllib
-from flask import Flask, request, render_template
-from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Cupcake
-from forms import CupcakeForm, SearchCupcakesForm
-
-app = Flask(__name__)
-config_file = os.environ.get('APP_TEST_CONFIG', 'config.toml')
-app.config.from_file(config_file, load=tomllib.load, text=False)
-toolbar = DebugToolbarExtension(app)
-
-connect_db(app)
-
-#######################################
-# Home Route
-@app.route("/")
-def go_home():
-    return render_template("home.html.jinja", cake_form=CupcakeForm(), filter_form=SearchCupcakesForm())
-
-#######################################
-# API Routes
-CUPCAKE_API_PATH = "/api/cupcakes"
+from flask import request
+from ...models import db, Cupcake
+from . import bp
 
 # List
-@app.get(CUPCAKE_API_PATH)
+@bp.get("")
 def get_cupcakes():
     return {"cupcakes": [cake.serialize() for cake in Cupcake.get_all()]}
 
-@app.get(CUPCAKE_API_PATH + "/search/<query>")
+@bp.get("/search/<query>")
 def search_cupcakes(query):
     select = db.select(Cupcake).where(Cupcake.flavor.ilike(f"%{query}%"))
     cupcakes = Cupcake.get_all(select)
     return {"query": query, "cupcakes": [cake.serialize() for cake in cupcakes]}
 
 # Read
-@app.get(CUPCAKE_API_PATH + "/<int:id>")
+@bp.get("/<int:id>")
 def get_cupcake(id):
     return {"cupcake": Cupcake.get_or_404(id).serialize()}
 
 # Create
-@app.post(CUPCAKE_API_PATH)
+@bp.post("")
 def add_new_cupcake():
     cake_data = {k:v for k,v in request.json.items()}
     new_cake = Cupcake(**cake_data)
@@ -50,7 +30,7 @@ def add_new_cupcake():
         return {"error": new_cake.get_last_error()}, 500
     
 # Update
-@app.patch(CUPCAKE_API_PATH + "/<int:id>")
+@bp.patch("/<int:id>")
 def update_cupcake(id):
     cake = Cupcake.get_or_404(id)
     cake.flavor = request.json.get("flavor", cake.flavor)
@@ -64,7 +44,7 @@ def update_cupcake(id):
         return {"error": cake.get_last_error()}, 500
 
 # Delete
-@app.delete(CUPCAKE_API_PATH + "/<int:id>")
+@bp.delete("/<int:id>")
 def delete_cupcake(id):
     cake = Cupcake.get_or_404(id)
 
