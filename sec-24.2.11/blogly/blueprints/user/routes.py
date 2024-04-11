@@ -1,6 +1,5 @@
 from flask import request, redirect, render_template, flash
-from ...extensions import db
-from ...models.user import User
+from ...models import db, User
 from . import bp
 
 # Show user

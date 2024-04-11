@@ -1,5 +1,5 @@
 from datetime import datetime
-from ..extensions import db
+from . import db
 from .helper import DBHelperMixin
 
 class Post(DBHelperMixin, db.Model):

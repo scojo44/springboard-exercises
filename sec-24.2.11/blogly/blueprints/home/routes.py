@@ -1,6 +1,5 @@
 from flask import render_template
-from ...extensions import db
-from ...models.post import Post
+from ...models import db, Post
 from . import bp
 
 @bp.get("/")

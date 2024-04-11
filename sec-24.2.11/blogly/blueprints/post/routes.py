@@ -1,6 +1,5 @@
 from flask import request, redirect, render_template, flash
-from ...models.user import User
-from ...models.post import Post
+from ...models import db, User, Post
 from . import bp
 
 # Show post

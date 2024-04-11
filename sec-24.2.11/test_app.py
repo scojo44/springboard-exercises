@@ -3,9 +3,7 @@ os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
 
 from unittest import TestCase
 from blogly import create_app
-from blogly.extensions import db
-from blogly.models.user import User
-from blogly.models.post import Post
+from blogly.models import db, User, Post
 
 app = create_app()
 app.testing = True

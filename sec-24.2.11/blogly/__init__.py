@@ -1,7 +1,8 @@
 """Blogly application."""
 import os, tomllib
 from flask import Flask
-from .extensions import db, debug_toolbar
+from .extensions import debug_toolbar
+from .models import db
 
 def create_app():
     """Initialize the Blogly application."""

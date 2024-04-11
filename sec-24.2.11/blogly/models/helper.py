@@ -1,4 +1,4 @@
-from ..extensions import db
+from . import db
 
 class DBHelperMixin:
     """Database methods common to all models.  Only make instances with subclasses."""
