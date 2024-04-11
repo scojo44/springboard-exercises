@@ -17,7 +17,7 @@ def create_app():
         db.create_all()
 
         # Register blueprints
-        from . import routes
-        app.register_blueprint(routes.blogly_bp)
+        from .routes import blogly_bp
+        app.register_blueprint(blogly_bp)
 
     return app
