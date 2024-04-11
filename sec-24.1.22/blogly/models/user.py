@@ -1,5 +1,5 @@
 """Models for Blogly."""
-from ..extensions import db
+from . import db
 
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
 
