@@ -25,8 +25,8 @@ Other Tasks
 -----------
 
 - [ ] Add CSS styling
-- [x] Migrate to Flask 3.0.2
-- [x] Migrate to Flask-SQLAlchemy 3.1.1 and SQLAlchemy 2.0.27
+- [x] Migrate to Flask 3.0.3
+- [x] Migrate to Flask-SQLAlchemy 3.1.1 and SQLAlchemy 2.0.29
 - [x] Use a TOML file for app config
 - [x] Use the Application Factory pattern
 - [x] Use Blueprints
