@@ -1,6 +1,6 @@
 """Blogly application."""
 import os, tomllib
-from flask import Flask
+from flask import Flask, render_template
 from .extensions import debug_toolbar
 from .models import db
 
@@ -22,5 +22,10 @@ def create_app():
         app.register_blueprint(home_bp)
         app.register_blueprint(user_bp)
         app.register_blueprint(post_bp)
+
+    # App-wide 404 handler
+    @app.errorhandler(404)
+    def show_not_found(e):
+        return render_template("errors/404.html.jinja"), 404
 
     return app
