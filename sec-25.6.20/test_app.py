@@ -3,9 +3,10 @@ import os
 os.environ['APP_TEST_CONFIG'] = 'config_test.toml'
 
 from unittest import TestCase
-from app import app
-from models import db, User, Feedback
+from flask_feedback import create_app
+from flask_feedback.models import db, User, Feedback
 
+app = create_app()
 app.testing = True
 
 with app.app_context():
