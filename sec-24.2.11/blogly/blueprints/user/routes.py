@@ -7,17 +7,17 @@ from . import bp
 def list_users():
     select = db.select(User).order_by(User.last_name, User.first_name)
     users = User.get_all(select)
-    return render_template("user_list.html.jinja", users=users)
+    return render_template("user/list.html.jinja", users=users)
 
 @bp.get("/users/<int:id>")
 def show_user_info(id):
     user = User.get_or_404(id)
-    return render_template("user_show.html.jinja", user=user)
+    return render_template("user/show.html.jinja", user=user)
 
 # Create user
 @bp.get("/users/new")
 def show_new_user_form():
-    return render_template("user_new.html.jinja")
+    return render_template("user/new.html.jinja")
 
 @bp.post("/users/new")
 def save_new_user():
@@ -35,7 +35,7 @@ def save_new_user():
 @bp.get("/users/<int:id>/edit")
 def show_edit_user_form(id):
     user = User.get_or_404(id)
-    return render_template("user_edit.html.jinja", user=user)
+    return render_template("user/edit.html.jinja", user=user)
 
 @bp.post("/users/<int:id>/edit")
 def update_user(id):

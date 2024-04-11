@@ -6,13 +6,13 @@ from . import bp
 @bp.get("/posts/<int:id>")
 def show_post(id):
     post = Post.get_or_404(id)
-    return render_template("post_show.html.jinja", post=post)
+    return render_template("post/show.html.jinja", post=post)
 
 # Create post
 @bp.get("/users/<int:user_id>/posts/new")
 def show_new_post_form(user_id):
     user = User.get_or_404(user_id)
-    return render_template("post_new.html.jinja", user=user)
+    return render_template("post/new.html.jinja", user=user)
 
 @bp.post("/users/<int:user_id>/posts/new")
 def save_new_post(user_id):
@@ -30,7 +30,7 @@ def save_new_post(user_id):
 @bp.get("/posts/<int:id>/edit")
 def show_edit_post_form(id):
     post = Post.get_or_404(id)
-    return render_template("post_edit.html.jinja", post=post)
+    return render_template("post/edit.html.jinja", post=post)
 
 @bp.post("/posts/<int:id>/edit")
 def update_post(id):
