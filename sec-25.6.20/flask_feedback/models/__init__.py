@@ -9,5 +9,6 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 bcrypt = Bcrypt()
 
+# Import models after setting up database connection
 from .user import User
 from .feedback import Feedback

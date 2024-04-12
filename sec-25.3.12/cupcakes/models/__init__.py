@@ -6,4 +6,5 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
+# Import models after setting up database connection
 from .cupcake import Cupcake
