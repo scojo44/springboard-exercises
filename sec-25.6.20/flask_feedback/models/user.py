@@ -1,5 +1,6 @@
 """User Model"""
-from . import db, bcrypt
+from . import db
+from ..extensions import bcrypt
 from .helper import DBHelperMixin
 
 class User(DBHelperMixin, db.Model):
