@@ -1,5 +1,7 @@
-from . import db
+from typing import Optional
+from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
+from . import db, str30
 
 #######################################
 class Pet(DBHelperMixin, db.Model):
@@ -7,13 +9,13 @@ class Pet(DBHelperMixin, db.Model):
     __tablename__ = "pets"
     GENERIC_PET_IMAGE = "https://mylostpetalert.com/wp-content/themes/mlpa-child/images/nophoto.gif"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30), nullable=False)
-    species = db.Column(db.String(30), nullable=False)
-    photo_url = db.Column(db.Text)
-    age = db.Column(db.Integer)
-    notes = db.Column(db.Text)
-    available = db.Column(db.Boolean, nullable=False, default=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str30]
+    species: Mapped[str30]
+    photo_url: Mapped[Optional[str]]
+    age: Mapped[Optional[int]]
+    notes: Mapped[Optional[str]]
+    available: Mapped[bool] = mapped_column(default=True)
 
     def __repr__(self):
         return f"<Pet #{self.id}: {self.name}, {self.species}, {self.age}, Available? {self.available}>"
