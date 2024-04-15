@@ -1,7 +1,9 @@
 """User Model"""
-from . import db
+from typing import List
+from sqlalchemy.orm import Mapped, mapped_column
 from ..extensions import bcrypt
 from .helper import DBHelperMixin
+from . import db, str20, str50, hashed_password
 
 class User(DBHelperMixin, db.Model):
     """Model of a user of the app"""
@@ -30,14 +32,14 @@ class User(DBHelperMixin, db.Model):
         else:
             return False
 
-    username = db.Column(db.String(20), primary_key=True)
-    password = db.Column(db.Text, nullable=False)
-    email = db.Column(db.String(50), nullable=False, unique=True)
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    username: Mapped[str20] = mapped_column(primary_key=True)
+    password: Mapped[hashed_password]
+    email: Mapped[str50] = mapped_column(unique=True)
+    first_name: Mapped[str50]
+    last_name: Mapped[str50]
+    is_admin: Mapped[bool] = mapped_column(default=False)
 
-    feedback = db.relationship("Feedback", back_populates="user", cascade="all, delete")
+    feedback: Mapped[List["Feedback"]] = db.relationship(back_populates="user", cascade="all, delete")
 
     @property
     def full_name(self):
