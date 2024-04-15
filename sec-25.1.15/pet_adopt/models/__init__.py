@@ -1,4 +1,4 @@
-from typing_extensions import Annotated
+from typing import Annotated
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase, registry
