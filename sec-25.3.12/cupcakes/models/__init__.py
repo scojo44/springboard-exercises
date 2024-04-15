@@ -1,17 +1,13 @@
 from typing import Annotated
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase, registry
+from sqlalchemy.orm import DeclarativeBase
 
 # Aliases for length-limited strings
 str30 = Annotated[str, 30]
 
 class Base(DeclarativeBase):
-    registry = registry(
-        type_annotation_map={
-            str30: String(30)
-        }
-    )
+    pass
 
 db = SQLAlchemy(model_class=Base)
 
