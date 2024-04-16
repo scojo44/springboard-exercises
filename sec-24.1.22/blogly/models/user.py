@@ -14,7 +14,6 @@ class User(DBHelperMixin, db.Model):
     first_name: Mapped[str30]
     last_name: Mapped[Optional[str30]]
     image_url: Mapped[str200] = mapped_column(default=DEFAULT_IMAGE_URL)
-    last_error = None
     
     @property
     def full_name(self):
