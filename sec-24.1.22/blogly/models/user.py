@@ -1,6 +1,8 @@
 """Models for Blogly."""
+from typing import Optional
+from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
-from . import db
+from . import db, str30, str200
 
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
 
@@ -8,10 +10,10 @@ class User(DBHelperMixin, db.Model):
     """User model class."""
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30))
-    image_url = db.Column(db.String(200), default=DEFAULT_IMAGE_URL)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    first_name: Mapped[str30]
+    last_name: Mapped[Optional[str30]]
+    image_url: Mapped[str200] = mapped_column(default=DEFAULT_IMAGE_URL)
     last_error = None
     
     @property
