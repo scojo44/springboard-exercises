@@ -1,5 +1,7 @@
-from . import db
+from typing import List
+from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
+from . import db, str30, str200
 
 DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
 
@@ -7,12 +9,12 @@ class User(DBHelperMixin, db.Model):
     """Model of a Blogly user."""
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    image_url = db.Column(db.String(200), nullable=False, default=DEFAULT_IMAGE_URL)
+    id: Mapped[int] = mapped_column(db.Integer, primary_key=True, autoincrement=True)
+    first_name: Mapped[str30]
+    last_name: Mapped[str30] 
+    image_url: Mapped[str200]  = mapped_column(default=DEFAULT_IMAGE_URL)
 
-    posts = db.relationship("Post", back_populates="user", cascade="all, delete-orphan")
+    posts: Mapped[List["Post"]]  = db.relationship(back_populates="user", cascade="all, delete-orphan")
 
     @property
     def full_name(self):
@@ -22,3 +24,4 @@ class User(DBHelperMixin, db.Model):
     def __repr__(self):
         """Return a nicer description of User"""
         return f"<User #{self.id}: {self.first_name} {self.last_name} {self.image_url}>"
+    
