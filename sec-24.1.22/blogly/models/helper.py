@@ -43,6 +43,8 @@ class DBHelperMixin:
             self.last_error = error
             return False
 
+    last_error = None
+
     def get_last_error(self):
         """Call to get error details after a failure in save() or delete()."""
         error = self.last_error
