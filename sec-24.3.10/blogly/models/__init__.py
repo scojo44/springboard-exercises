@@ -1,9 +1,20 @@
-import sqlalchemy
+from typing import Annotated
+from sqlalchemy import Column, ForeignKey, String
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, registry
+
+str30 = Annotated[str, 30]
+str100 = Annotated[str, 100]
+str200 = Annotated[str, 200]
 
 class Base(DeclarativeBase):
-    pass
+    registry = registry(
+        type_annotation_map = {
+            str30: String(30),
+            str100: String(100),
+            str200: String(200)
+        }
+    )
 
 db = SQLAlchemy(model_class=Base)
 
@@ -14,6 +25,6 @@ from .tag import Tag
 
 # Many-to-Many association table for Post and Tag
 post_tag = db.Table("posts_tags",
-    sqlalchemy.Column("post", sqlalchemy.ForeignKey(Post.id), primary_key=True),
-    sqlalchemy.Column("tag", sqlalchemy.ForeignKey(Tag.id), primary_key=True)
+    Column("post", ForeignKey(Post.id), primary_key=True),
+    Column("tag", ForeignKey(Tag.id), primary_key=True)
 )

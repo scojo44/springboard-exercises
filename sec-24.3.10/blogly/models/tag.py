@@ -1,14 +1,16 @@
-from . import db
+from typing import List
+from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
+from . import db, str30
 
 class Tag(DBHelperMixin, db.Model):
     """Model of a tag"""
     __tablename__ = "tags"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30), nullable=False, unique=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str30] = mapped_column(unique=True)
 
-    posts = db.relationship("Post", back_populates="tags", secondary="posts_tags")
+    posts: Mapped[List["Post"]] = db.relationship(back_populates="tags", secondary="posts_tags")
 
     def __repr__(self):
         """Return a nicer description of Tag"""

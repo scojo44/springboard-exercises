@@ -20,10 +20,8 @@ class BaseModelTest(TestCase):
         """Add sample data"""
         with app.app_context():
             # Clear the tables
-            for tag in Tag.get_all():
-                db.session.delete(tag)
-            for user in User.get_all():
-                db.session.delete(user)
+            [db.session.delete(tag) for tag in Tag.get_all()]
+            [db.session.delete(user) for user in User.get_all()]
             db.session.commit()
 
         # Create sample users
