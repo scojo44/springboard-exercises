@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
 from . import db, str100
@@ -14,7 +13,7 @@ class Post(DBHelperMixin, db.Model):
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
     user_id: Mapped[int] = mapped_column(db.ForeignKey("users.id"))
 
-    user: Mapped[List["User"]] = db.relationship(back_populates="posts")
+    user: Mapped[list["User"]] = db.relationship(back_populates="posts")
 
     @property
     def friendly_date(self):

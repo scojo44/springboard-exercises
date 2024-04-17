@@ -1,4 +1,3 @@
-from typing import List
 from sqlalchemy.orm import Mapped, mapped_column
 from .helper import DBHelperMixin
 from . import db, str30, str200
@@ -14,7 +13,7 @@ class User(DBHelperMixin, db.Model):
     last_name: Mapped[str30]
     image_url: Mapped[str200] = mapped_column(default=DEFAULT_IMAGE_URL)
 
-    posts: Mapped[List["Post"]] = db.relationship(back_populates="user", cascade="all, delete-orphan")
+    posts: Mapped[list["Post"]] = db.relationship(back_populates="user", cascade="all, delete-orphan")
 
     @property
     def full_name(self):

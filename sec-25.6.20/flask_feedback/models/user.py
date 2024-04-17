@@ -1,5 +1,4 @@
 """User Model"""
-from typing import List
 from sqlalchemy.orm import Mapped, mapped_column
 from ..extensions import bcrypt
 from .helper import DBHelperMixin
@@ -39,7 +38,7 @@ class User(DBHelperMixin, db.Model):
     last_name: Mapped[str50]
     is_admin: Mapped[bool] = mapped_column(default=False)
 
-    feedback: Mapped[List["Feedback"]] = db.relationship(back_populates="user", cascade="all, delete")
+    feedback: Mapped[list["Feedback"]] = db.relationship(back_populates="user", cascade="all, delete")
 
     @property
     def full_name(self):
