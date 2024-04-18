@@ -1,0 +1,11 @@
+{
+  "name": "recursion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "recursion.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Scott Jones",
+  "license": "ISC"
+}
