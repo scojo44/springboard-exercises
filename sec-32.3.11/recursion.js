@@ -23,11 +23,10 @@ function longest(words, i = 0, highScore = 0) {
 
 function everyOther(str, i = 0) {
   // Base case
-  if(i === str.length) return '';
+  if(i >= str.length) return '';
 
   // Normal case
-  const letter = i % 2 == 0? str[i] : '';
-  return letter + everyOther(str, i + 1);
+  return str[i] + everyOther(str, i + 2);
 }
 
 /** isPalindrome: checks whether a string is a palindrome or not. */
@@ -37,10 +36,10 @@ function isPalindrome(str, i = 0) {
   if(i >= str.length/2) return true;
 
   // Normal case
-  const same = str[i] === str[str.length-1 - i]; // Compare same index from start and end
-  if(!same) return false; // Stop as soon as a mismatch is found
+  if(str[i] !== str[str.length-1 - i]) // Compare same index from start and end
+    return false; // Stop as soon as a mismatch is found
 
-  return same && isPalindrome(str, i + 1);
+  return isPalindrome(str, i + 1);
 }
 
 /** findIndex: return the index of val in arr (or -1 if val is not present). */
@@ -95,15 +94,13 @@ function binarySearch(array, value, low = 0, high = array.length-1) {
   // Normal case
   const middle = Math.floor((high + low) / 2)
 
-  if(array[middle] > value)
-    high = middle - 1;
-  else if(array[middle] < value)
-    low = middle + 1;
-  else
-    return middle; // Found it!
-
   // console.log(`L:${low} M:${middle} H:${high}`);
-  return binarySearch(array, value, low, high);
+  if(array[middle] > value)
+    return binarySearch(array, value, low, middle-1);
+  else if(array[middle] < value)
+    return binarySearch(array, value, middle+1, high);
+
+  return middle; // Found it!
 }
 
 module.exports = {
