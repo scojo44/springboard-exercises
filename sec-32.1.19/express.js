@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const ExpressError = require('./express-error');
+const ExpressError = require('./expressError');
 const app = express();
 const {mean, median, mode, all, toIntArray} = require('./stats-calc');
 
