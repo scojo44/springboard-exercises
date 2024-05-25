@@ -1,0 +1,18 @@
+{
+  "name": "sec-32.2.10",
+  "version": "1.0.0",
+  "description": "Express Shopping List",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Scott Jones",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}
