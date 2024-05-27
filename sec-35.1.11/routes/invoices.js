@@ -17,12 +17,25 @@ router.get('', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const {id} = req.params;
-    const result = await db.query('SELECT * FROM invoices WHERE id = $1', [id]);
+    let result = await db.query(
+     `SELECT * FROM invoices
+      WHERE id = $1`, [id]
+    );
 
     if(result.rows.length === 0)
       throw new ExpressError(`Invoice #${id} doesn't exist`, 404)
 
-    return res.json({invoice: result.rows[0]});
+    // Get the company for this invoice
+    const invoice = result.rows[0];
+
+    result = await db.query(
+     `SELECT * FROM companies
+      WHERE code = $1`, [invoice.comp_code]
+    );
+    
+    invoice.company = result.rows;
+
+    return res.json({invoice});
   }
   catch(e) {
     return next(e);
@@ -34,7 +47,7 @@ router.post('', async (req, res, next) => {
     const {comp_code, amt} = req.body;
     const result = await db.query(
      `INSERT INTO invoices (comp_code, amt)
-      VALUES = ($1, $2)
+      VALUES ($1, $2)
       RETURNING *`, [comp_code, amt]
     );
 
@@ -68,12 +81,16 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const {id} = req.params;
-    const result = await db.query('DELETE FROM invoices WHERE id = $1', [id]);
+    const result = await db.query(
+     `DELETE FROM invoices
+      WHERE id = $1
+      RETURNING id`, [id]
+    );
 
     if(result.rows.length === 0)
       throw new ExpressError(`Invoice #${id} doesn't exist`, 404)
 
-    return res.json({status: 'Deleted invoice ' + id});
+    return res.json({status: 'Deleted invoice #' + id});
   }
   catch(e) {
     return next(e);

@@ -17,12 +17,25 @@ router.get('', async (req, res, next) => {
 router.get('/:code', async (req, res, next) => {
   try {
     const {code} = req.params;
-    const result = await db.query('SELECT * FROM companies WHERE code = $1', [code]);
+    let result = await db.query(
+     `SELECT * FROM companies
+      WHERE code = $1`, [code]
+    );
 
     if(result.rows.length === 0)
       throw new ExpressError(`Company with code, ${code}, doesn't exist`, 404)
 
-    return res.json({company: result.rows[0]});
+    // Get the invoices for this company
+    const company = result.rows[0];
+
+    result = await db.query(
+     `SELECT * FROM invoices
+      WHERE comp_code = $1`, [company.code]
+    );
+    
+    company.invoices = result.rows;
+
+    return res.json({company});
   }
   catch(e) {
     return next(e);
@@ -31,11 +44,12 @@ router.get('/:code', async (req, res, next) => {
 
 router.post('', async (req, res, next) => {
   try {
-    const {code, name, desc} = req.body;
+    const {code, name, description} = req.body;
+    console.log('---- nylons ----', req.body, code, name, description);
     const result = await db.query(
      `INSERT INTO companies (code, name, description)
       VALUES ($1, $2, $3)
-      RETURNING *`, [code, name, desc]
+      RETURNING *`, [code, name, description]
     );
 
     return res.json({company: result.rows[0]});
@@ -48,11 +62,11 @@ router.post('', async (req, res, next) => {
 router.put('/:code', async (req, res, next) => {
   try {
     const {code} = req.params;
-    const {name, desc} = req.body;
+    const {name, description} = req.body;
     const result = await db.query(
      `UPDATE companies SET name=$2, description=$3
       WHERE code = $1
-      RETURNING *`, [code, name, desc]
+      RETURNING *`, [code, name, description]
     );
 
     if(result.rows.length === 0)
@@ -68,7 +82,11 @@ router.put('/:code', async (req, res, next) => {
 router.delete('/:code', async (req, res, next) => {
   try {
     const {code} = req.params;
-    const result = await db.query('DELETE FROM companies WHERE code = $1', [code]);
+    const result = await db.query(
+     `DELETE FROM companies
+      WHERE code = $1
+      REtURNING code`, [code]
+    );
 
     if(result.rows.length === 0)
       throw new ExpressError(`Company with code, ${code}, doesn't exist`, 404)
