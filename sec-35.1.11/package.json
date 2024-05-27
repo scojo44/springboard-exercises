@@ -1,0 +1,16 @@
+{
+  "name": "sec-35.1.11",
+  "version": "1.0.0",
+  "description": "Node PG Exercise (Steps 1-3)",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Scott Jones",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.5"
+  }
+}
