@@ -1,0 +1,20 @@
+{
+  "name": "sec-35.2.7",
+  "version": "1.0.0",
+  "description": "Node-pg Relationships (Further Study)",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Scott Jones",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.5",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}
