@@ -32,22 +32,11 @@ describe('GET /companies/:code', () => {
 
 describe('POST /companies', () => {
   test('Creates new company, returning {added: company}', async () => {
-    const shinra = {code: 'shinra', name: 'Shinra Inc.', description: null};
+    const shinra = {name: 'Shinra Inc.', description: null};
     const res = await request(app).post('/companies').send(shinra);
+    shinra.code = 'shinra-inc.'; // Add slugified code to sample company
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual({company: shinra});
-  });
-
-  test("Responds with 400 if no code", async function() {
-    const shinra = {name: 'Shinra Inc.'};
-    const res = await request(app).post('/companies').send(shinra);
-    expect(res.statusCode).toBe(400);
-  });
-
-  test("Responds with 400 if no name", async function() {
-    const shinra = {code: 'shinra'};
-    const res = await request(app).post('/companies').send(shinra);
-    expect(res.statusCode).toBe(400);
   });
 
   test("Responds with 400 if no properties", async function() {
@@ -57,7 +46,7 @@ describe('POST /companies', () => {
   });
 
   test("Responds with 400 if wrong properties", async function() {
-    const shinra = {id: 'shinra', title: 'Shinra Inc.'};
+    const shinra = {title: 'Shinra Inc.'};
     const res = await request(app).post('/companies').send(shinra);
     expect(res.statusCode).toBe(400);
   });
