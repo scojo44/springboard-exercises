@@ -23,7 +23,7 @@ router.get('/:id', async (req, res, next) => {
     );
 
     if(result.rows.length === 0)
-      throw new ExpressError(`Invoice #${id} doesn't exist`, 404)
+      throw new ExpressError(`Invoice #${id} doesn't exist`, 404);
 
     // Get the company for this invoice
     const invoice = result.rows[0];
@@ -47,7 +47,7 @@ router.post('', async (req, res, next) => {
     const {comp_code, amt} = req.body;
 
     if(!comp_code || !amt)
-      throw new ExpressError(`Company code and amount are required`, 400)
+      throw new ExpressError(`Company code and amount are required`, 400);
 
     const result = await db.query(
      `INSERT INTO invoices (comp_code, amt)
@@ -73,7 +73,7 @@ router.put('/:id', async (req, res, next) => {
      );
 
     if(result.rows.length === 0)
-      throw new ExpressError(`Invoice #${id} doesn't exist`, 404)
+      throw new ExpressError(`Invoice #${id} doesn't exist`, 404);
 
     let invoice = result.rows[0];
 
@@ -118,7 +118,7 @@ router.delete('/:id', async (req, res, next) => {
     );
 
     if(result.rows.length === 0)
-      throw new ExpressError(`Invoice #${id} doesn't exist`, 404)
+      throw new ExpressError(`Invoice #${id} doesn't exist`, 404);
 
     return res.json({status: 'Deleted invoice #' + id});
   }
