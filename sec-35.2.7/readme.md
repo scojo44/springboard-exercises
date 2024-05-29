@@ -2,5 +2,5 @@
 
 - [x] Write Tests
 - [x] Slugify Company Names
-- [ ] Allow paying of invoices
-- [ ] Add a Many-to-Many
+- [x] Allow paying of invoices
+- [ ] Add a Many-to-Many (add an industries table)

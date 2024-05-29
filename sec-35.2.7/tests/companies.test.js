@@ -69,6 +69,12 @@ describe('PUT /companies/:code', () => {
     const res = await request(app).put(`/companies/xyzzy`).send({code: 'xyzzy', name: 'Nothing Happens'});
     expect(res.statusCode).toBe(404);
   });
+
+  test("Responds with 400 if no properties", async function() {
+    const shinra = {};
+    const res = await request(app).put('/companies/acme').send(shinra);
+    expect(res.statusCode).toBe(400);
+  });
 });
 
 describe("DELETE /companies/:code", () => {

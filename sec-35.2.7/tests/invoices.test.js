@@ -67,20 +67,39 @@ describe('POST /invoices', () => {
 });
 
 describe('PUT /invoices/:id', () => {
-  test('Updates existing invoice, returning {invoice: invoice}', async () => {
+  test('Updates existing unpaid invoice amount, returning {invoice: invoice}', async () => {
+    const invUpdate = {amt: 395};
+    const res = await request(app).put(`/invoices/${t.invAcme1.id}`).send(invUpdate);
+    res.body.invoice = t.fixInvoiceDates(res.body.invoice);
+    t.invAcme1.amt = invUpdate.amt; // Update original sample invoice for comparison
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({invoice: t.invAcme1});
+  });
+
+  test('Updates existing paid invoice amount, returning {invoice: invoice}', async () => {
     const invUpdate = {amt: 395};
     const res = await request(app).put(`/invoices/${t.invWidget1.id}`).send(invUpdate);
     res.body.invoice = t.fixInvoiceDates(res.body.invoice);
     t.invWidget1.amt = invUpdate.amt; // Update original sample invoice for comparison
     expect(res.statusCode).toBe(200);
+    expect(res.body.invoice.paid_date).toEqual(t.invWidget1.paid_date);
     expect(res.body).toEqual({invoice: t.invWidget1});
   });
 
   test('Updates existing invoice as paid, returning {invoice: invoice}', async () => {
-    const paid = {amt: 400, paid: true};
-    const res = await request(app).put(`/invoices/${t.invWidget1.id}`).send(paid);
+    const paid = {paid: true};
+    const res = await request(app).put(`/invoices/${t.invAcme1.id}`).send(paid);
     expect(res.statusCode).toBe(200);
     expect(res.body.invoice.paid).toBe(true);
+    expect(new Date(res.body.invoice.paid_date)).toEqual(expect.any(Date));
+  });
+
+  test('Updates existing invoice as unpaid, returning {invoice: invoice}', async () => {
+    const paid = {paid: false};
+    const res = await request(app).put(`/invoices/${t.invWidget1.id}`).send(paid);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.invoice.paid).toBe(false);
+    expect(res.body.invoice.paid_date).toBeNull();
   });
 
   test("Responds with 404 if invalid code", async function() {
