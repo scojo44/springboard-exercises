@@ -16,15 +16,26 @@ class Customer {
 
   /** find all customers. */
 
-  static async all() {
+  static async all(search) {
+    let where = '';
+    const params = [];
+
+    // Build search SQL and parameters
+    if(search) {
+      where = `WHERE first_name ILIKE $1 OR last_name ILIKE $1`;
+      params.push(`%${search}%`);
+    }
+
     const results = await db.query(
-      `SELECT id, 
-         first_name AS "firstName",  
-         last_name AS "lastName", 
-         phone, 
+      `SELECT id,
+         first_name AS "firstName",
+         last_name AS "lastName",
+         phone,
          notes
        FROM customers
-       ORDER BY last_name, first_name`
+       ${where}
+       ORDER BY last_name, first_name`,
+       params
     );
     return results.rows.map(c => new Customer(c));
   }

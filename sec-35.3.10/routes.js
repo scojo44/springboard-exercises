@@ -11,7 +11,8 @@ const router = new express.Router();
 
 router.get("/", async function(req, res, next) {
   try {
-    const customers = await Customer.all();
+    const {search} = req.query;
+    const customers = await Customer.all(search);
     return res.render("customer_list.html.jinja", { customers });
   } catch (err) {
     return next(err);
