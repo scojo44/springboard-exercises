@@ -6,9 +6,10 @@ const Reservation = require("./reservation");
 /** Customer of the restaurant. */
 
 class Customer {
-  constructor({ id, firstName, lastName, phone, notes }) {
+  constructor({ id, firstName, middleName, lastName, phone, notes }) {
     this.#id = id;
     this.#firstName = firstName;
+    this.#middleName = middleName;
     this.#lastName = lastName;
     this.#phone = phone;
     this.#notes = notes;
@@ -23,6 +24,13 @@ class Customer {
   get firstName() { return this.#firstName; }
   set firstName(name) {
     this.#firstName = name? name : '';
+    this.save();
+  }
+
+  #middleName;
+  get middleName() { return this.#middleName; }
+  set middleName(name) {
+    this.#middleName = name? name : '';
     this.save();
   }
 
@@ -48,7 +56,33 @@ class Customer {
   }
 
   get fullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.firstName} ${this.middleName} ${this.lastName}`.replace('  ', ' '); // If middleName is empty, remove the resulting double space
+  }
+
+  /** get all reservations for this customer. */
+
+  async getReservations() {
+    return await Reservation.getReservationsForCustomer(this.id);
+  }
+
+  /** save this customer. */
+
+  async save() {
+    if (this.id === undefined) {
+      const result = await db.query(
+        `INSERT INTO customers (first_name, middle_name, last_name, phone, notes)
+             VALUES ($1, $2, $3, $4, $5)
+             RETURNING id`,
+        [this.firstName, this.middleName, this.lastName, this.phone, this.notes]
+      );
+      this.#id = result.rows[0].id;
+    } else {
+      await db.query(
+        `UPDATE customers SET first_name=$1, middle_name=$2, last_name=$3, phone=$4, notes=$5
+             WHERE id=$6`,
+        [this.firstName, this.middleName, this.lastName, this.phone, this.notes, this.id]
+      );
+    }
   }
 
   /** find all customers. */
@@ -66,6 +100,7 @@ class Customer {
     const results = await db.query(
       `SELECT id,
          first_name AS "firstName",
+         middle_name AS "middleName",
          last_name AS "lastName",
          phone,
          notes
@@ -81,6 +116,7 @@ class Customer {
     const results = await db.query(
       `SELECT c.id,
          c.first_name AS "firstName",
+         c.middle_name AS "middleName",
          c.last_name AS "lastName",
          c.phone,
          c.notes,
@@ -105,6 +141,7 @@ class Customer {
     const results = await db.query(
       `SELECT id, 
          first_name AS "firstName",  
+         middle_name AS "middleName",  
          last_name AS "lastName", 
          phone, 
          notes 
@@ -119,32 +156,6 @@ class Customer {
     }
 
     return new Customer(customer);
-  }
-
-  /** get all reservations for this customer. */
-
-  async getReservations() {
-    return await Reservation.getReservationsForCustomer(this.id);
-  }
-
-  /** save this customer. */
-
-  async save() {
-    if (this.id === undefined) {
-      const result = await db.query(
-        `INSERT INTO customers (first_name, last_name, phone, notes)
-             VALUES ($1, $2, $3, $4)
-             RETURNING id`,
-        [this.firstName, this.lastName, this.phone, this.notes]
-      );
-      this.#id = result.rows[0].id;
-    } else {
-      await db.query(
-        `UPDATE customers SET first_name=$1, last_name=$2, phone=$3, notes=$4
-             WHERE id=$5`,
-        [this.firstName, this.lastName, this.phone, this.notes, this.id]
-      );
-    }
   }
 }
 

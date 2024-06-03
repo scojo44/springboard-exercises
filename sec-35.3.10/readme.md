@@ -2,13 +2,13 @@
 
 ## Further Study
 
-- [ ] Part 7: Add Search Functionality
-- [ ] Part 8: Best Customers
-- [ ] Getters and Setters
+- [x] Part 7: Add Search Functionality
+- [x] Part 8: Best Customers
+- [x] Getters and Setters
 
 ## Other fun things!
 
-- [ ] Add a new field for an optional middle name
+- [x] Add a new field for an optional middle name
 - [ ] Add a feature to edit existing reservations
 - [ ] Customer Listing:  Show the most recent reservation for each
 - [ ] Customer Detail:  Show the most recent reservation using "5 min ago" style
