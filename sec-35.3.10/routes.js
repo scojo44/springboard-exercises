@@ -1,7 +1,5 @@
 /** Routes for Lunchly */
-
 const express = require("express");
-
 const Customer = require("./models/customer");
 const Reservation = require("./models/reservation");
 
@@ -64,7 +62,6 @@ router.post("/add/", async function(req, res, next) {
 router.get("/:id/", async function(req, res, next) {
   try {
     const customer = await Customer.get(req.params.id);
-
     const reservations = await customer.getReservations();
 
     return res.render("customer_detail.html.jinja", { customer, reservations });
@@ -106,20 +103,20 @@ router.post("/:id/edit/", async function(req, res, next) {
 
 router.post("/:id/add-reservation/", async function(req, res, next) {
   try {
-    const customerId = req.params.id;
+    const customerID = req.params.id;
     const startAt = new Date(req.body.startAt);
     const numGuests = req.body.numGuests;
     const notes = req.body.notes;
 
     const reservation = new Reservation({
-      customerId,
+      customerID,
       startAt,
       numGuests,
       notes
     });
     await reservation.save();
 
-    return res.redirect(`/${customerId}/`);
+    return res.redirect(`/${customerID}/`);
   } catch (err) {
     return next(err);
   }
