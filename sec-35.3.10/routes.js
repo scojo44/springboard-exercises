@@ -19,6 +19,18 @@ router.get("/", async function(req, res, next) {
   }
 });
 
+/** Show the top 10 best customers. */
+
+router.get("/top/:count", async function(req, res, next) {
+  try {
+    const {count} = req.params;
+    const customers = await Customer.top(count);
+    return res.render("customer_top.html.jinja", { customers, count });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /** Form to add a new customer. */
 
 router.get("/add/", async function(req, res, next) {

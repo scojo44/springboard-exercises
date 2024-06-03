@@ -1,0 +1,17 @@
+{% extends 'base.html.jinja' %}
+{% block title %}Top {{ count }} Customers{% endblock %}
+{% block content %}
+
+<h1>Top {{ count }} Customers</h1>
+
+<table class="table table-sm w-50">
+  <tr><th class="text-center">Reservations</th><th>Customer</th></tr>
+  {% for customer in customers %}
+  <tr>
+    <td class="text-center">{{ customer.resCount }}</td>
+    <td><a href="/{{ customer.id }}/">{{ customer.fullName() }}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

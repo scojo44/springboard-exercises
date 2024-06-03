@@ -40,6 +40,28 @@ class Customer {
     return results.rows.map(c => new Customer(c));
   }
 
+  static async top(count) {
+    const results = await db.query(
+      `SELECT c.id,
+         c.first_name AS "firstName",
+         c.last_name AS "lastName",
+         c.phone,
+         c.notes,
+         count(r.customer_id) AS "resCount"
+       FROM customers c
+       JOIN reservations r on r.customer_id = c.id
+       GROUP BY r.customer_id, c.id, c.first_name, c.last_name, c.phone, c.notes
+       ORDER BY count(r.customer_id) DESC
+       LIMIT ${+count}`
+    );
+
+    return results.rows.map(c => {
+        const entry = new Customer(c);
+        entry.resCount = c.resCount;
+        return entry;
+    });
+  }
+
   /** get a customer by ID. */
 
   static async get(id) {
