@@ -6,9 +6,14 @@
 
 <h1>Customers</h1>
 
-<ul style="column-count: 4">
+<ul style="column-count: 2">
   {% for customer in customers %}
-  <li><a href="/{{ customer.id }}/">{{ customer.fullName }}</a></li>
+  <li>
+    <a href="/{{ customer.id }}/">{{ customer.fullName }}</a>
+    {% if customer.lastReservation %}
+    - for {{ customer.lastReservation.numGuests }} @ {{ customer.lastReservation.formattedStartAt }}
+    {% endif %}
+  </li>
   {% endfor %}
 </ul>
 

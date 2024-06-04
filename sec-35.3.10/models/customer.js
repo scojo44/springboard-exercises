@@ -9,9 +9,9 @@ class Customer {
   constructor({ id, firstName, middleName, lastName, phone, notes }) {
     this.#id = id;
     this.#firstName = firstName;
-    this.#middleName = middleName;
+    this.#middleName = middleName || '';
     this.#lastName = lastName;
-    this.#phone = phone;
+    this.#phone = phone || '';
     this.#notes = notes;
   }
 
@@ -23,35 +23,35 @@ class Customer {
   #firstName;
   get firstName() { return this.#firstName; }
   set firstName(name) {
-    this.#firstName = name? name : '';
+    this.#firstName = name || '';
     this.save();
   }
 
   #middleName;
   get middleName() { return this.#middleName; }
   set middleName(name) {
-    this.#middleName = name? name : '';
+    this.#middleName = name || '';
     this.save();
   }
 
   #lastName;
   get lastName() { return this.#lastName; }
   set lastName(name) {
-    this.#lastName = name? name : '';
+    this.#lastName = name || '';
     this.save();
   }
 
   #phone;
   get phone() { return this.#phone; }
   set phone(ph) {
-    this.#phone = ph? ph : '';
+    this.#phone = ph || '';
     this.save();
   }
 
   #notes;
   get notes() { return this.#notes; }
   set notes(n) {
-    this.#notes = n? n : '';
+    this.#notes = n || '';
     this.save();
   }
 
@@ -65,21 +65,28 @@ class Customer {
     return await Reservation.getReservationsForCustomer(this.id);
   }
 
+  /** get the most recent reservation for this customer. */
+
+  async getLastReservation() {
+    const last = await Reservation.getReservationsForCustomer(this.id, 1);
+    return last.length > 0? last[0] : null;
+  }
+
   /** save this customer. */
 
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
         `INSERT INTO customers (first_name, middle_name, last_name, phone, notes)
-             VALUES ($1, $2, $3, $4, $5)
-             RETURNING id`,
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id`,
         [this.firstName, this.middleName, this.lastName, this.phone, this.notes]
       );
       this.#id = result.rows[0].id;
     } else {
       await db.query(
         `UPDATE customers SET first_name=$1, middle_name=$2, last_name=$3, phone=$4, notes=$5
-             WHERE id=$6`,
+         WHERE id=$6`,
         [this.firstName, this.middleName, this.lastName, this.phone, this.notes, this.id]
       );
     }
@@ -109,7 +116,16 @@ class Customer {
        ORDER BY last_name, first_name`,
        params
     );
-    return results.rows.map(c => new Customer(c));
+
+    // Add the most recent reservation to each customer
+    const customers = [];
+    for(const row of results.rows) {
+      const customer = new Customer(row);
+      customer.lastReservation = await customer.getLastReservation();
+      customers.push(customer);
+    }
+
+    return customers;
   }
 
   static async top(count) {
@@ -129,9 +145,9 @@ class Customer {
     );
 
     return results.rows.map(c => {
-        const entry = new Customer(c);
-        entry.resCount = c.resCount;
-        return entry;
+        const customer = new Customer(c);
+        customer.resCount = c.resCount;
+        return customer;
     });
   }
 
@@ -139,12 +155,12 @@ class Customer {
 
   static async get(id) {
     const results = await db.query(
-      `SELECT id, 
-         first_name AS "firstName",  
-         middle_name AS "middleName",  
-         last_name AS "lastName", 
-         phone, 
-         notes 
+      `SELECT id,
+         first_name AS "firstName",
+         middle_name AS "middleName",
+         last_name AS "lastName",
+         phone,
+         notes
         FROM customers WHERE id = $1`,
       [id]
     );

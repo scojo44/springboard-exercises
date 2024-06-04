@@ -43,7 +43,7 @@ class Reservation {
   #notes;
   get notes() { return this.#notes; }
   set notes(n) {
-    this.#notes = n? n : '';
+    this.#notes = n || '';
     this.save();
   }
 
@@ -51,17 +51,28 @@ class Reservation {
     return moment(this.startAt).format('MMMM Do YYYY, h:mm a');
   }
 
+  get timeSince() {
+    return moment(this.startAt).fromNow();
+  }
+
   /** given a customer id, find their reservations. */
 
-  static async getReservationsForCustomer(customerID) {
+  static async getReservationsForCustomer(customerID, limit) {
+    let limitClause = '';
+
+    if(limit)
+      limitClause = `LIMIT ${limit}`;
+
     const results = await db.query(
-          `SELECT id, 
+        `SELECT id, 
            customer_id AS "customerID", 
            num_guests AS "numGuests", 
            start_at AS "startAt", 
            notes AS "notes"
          FROM reservations 
-         WHERE customer_id = $1`,
+         WHERE customer_id = $1
+         ORDER BY start_at DESC
+         ${limitClause}`,
         [customerID]
     );
 
@@ -72,15 +83,15 @@ class Reservation {
     if (this.id === undefined) {
       const result = await db.query(
         `INSERT INTO reservations (customer_id, start_at, num_guests, notes)
-             VALUES ($1, $2, $3, $4)
-             RETURNING id`,
+         VALUES ($1, $2, $3, $4)
+         RETURNING id`,
         [this.customerID, this.startAt, this.numGuests, this.notes]
       );
       this.#id = result.rows[0].id;
     } else {
       await db.query(
-        `UPDATE customers SET customer_id=$1, start_at=$2, num_guests=$3, notes=$4
-             WHERE id=$5`,
+        `UPDATE reservations SET customer_id=$1, start_at=$2, num_guests=$3, notes=$4
+         WHERE id=$5`,
         [this.customerID, this.startAt, this.numGuests, this.notes, this.id]
       );
     }

@@ -10,8 +10,9 @@
 
   <div class="col-6">
 
-    <p><b>Phone: </b> {{ customer.phone }}</p>
+    <p><b>Phone: </b>{{ customer.phone }}</p>
     <p><b>Notes: </b>{{ customer.notes }}</p>
+    <p><b>Last Reservation: </b>{{ (reservations|first).timeSince }}</p>
 
     <p><a class="btn btn-primary" href="/{{ customer.id }}/edit/">Edit</a></p>
 
