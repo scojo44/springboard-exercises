@@ -74,7 +74,8 @@ class User {
   static async all() {
     const results = await db.query(
      `SELECT username, first_name, last_name, phone
-      FROM users`);
+      FROM users
+      ORDER BY username`);
 
     return results.rows;
   }
