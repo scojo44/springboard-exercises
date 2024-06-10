@@ -9,9 +9,7 @@ const DB_URI = (process.env.NODE_ENV === "test")
   : "postgresql:///messagely";
 
 const SECRET_KEY = process.env.SECRET_KEY || "secret";
-
-const BCRYPT_WORK_FACTOR = 12;
-
+const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test"? 1 : 12; // Make tests go faster
 
 module.exports = {
   DB_URI,

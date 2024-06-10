@@ -1,23 +1,16 @@
-const db = require("../db");
+const t = require("./testSetup");
+const db = require('../db');
 const User = require("../models/user");
 const Message = require("../models/message");
 
+afterAll(async () => await t.closeDB());
 
 describe("Test User class", function () {
-  beforeEach(async function () {
-    await db.query("DELETE FROM messages");
-    await db.query("DELETE FROM users");
-    let u = await User.register({
-      username: "test",
-      password: "password",
-      first_name: "Test",
-      last_name: "Testy",
-      phone: "+14155550000",
-    });
-  });
+  beforeEach(async () => await t.initDB());
+  afterEach(async () => await t.clearDB());
 
   test("can register", async function () {
-    let u = await User.register({
+    const u = await User.register({
       username: "joel",
       password: "password",
       first_name: "Joel",
@@ -30,78 +23,45 @@ describe("Test User class", function () {
   });
 
   test("can authenticate", async function () {
-    let isValid = await User.authenticate("test", "password");
+    let isValid = await User.authenticate("test1", "password");
     expect(isValid).toBeTruthy();
 
-    isValid =  await User.authenticate("test", "xxx");
+    isValid = await User.authenticate("test1", "xxx");
     expect(isValid).toBeFalsy();
   });
 
 
   test("can update login timestamp", async function () {
-    await db.query("UPDATE users SET last_login_at=NULL WHERE username='test'");
-    let u = await User.get("test");
-    expect(u.last_login_at).toBe(null);
+    await db.query("UPDATE users SET last_login_at=NULL WHERE username='test1'");
+    const u1 = await User.get("test1");
+    expect(u1.last_login_at).toBe(null);
 
-    User.updateLoginTimestamp("test");
-    let u2 = await User.get("test");
+    User.updateLoginTimestamp("test1");
+    const u2 = await User.get("test1");
     expect(u2.last_login_at).not.toBe(null);
   });
 
   test("can get", async function () {
-    let u = await User.get("test");
+    let u = await User.get("test1");
     expect(u).toEqual({
-      username: "test",
-      first_name: "Test",
-      last_name: "Testy",
-      phone: "+14155550000",
+      username: "test1",
+      first_name: "Test1",
+      last_name: "Testy1",
+      phone: "+14155551111",
       last_login_at: expect.any(Date),
       join_at: expect.any(Date),
     });
   });
 
   test("can get all", async function () {
-    let u = await User.all();
-    expect(u).toEqual([{
-      username: "test",
-      first_name: "Test",
-      last_name: "Testy",
-      phone: "+14155550000"
-    }]);
+    const u = await User.all();
+    expect(u).toEqual(t.users);
   });
 });
 
 describe("Test messages part of User class", function () {
-  beforeEach(async function () {
-    await db.query("DELETE FROM messages");
-    await db.query("DELETE FROM users");
-    await db.query("ALTER SEQUENCE messages_id_seq RESTART WITH 1");
-
-    let u1 = await User.register({
-      username: "test1",
-      password: "password",
-      first_name: "Test1",
-      last_name: "Testy1",
-      phone: "+14155550000",
-    });
-    let u2 = await User.register({
-      username: "test2",
-      password: "password",
-      first_name: "Test2",
-      last_name: "Testy2",
-      phone: "+14155552222",
-    });
-    let m1 = await Message.create({
-      from_username: "test1",
-      to_username: "test2",
-      body: "u1-to-u2"
-    });
-    let m2 = await Message.create({
-      from_username: "test2",
-      to_username: "test1",
-      body: "u2-to-u1"
-    });
-  });
+  beforeEach(async () => await t.initDB());
+  afterEach(async () => await t.clearDB());
 
   test('can get messages from user', async function () {
     let m = await User.messagesFrom("test1");
@@ -134,8 +94,4 @@ describe("Test messages part of User class", function () {
       }
     }]);
   });
-});
-
-afterAll(async function() {
-  await db.end();
 });

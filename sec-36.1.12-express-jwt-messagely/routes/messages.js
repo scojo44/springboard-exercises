@@ -21,7 +21,7 @@ const router = new express.Router();
 
 router.get('/:id', ensureLoggedIn, async (req, res, next) => {
   try {
-    const {id} = req.body;
+    const {id} = req.params;
     const message = await Message.get(id);
 
     // Show the message if the user is either the sender or recipient
@@ -62,7 +62,7 @@ router.post('/', ensureLoggedIn, async (req, res, next) => {
 
 router.post('/:id/read', ensureLoggedIn, async (req, res, next) => {
   try {
-    const {id} = req.body;
+    const {id} = req.params;
     const message = await Message.get(id);
 
     // Mark the message as read if the user is the recipient

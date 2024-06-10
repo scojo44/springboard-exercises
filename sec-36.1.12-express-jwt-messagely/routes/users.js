@@ -29,7 +29,7 @@ router.get('/', ensureLoggedIn, async (req, res, next) => {
 
 router.get('/:username', ensureLoggedIn, ensureCorrectUser, async (req, res, next) => {
   try {
-    const {username} = req.body;
+    const {username} = req.params;
     const user = await User.get(username);
     return res.json(user);
   }
@@ -50,7 +50,7 @@ router.get('/:username', ensureLoggedIn, ensureCorrectUser, async (req, res, nex
 
 router.get('/:username/to', ensureLoggedIn, ensureCorrectUser, async (req, res, next) => {
   try {
-    const {username} = req.body;
+    const {username} = req.params;
     const messages = await User.messagesTo(username);
     return res.json(messages);
   }
@@ -71,7 +71,7 @@ router.get('/:username/to', ensureLoggedIn, ensureCorrectUser, async (req, res, 
 
 router.get('/:username/from', ensureLoggedIn, ensureCorrectUser, async (req, res, next) => {
   try {
-    const {username} = req.body;
+    const {username} = req.params;
     const messages = await User.messagesFrom(username);
     return res.json(messages);
   }

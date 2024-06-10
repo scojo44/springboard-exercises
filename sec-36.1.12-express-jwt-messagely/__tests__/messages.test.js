@@ -1,40 +1,12 @@
-const db = require("../db");
-const User = require("../models/user");
+const t = require("./testSetup");
+const db = require('../db');
 const Message = require("../models/message");
 
+afterAll(async () => await t.closeDB());
 
 describe("Test Message class", function () {
-
-  beforeEach(async function () {
-    await db.query("DELETE FROM messages");
-    await db.query("DELETE FROM users");
-    await db.query("ALTER SEQUENCE messages_id_seq RESTART WITH 1");
-
-    let u1 = await User.register({
-      username: "test1",
-      password: "password",
-      first_name: "Test1",
-      last_name: "Testy1",
-      phone: "+14155550000",
-    });
-    let u2 = await User.register({
-      username: "test2",
-      password: "password",
-      first_name: "Test2",
-      last_name: "Testy2",
-      phone: "+14155552222",
-    });
-    let m1 = await Message.create({
-      from_username: "test1",
-      to_username: "test2",
-      body: "u1-to-u2"
-    });
-    let m2 = await Message.create({
-      from_username: "test2",
-      to_username: "test1",
-      body: "u2-to-u1"
-    });
-  });
+  beforeEach(async () => await t.initDB());
+  afterEach(async () => await t.clearDB());
 
   test("can create", async function () {
     let m = await Message.create({
@@ -61,8 +33,11 @@ describe("Test Message class", function () {
     expect(m.read_at).toBe(undefined);
 
     Message.markRead(m.id);
-    const result = await db.query("SELECT read_at from messages where id=$1",
-        [m.id]);
+    const result = await db.query(
+     `SELECT read_at FROM messages
+      WHERE id = $1`,
+      [m.id]);
+
     expect(result.rows[0].read_at).toEqual(expect.any(Date));
   });
 
@@ -77,7 +52,7 @@ describe("Test Message class", function () {
         username: "test1",
         first_name: "Test1",
         last_name: "Testy1",
-        phone: "+14155550000",
+        phone: "+14155551111",
       },
       to_user: {
         username: "test2",
@@ -87,8 +62,4 @@ describe("Test Message class", function () {
       },
     });
   });
-});
-
-afterAll(async function() {
-  await db.end();
 });
