@@ -3,8 +3,8 @@ Hashing and JWTs - Message.ly
 
 ## Further Study
 
-- [x] Write Tests for Routes
-- [ ] Make a Straightforward Front End
-- [ ] Send SMS With New Message
-- [ ] Make a SMS-backed Change Your Password Feature
-- [ ] Refactoring the Classes
+- [x] Write tests for routes
+- [ ] Make a straightforward front-end
+- [ ] Sign up with [Twilio](https://twilio.com) and send an SMS notification for each received message
+- [ ] Make a SMS-backed change password feature
+- [ ] Refactor the static model classes to instance classes
