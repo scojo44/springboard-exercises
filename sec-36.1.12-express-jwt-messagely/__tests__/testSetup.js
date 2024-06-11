@@ -32,9 +32,6 @@ class TestSetup {
       phone: "+14155553333",
     });
 
-    // Remove password hashes from users
-    [this.user1, this.user2, this.user3].forEach(u => delete u.password);
-
     // Create some messages
     this.message1 = await Message.create({
       from_username: "test1",
@@ -96,7 +93,32 @@ class TestSetup {
     const response = await request(app)
       .post("/auth/login")
       .send({username, password});
+    
+    // Update the last login field on the test user
+    const login = await User.get(username);
+    const user = this.users.find(u => u.username = username);
+    user.last_login_at = login.last_login_at;
+
     return response.body.token;
+  }
+
+  /** Fix dates in response.body that come back as quoted strings. */
+
+  fixQuotedDates(obj, key) {
+    if(obj[key])
+      obj[key] = new Date(obj[key]); // Use Date() to parse the quoted date string
+  }
+
+  fixQuotedDatesInUser(user) {
+    this.fixQuotedDates(user, 'join_at');
+    this.fixQuotedDates(user, 'last_login_at');
+  }
+
+  fixQuotedDatesInMessage(message) {
+    this.fixQuotedDatesInUser(message.from_user);
+    this.fixQuotedDatesInUser(message.to_user);
+    this.fixQuotedDates(message, 'sent_at');
+    this.fixQuotedDates(message, 'read_at');
   }
 }
 

@@ -9,36 +9,21 @@ const {BCRYPT_WORK_FACTOR, SECRET_KEY} = require('../config');
 /** User of the site. */
 
 class User {
-
-  /** register new user -- returns
-   *    {username, password, first_name, last_name, phone}
-   */
-
-  static async register({username, password, first_name, last_name, phone}) {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
-
-    // Save the new user to the database
-    const result = await db.query(
-     `INSERT INTO users (username, password, first_name, last_name, phone, join_at, last_login_at)
-      VALUES ($1, $2, $3, $4, $5, current_timestamp, current_timestamp)
-      RETURNING username, password, first_name, last_name, phone`,
-      [username, hashedPassword, first_name, last_name, phone]);
-
-    return result.rows[0];
+  constructor({username, password, first_name, last_name, phone, join_at = null, last_login_at = null}) {
+    this.username = username;
+    this.password = password;
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.phone = phone;
+    this.join_at = join_at;
+    this.last_login_at = last_login_at;
   }
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
-  static async authenticate(username, password) {
+  async authenticate(password) {
     try {
-      const result = await db.query(
-        `SELECT password FROM users
-         WHERE username = $1`,
-         [username]);
-      const user = result.rows[0];
-
-      return user && await bcrypt.compare(password, user.password);
+      return await bcrypt.compare(password, this.password);
     }
     catch {
       return false; // Treat nonexistent user the same as a wrong password
@@ -47,59 +32,33 @@ class User {
 
   /** Log in the user.  Returns token containing the username */
 
-  static async login(username) {
-    await User.updateLoginTimestamp(username);
-    const token = await jwt.sign({username}, SECRET_KEY);
+  async login() {
+    await this.updateLoginTimestamp();
+    const token = await jwt.sign({username: this.username}, SECRET_KEY);
     return token;
   }
 
   /** Update last_login_at for user */
 
-  static async updateLoginTimestamp(username) {
+  async updateLoginTimestamp() {
+    this.last_login_at = new Date();
+    return await this.save();
+  }
+
+  /** Save user to the database */
+
+  async save() {
     const result = await db.query(
-     `UPDATE users SET last_login_at = current_timestamp
+     `UPDATE users SET password=$2, first_name=$3, last_name=$4, phone=$5, last_login_at=$6
       WHERE username = $1
-      RETURNING username, last_login_at`,
-      [username]);
+      RETURNING username, password, first_name, last_name, phone, last_login_at`,
+      [this.username, this.password, this.first_name, this.last_name, this.phone, this.last_login_at]
+    );
 
     if(!result.rows[0])
-      throw new ExpressError(`Error saving login timestamp for user: ${username}`, 400);
+      throw new ExpressError(`No such user: ${this.username}`, 404);
 
-    return result.rows[0];
-  }
-
-  /** All: basic info on all users:
-   * [{username, first_name, last_name, phone}, ...] */
-
-  static async all() {
-    const results = await db.query(
-     `SELECT username, first_name, last_name, phone
-      FROM users
-      ORDER BY username`);
-
-    return results.rows;
-  }
-
-  /** Get: get user by username
-   *
-   * returns {username,
-   *          first_name,
-   *          last_name,
-   *          phone,
-   *          join_at,
-   *          last_login_at } */
-
-  static async get(username) {
-    const result = await db.query(
-     `SELECT username, first_name, last_name, phone, join_at, last_login_at
-      FROM users
-      WHERE username = $1`,
-      [username]);
-
-    if(result.rows.length === 0)
-      throw new ExpressError(`No such user: ${username}`, 404);
-
-    return result.rows[0];
+    return true;
   }
 
   /** Return messages from this user.
@@ -110,29 +69,22 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesFrom(username) {
-    const user = await User.get(username);
+  async messagesFrom() {
     const results = await db.query(
-      `SELECT m.id, m.body, m.sent_at, m.read_at, u.username, u.first_name, u.last_name, u.phone
-       FROM messages m
-       JOIN users u ON u.username = m.to_username
-       WHERE m.from_username = $1`,
-       [username]);
+     `SELECT id, to_username, body, sent_at, read_at
+      FROM messages
+      WHERE from_username = $1`,
+      [this.username]
+    );
  
-     return results.rows.map(r => {
-       return {
-         id: r.id,
-         body: r.body,
-         sent_at: r.sent_at,
-         read_at: r.read_at,
-         to_user: {
-           username: r.username,
-           first_name: r.first_name,
-           last_name: r.last_name,
-           phone: r.phone
-         }
-       }
-     })
+    const Message = require('./message');
+
+    const promisedMessages = results.rows.map(async r => {
+      const toUser = await User.get(r.to_username);
+      return new Message(r.id, this, toUser, r.body, r.sent_at, r.read_at);
+    });
+
+    return await Promise.all(promisedMessages);
   }
 
   /** Return messages to this user.
@@ -143,29 +95,77 @@ class User {
    *   {username, first_name, last_name, phone}
    */
 
-  static async messagesTo(username) {
-    const user = await User.get(username);
+  async messagesTo() {
     const results = await db.query(
-     `SELECT m.id, m.body, m.sent_at, m.read_at, u.username, u.first_name, u.last_name, u.phone
-      FROM messages m
-      JOIN users u ON u.username = m.from_username
-      WHERE m.to_username = $1`,
-      [username]);
+     `SELECT id, from_username, body, sent_at, read_at
+      FROM messages
+      WHERE to_username = $1`,
+      [this.username]
+    );
 
-    return results.rows.map(r => {
-      return {
-        id: r.id,
-        body: r.body,
-        sent_at: r.sent_at,
-        read_at: r.read_at,
-        from_user: {
-          username: r.username,
-          first_name: r.first_name,
-          last_name: r.last_name,
-          phone: r.phone
-        }
-      }
-    })
+    const Message = require('./message');
+
+    const promisedMessages = results.rows.map(async r => {
+      const fromUser = await User.get(r.from_username);
+      return new Message(r.id, fromUser, this, r.body, r.sent_at, r.read_at);
+    });
+
+    return await Promise.all(promisedMessages);
+  }
+
+  /** register new user -- returns
+   *    {username, password, first_name, last_name, phone}
+   */
+
+  static async register({username, password, first_name, last_name, phone}) {
+    // Save the new user to the database
+    const result = await db.query(
+     `INSERT INTO users (username, password, first_name, last_name, phone, join_at)
+      VALUES ($1, $2, $3, $4, $5, current_timestamp)
+      RETURNING username, password, first_name, last_name, phone, join_at`,
+      [username, await User.hashPassword(password), first_name, last_name, phone]
+    );
+
+    return new User(result.rows[0]);
+  }
+
+  /** Hash the password */
+
+  static async hashPassword(password) {
+    return await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+  }
+
+  /** All: basic info on all users:
+   * [{username, first_name, last_name, phone}, ...]
+   */
+
+  static async all() {
+    const results = await db.query(
+     `SELECT username, password, first_name, last_name, phone, join_at, last_login_at
+      FROM users
+      ORDER BY username`
+    );
+
+    return results.rows.map(r => new User(r));
+  }
+
+  /** Get: get user by username
+   *
+   * returns {username, first_name, last_name, phone, join_at, last_login_at}
+   */
+
+  static async get(username) {
+    const result = await db.query(
+     `SELECT username, password, first_name, last_name, phone, join_at, last_login_at
+      FROM users
+      WHERE username = $1`,
+      [username]
+    );
+
+    if(result.rows.length === 0)
+      throw new ExpressError(`No such user: ${username}`, 404);
+
+    return new User(result.rows[0]);
   }
 }
 

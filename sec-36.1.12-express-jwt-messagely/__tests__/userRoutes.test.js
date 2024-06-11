@@ -17,7 +17,10 @@ describe("User Routes Test", () => {
       const response = await request(app)
         .get('/users')
         .query({_token: token});
-      expect(response.body).toEqual(t.users);
+
+      response.body.users.forEach(u => t.fixQuotedDatesInUser(u));
+
+      expect(response.body).toEqual({users: t.users});
     });
 
     test("can't get all users w/o login", async () => {
@@ -35,7 +38,10 @@ describe("User Routes Test", () => {
       const response = await request(app)
         .get('/users/test1')
         .query({_token: token});
-      expect(response.body).toMatchObject(t.user1); // Ignore last_login and join_at dates
+
+      t.fixQuotedDatesInUser(response.body.user);
+
+      expect(response.body).toMatchObject({user: t.user1});
     });
 
     t.expectUnauthorizedFromWrongUsersGet(`user's details`, '/users/test1');
@@ -49,8 +55,19 @@ describe("User Routes Test", () => {
       const response = await request(app)
         .get('/users/test1/to')
         .query({_token: token});
-      expect(response.body[0].id).toEqual(t.message2.id);
-      expect(response.body[0].body).toEqual(t.message2.body);
+
+      response.body.messages.forEach(m => t.fixQuotedDatesInMessage(m));
+
+      expect(response.body).toEqual({
+        messages: [{
+          id: t.message2.id,
+          from_user: t.user2,
+          to_user: t.user1,
+          body: t.message2.body,
+          sent_at: expect.any(Date),
+          read_at: null
+        }]
+      });
     });
 
     t.expectUnauthorizedFromWrongUsersGet(`user's received messages`, '/users/test1/to');
@@ -64,8 +81,19 @@ describe("User Routes Test", () => {
       const response = await request(app)
         .get('/users/test1/from')
         .query({_token: token});
-      expect(response.body[0].id).toEqual(t.message1.id);
-      expect(response.body[0].body).toEqual(t.message1.body);
+
+      response.body.messages.forEach(m => t.fixQuotedDatesInMessage(m));
+
+      expect(response.body).toEqual({
+        messages: [{
+          id: t.message1.id,
+          from_user: t.user1,
+          to_user: t.user2,
+          body: t.message1.body,
+          sent_at: expect.any(Date),
+          read_at: null
+        }]
+      });
     });
 
     t.expectUnauthorizedFromWrongUsersGet(`user's sent messages`, '/users/test1/from');
