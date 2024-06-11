@@ -25,6 +25,7 @@ describe("Auth Routes Test", function () {
         });
 
       const token = response.body.token;
+      expect(response.status).toBe(201);
       expect(jwt.decode(token)).toEqual({
         username: "bob",
         iat: expect.any(Number)

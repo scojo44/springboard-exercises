@@ -71,6 +71,7 @@ describe("User Routes Test", () => {
 
       t.fixQuotedDatesInMessage(response.body.message);
 
+      expect(response.status).toBe(201);
       expect(response.body).toEqual({
         message: {
           id: expect.any(Number),

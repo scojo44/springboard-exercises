@@ -16,7 +16,7 @@ router.post('/register', async (req, res, next) => {
     // Register the new user and log them in
     const user = await User.register(req.body);
     const token = await user.login();
-    return res.json({token});
+    return res.status(201).json({token});
   }
   catch (error) {
     // Check for the Postgres error code for 'primary key already exists'
