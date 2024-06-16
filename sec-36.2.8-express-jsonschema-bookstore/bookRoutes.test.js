@@ -91,7 +91,6 @@ describe('Express Bookstore Tests', () => {
   describe('PUT /books/:isbn - Replace a book', () => {
     test('Can change book details for a given ISBN', async () => {
       const book4 = {
-        isbn: book1.isbn,
         amazon_url: "https://a.co/d/33693O2",
         author: "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
         language: "english",
@@ -101,6 +100,7 @@ describe('Express Bookstore Tests', () => {
         year: 1994
       }
       const response = await request(app).put(`/books/${book1.isbn}`).send(book4);
+      book4.isbn = book1.isbn; // Response will have ISBN
       expect(response.status).toBe(200);
       expect(response.body).toEqual({book: book4});
 
@@ -128,8 +128,23 @@ describe('Express Bookstore Tests', () => {
       expect(response.body.error.message).toEqual(errors);
     })
 
+    test('Try to change ISBN rejected', async () => {
+      const book5 = {
+        isbn: 9780321965516,
+        amazon_url: "https://a.co/d/7IXIyq2",
+        author: "Steve Krug",
+        language: "english",
+        pages: 216,
+        publisher: "New Riders",
+        title: "Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability (3rd Edition)",
+        year: 2013
+      }
+      const response = await request(app).put(`/books/9999999999`).send(book5);
+      expect(response.status).toBe(400);
+    })
+
     test('Non-existent book returns a 404', async () => {
-      const book5 = { // ISBN: 9780321965516
+      const book5 = {
         amazon_url: "https://a.co/d/7IXIyq2",
         author: "Steve Krug",
         language: "english",

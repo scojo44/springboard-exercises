@@ -55,6 +55,11 @@ router.post("/", async function (req, res, next) {
 /** PUT /[isbn]   bookData => {book: updatedBook}  */
 
 router.put("/:isbn", async function (req, res, next) {
+  if(req.body.isbn) {
+    const error = new ExpressError('Unable to change ISBN', 400);
+    return next(error);
+  }
+
   try {
     const check = jsonschema.validate(req.body, updateBookSchema);
 
