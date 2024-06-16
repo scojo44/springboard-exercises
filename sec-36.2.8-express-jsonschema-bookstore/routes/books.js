@@ -2,7 +2,8 @@ const express = require("express");
 const jsonschema = require('jsonschema');
 const ExpressError = require('../expressError');
 const Book = require("../models/book");
-const bookSchema = require('../schemas/book.json');
+const newBookSchema = require('../schemas/bookNew.json');
+const updateBookSchema = require('../schemas/bookUpdate.json');
 
 const router = new express.Router();
 
@@ -35,7 +36,7 @@ router.get("/:id", async function (req, res, next) {
 
 router.post("/", async function (req, res, next) {
   try {
-    const check = jsonschema.validate(req.body, bookSchema);
+    const check = jsonschema.validate(req.body, newBookSchema);
 
     if(!check.valid) {
       const validationErrors = check.errors.map(e => e.stack);
@@ -55,8 +56,7 @@ router.post("/", async function (req, res, next) {
 
 router.put("/:isbn", async function (req, res, next) {
   try {
-    req.body.isbn = req.params.isbn; // Validtator will require an ISBN
-    const check = jsonschema.validate(req.body, bookSchema);
+    const check = jsonschema.validate(req.body, updateBookSchema);
 
     if(!check.valid) {
       const validationErrors = check.errors.map(e => e.stack);
