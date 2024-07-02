@@ -1,0 +1,36 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+.tweet {
+  border: 3px solid white;
+  border-radius: 10px;
+  margin: 10px;
+}
+.header {
+  margin: 0;
+  padding: 3px 10px;
+  background-color: rgb(52, 88, 249);
+  border-radius: 8px 8px 0 0;
+}
+.name {
+  font-weight: bold;
+  padding-right: 1rem;
+}
+.username {
+  color: rgb(164, 164, 164);
+}
+.message {
+  font-size: x-large;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px 10px;
+}
+.footer {
+  margin: 0;
+  padding: 0 0 5px 10px;
+  background-color: rgb(75, 56, 110);
+  color: gray;
+  border-radius: 0 0 8px 8px;
+}
