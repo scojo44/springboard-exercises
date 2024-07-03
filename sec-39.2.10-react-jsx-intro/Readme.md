@@ -8,4 +8,4 @@ JSX Exercises
 ## Other Items
 
 - [x] Refactor to destructure props
-- [ ] Migrate ReactDOM.render to use React 18's way
+- [x] Migrate `ReactDOM.render()` to `ReactDOM.createRoot()` in React 18
