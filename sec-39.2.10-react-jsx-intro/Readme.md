@@ -9,3 +9,4 @@ JSX Exercises
 
 - [x] Refactor to destructure props
 - [x] Migrate `ReactDOM.render()` to `ReactDOM.createRoot()` in React 18
+- [x] Fix key warning in Person component

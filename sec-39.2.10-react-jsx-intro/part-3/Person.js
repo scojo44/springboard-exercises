@@ -9,7 +9,7 @@ const Person = ({name, age, hobbies}) => {
     <h3>{voteMsg}</h3>
 
     <ul>
-      {hobbies.map(h => <li>{h}</li>)}
+      {hobbies.map(([id,h]) => <li key={id}>{h}</li>)}
     </ul>
 
     <hr />

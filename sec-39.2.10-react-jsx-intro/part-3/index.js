@@ -2,9 +2,9 @@ const App = () => (
   <div>
     <Alert type="success" message="Added three people!" />
     <hr />
-    <Person name="Bob" age="32" hobbies={['Geocaching', "Jigsaw Puzzles", "Genealogy"]} />
-    <Person name="Kimberly" age="24" hobbies={['Crocheting', "Quilting", "Birdwatching"]} />
-    <Person name="Johnny" age="15" hobbies={['Programming', "Board Games", "Model Airplanes"]} />
+    <Person name="Bob" age="32" hobbies={[[1, 'Geocaching'], [2, 'Jigsaw Puzzles'], [3, 'Genealogy']]} />
+    <Person name="Kimberly" age="24" hobbies={[[1, 'Crocheting'], [2, 'Quilting'], [3, 'Birdwatching']]} />
+    <Person name="Johnny" age="15" hobbies={[[1, 'Programming'], [2, 'Board Games'], [3, 'Model Airplanes']]} />
   </div>
 );
 
