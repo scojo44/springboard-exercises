@@ -7,5 +7,5 @@ JSX Exercises
 
 ## Other Items
 
-- [ ] Refactor to destructure props
+- [x] Refactor to destructure props
 - [ ] Migrate ReactDOM.render to use React 18's way

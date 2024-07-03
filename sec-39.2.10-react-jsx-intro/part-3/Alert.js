@@ -1,5 +1,5 @@
-const Alert = (props) => (
-  <aside className="alert-{props.type}">
-    {props.message}
+const Alert = ({message, category}) => (
+  <aside className="alert-{category}">
+    {message}
   </aside>
 )
