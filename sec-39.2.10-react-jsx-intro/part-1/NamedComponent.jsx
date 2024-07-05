@@ -1,1 +1,1 @@
-const NamedComponent = ({name}) => <p>My name is {name}</p>
+const NamedComponent = ({name}) => <p>My name is {name}</p>;

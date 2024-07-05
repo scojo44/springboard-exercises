@@ -8,4 +8,4 @@ const Tweet = ({name, username, message, date}) => (
       <small>{date.toLocaleString()}</small>
     </p>
   </div>
-)
+);

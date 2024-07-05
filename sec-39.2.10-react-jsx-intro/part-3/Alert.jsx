@@ -5,4 +5,4 @@ const Alert = ({message, category}) => {
       {message}
     </aside>
   )
-}
+};
