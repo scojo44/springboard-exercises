@@ -6,6 +6,4 @@ const App = () => (
 );
 
 // Using React 18 syntax
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
-root.render(<App/>);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
