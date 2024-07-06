@@ -1,4 +1,5 @@
-.Pokedex h1 {
+.Pokedex h1,
+.Pokedex h2 {
   text-align: center;
 }
 .Pokedex ul {
