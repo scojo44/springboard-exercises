@@ -4,6 +4,6 @@
 
 - [x] 8-Ball Reset Button
 - [x] 8-Ball Record Keeping
-- [ ] Color Boxes App
-  - [ ] Default Properties
+- [x] Color Boxes App
+  - [x] Default Properties
   - [ ] Feedback on Changed Box
