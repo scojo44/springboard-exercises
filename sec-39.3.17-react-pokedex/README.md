@@ -1,8 +1,8 @@
 React Props: Pokedex
 ====================
 
-## Further Study
+## Further Study Items
 
 - [x] Pokegame Component
-- [ ] Styling with flashy CSS
+- [x] Styling with flashy CSS
 - [ ] Basic Blackjack!
