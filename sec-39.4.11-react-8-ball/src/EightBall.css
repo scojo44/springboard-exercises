@@ -14,3 +14,13 @@
   font-size: 2rem;
   background-color: cornflowerblue;
 }
+.EightBall .count {
+  padding: .5rem 1rem;
+  margin: 1rem;
+  font-weight: bold;
+  font-size: 2rem;
+  border-radius: 1rem;
+}
+.EightBall .red {background-color: red;}
+.EightBall .goldenrod {background-color: goldenrod;}
+.EightBall .green {background-color: green;}

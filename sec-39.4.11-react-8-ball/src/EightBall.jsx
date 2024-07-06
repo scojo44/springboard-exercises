@@ -31,20 +31,29 @@ const EightBall = ({answers = answersDB}) => {
   function reset() {
     setColor(START_COLOR);
     setMessage(START_MESSAGE);
+    setColorCounts({red: 0, goldenrod: 0, green: 0});
   }
   function pickMessage() {
     const idx = Math.floor(Math.random() * answers.length);
     setMessage(answers[idx].msg);
     setColor(answers[idx].color);
+    colorCounts[answers[idx].color]++;
+    setColorCounts(colorCounts);
   }
 
   const [color, setColor] = useState(START_COLOR);
   const [message, setMessage] = useState(START_MESSAGE);
+  const [colorCounts, setColorCounts] = useState({red: 0, goldenrod: 0, green: 0});
 
   return (
     <div className="EightBall">
       <h2 style={{backgroundColor: color}} onClick={pickMessage}>{message}</h2>
-      <p><button onClick={reset}>Reset</button></p>
+      <p>
+        <button onClick={reset}>Reset</button>
+        <span className="count red">{colorCounts.red}</span>
+        <span className="count goldenrod">{colorCounts.goldenrod}</span>
+        <span className="count green">{colorCounts.green}</span>
+      </p>
     </div>
   );
 }
