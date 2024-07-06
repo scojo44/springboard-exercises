@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import './EightBall.css'
 
+const START_COLOR = 'black';
+const START_MESSAGE = 'Think of a Question';
+
 const answersDB = [
   { msg: "It is certain.", color: "green" },
   { msg: "It is decidedly so.", color: "green" },
@@ -25,16 +28,25 @@ const answersDB = [
 ]
 
 const EightBall = ({answers = answersDB}) => {
+  function reset() {
+    setColor(START_COLOR);
+    setMessage(START_MESSAGE);
+  }
   function pickMessage() {
     const idx = Math.floor(Math.random() * answers.length);
     setMessage(answers[idx].msg);
     setColor(answers[idx].color);
   }
 
-  const [color, setColor] = useState('black');
-  const [message, setMessage] = useState('Think of a Question');
+  const [color, setColor] = useState(START_COLOR);
+  const [message, setMessage] = useState(START_MESSAGE);
 
-  return <p className="EightBall" style={{backgroundColor: color}} onClick={pickMessage}>{message}</p>;
+  return (
+    <div className="EightBall">
+      <h2 style={{backgroundColor: color}} onClick={pickMessage}>{message}</h2>
+      <p><button onClick={reset}>Reset</button></p>
+    </div>
+  );
 }
 
 export default EightBall;
