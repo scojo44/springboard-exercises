@@ -6,4 +6,4 @@
 - [x] 8-Ball Record Keeping
 - [x] Color Boxes App
   - [x] Default Properties
-  - [ ] Feedback on Changed Box
+  - [x] Feedback on Changed Box

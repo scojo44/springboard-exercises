@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <h1>Color Boxes</h1>
-      <ColorPallet />
+      <ColorPallet boxCount={44} />
     </>
   );
 }
