@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import './EightBall.css'
 
-const START_COLOR = 'black';
-const START_MESSAGE = 'Think of a Question';
+const START_PROMPT = {msg: 'Think of a Question', color: 'black'};
+const START_COUNTS = {red: 0, goldenrod: 0, green: 0};
 
 const answersDB = [
   { msg: "It is certain.", color: "green" },
@@ -29,25 +29,22 @@ const answersDB = [
 
 const EightBall = ({answers = answersDB}) => {
   function reset() {
-    setColor(START_COLOR);
-    setMessage(START_MESSAGE);
-    setColorCounts({red: 0, goldenrod: 0, green: 0});
+    setOutput(START_PROMPT);
+    setColorCounts(START_COUNTS);
   }
   function pickMessage() {
     const idx = Math.floor(Math.random() * answers.length);
-    setMessage(answers[idx].msg);
-    setColor(answers[idx].color);
+    setOutput(answers[idx]);
     colorCounts[answers[idx].color]++;
     setColorCounts(colorCounts);
   }
 
-  const [color, setColor] = useState(START_COLOR);
-  const [message, setMessage] = useState(START_MESSAGE);
-  const [colorCounts, setColorCounts] = useState({red: 0, goldenrod: 0, green: 0});
+  const [output, setOutput] = useState(START_PROMPT);
+  const [colorCounts, setColorCounts] = useState(START_COUNTS);
 
   return (
     <div className="EightBall">
-      <h2 style={{backgroundColor: color}} onClick={pickMessage}>{message}</h2>
+      <h2 style={{backgroundColor: output.color}} onClick={pickMessage}>{output.msg}</h2>
       <p>
         <button onClick={reset}>Reset</button>
         <span className="count red">{colorCounts.red}</span>
