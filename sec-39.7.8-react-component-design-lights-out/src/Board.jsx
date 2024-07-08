@@ -27,7 +27,7 @@ import "./Board.css";
  *
  **/
 
-function Board({ rows, cols, chanceLightStartsOn }) {
+function Board({rows = 5, cols = 5, chanceLightStartsOn = .5}) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board with the given number of rows and cols, each light randomly lit or unlit */
@@ -88,5 +88,12 @@ function Board({ rows, cols, chanceLightStartsOn }) {
       </table>
     )
 }
+
+// This method of defaultProps will be gone in React 19
+// Board.defaultprops = {
+//   rows: 5,
+//   cols: 5,
+//   chanceLightStartsOn: .5
+// };
 
 export default Board;

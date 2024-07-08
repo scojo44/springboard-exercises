@@ -21,7 +21,8 @@ Light: Shows the light
 
 ## Further Study Items
 
-- [ ] Default Properties
+- [x] Default Properties
+  - React 18.3 deprecated defaultProps for function components in favor of JS default parameters.  Will be removed in React 19.
 - [ ] Add Tests
 - [ ] Improve Our CSS
 - [ ] Ensure A Game Is Winnable
