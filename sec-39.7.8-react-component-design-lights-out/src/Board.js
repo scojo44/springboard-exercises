@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Cell from "./Cell";
+import Light from "./Light";
 import "./Board.css";
 
 /** Game board of Lights out.
  *
  * Properties:
  *
- * - nrows: number of rows of board
- * - ncols: number of cols of board
- * - chanceLightStartsOn: float, chance any cell is lit at start of game
+ * - rows: number of rows of board
+ * - cols: number of cols of board
+ * - chanceLightStartsOn: float, chance any light is lit at start of game
  *
  * State:
  *
@@ -21,16 +21,16 @@ import "./Board.css";
  *
  *    This would be: [[f, f, f], [t, t, f], [f, f, f]]
  *
- *  This should render an HTML table of individual <Cell /> components.
+ *  This should render an HTML table of individual <Light /> components.
  *
- *  This doesn't handle any clicks --- clicks are on individual cells
+ *  This doesn't handle any clicks --- clicks are on individual lights
  *
  **/
 
-function Board({ nrows, ncols, chanceLightStartsOn }) {
+function Board({ rows, cols, chanceLightStartsOn }) {
   const [board, setBoard] = useState(createBoard());
 
-  /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
+  /** create a board with the given number of rows and cols, each light randomly lit or unlit */
   function createBoard() {
     let initialBoard = [];
     // TODO: create array-of-arrays of true/false values
@@ -41,21 +41,21 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     // TODO: check the board in state to determine whether the player has won.
   }
 
-  function flipCellsAround(coord) {
+  function flipLightsAround(coord) {
     setBoard(oldBoard => {
       const [y, x] = coord.split("-").map(Number);
 
-      const flipCell = (y, x, boardCopy) => {
+      const flipLight = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
 
-        if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
+        if (x >= 0 && x < cols && y >= 0 && y < rows) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
       };
 
       // TODO: Make a (deep) copy of the oldBoard
 
-      // TODO: in the copy, flip this cell and the cells around it
+      // TODO: in the copy, flip this light and the lights around it
 
       // TODO: return the copy
     });
