@@ -50,7 +50,7 @@ function Board({rows = 5, cols = 5, chanceLightStartsOn = .5}) {
     }, true);
   }
 
-  function flipLightsAround(x,y) {
+  function flipLightsAround(y,x) {
     setBoard(oldBoard => {
       const flipLight = (y, x, boardCopy) => {
         // if this coord is actually on the board, flip it
@@ -83,7 +83,7 @@ function Board({rows = 5, cols = 5, chanceLightStartsOn = .5}) {
         <tbody>
           {board.map((row,y) => 
             <tr key={y}>
-              {row.map((isLit,x) => <Light key={[x,y]} isLit={isLit} flipLightsAroundMe={e => flipLightsAround(x,y)} />)}
+              {row.map((isLit,x) => <Light key={[y,x]} isLit={isLit} flipLightsAroundMe={e => flipLightsAround(y,x)} />)}
             </tr>
           )}
         </tbody>
