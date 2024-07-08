@@ -24,5 +24,9 @@ Light: Shows the light
 - [x] Default Properties
   - React 18.3 deprecated defaultProps for function components in favor of JS default parameters.  Will be removed in React 19.
 - [ ] Add Tests
+  - [x] Renders a light cell properly
+  - [ ] Renders the starting board
+  - [ ] Clicking a light toggles the correct lights
+  - [ ] Checks for a win and shows the winner message
 - [ ] Improve Our CSS
 - [ ] Ensure A Game Is Winnable
