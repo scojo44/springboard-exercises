@@ -80,11 +80,13 @@ function Board({rows = 5, cols = 5, chanceLightStartsOn = .5}) {
     : (
       // make table board
       <table className="Board">
-        {board.map((row,y) => 
-          <tr>
-            {row.map((isLit,x) => <Light x={x} y={y} isLit={isLit} flipLightsAroundMe={() => flipLightsAround(x,y)} key={[x,y]} />)}
-          </tr>
-        )}
+        <tbody>
+          {board.map((row,y) => 
+            <tr key={y}>
+              {row.map((isLit,x) => <Light key={[x,y]} isLit={isLit} flipLightsAroundMe={e => flipLightsAround(x,y)} />)}
+            </tr>
+          )}
+        </tbody>
       </table>
     )
 }

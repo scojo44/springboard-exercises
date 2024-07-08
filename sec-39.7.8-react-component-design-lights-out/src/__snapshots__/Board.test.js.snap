@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches the snapshot 1`] = `
+<DocumentFragment>
+  <table
+    class="Board"
+  >
+    <tbody>
+      <tr>
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+      </tr>
+      <tr>
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+      </tr>
+      <tr>
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+        <td
+          class="Light Light-lit"
+        />
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
