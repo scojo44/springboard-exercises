@@ -52,3 +52,22 @@ it("works when you click on the left arrow", () => {
   expect(container.querySelector('img[alt="testing image 1"]')).toBeInTheDocument();
   expect(container.querySelector('img[alt="testing image 2"]')).not.toBeInTheDocument();
 });
+
+it("should hide the left arrow when on the first image", function() {
+  const { container } = render(
+    <Carousel photos={TEST_IMAGES} title="images for testing" />
+  );
+  expect(container.querySelector('.bi-arrow-left-circle')).not.toBeInTheDocument();
+});
+
+it("should hide the right arrow when on the last image", function() {
+  const { container } = render(
+    <Carousel photos={TEST_IMAGES} title="images for testing" />
+  );
+
+  // move forward to the third and last image in the carousel
+  const rightArrow = container.querySelector(".bi-arrow-right-circle");
+  fireEvent.click(rightArrow);
+  fireEvent.click(rightArrow);
+  expect(container.querySelector('.bi-arrow-right-circle')).not.toBeInTheDocument();
+});

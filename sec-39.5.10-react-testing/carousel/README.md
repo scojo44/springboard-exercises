@@ -1,10 +1,10 @@
 React Testing Exercises
 =======================
 
-- [ ] Part 1: Demo the App & Read the Code
-- [ ] Part 2: Smoke and Snapshot tests
-- [ ] Part 3: Bug! Left arrow
-- [ ] Part 4: Bug! Exhausting the image array
+- [x] Part 1: Demo the App & Read the Code
+- [x] Part 2: Smoke and Snapshot tests
+- [x] Part 3: Bug! Left arrow
+- [x] Part 4: Bug! Exhausting the image array
 
 ## Further Study Items
 
