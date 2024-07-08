@@ -32,42 +32,61 @@ function Board({ rows, cols, chanceLightStartsOn }) {
 
   /** create a board with the given number of rows and cols, each light randomly lit or unlit */
   function createBoard() {
-    let initialBoard = [];
+    function lightRandomly() {
+      return Math.random() < chanceLightStartsOn;
+    }
+
+    const initialBoard = Array.from({length: cols});
     // TODO: create array-of-arrays of true/false values
-    return initialBoard;
+    return initialBoard.map(row => Array.from({length: cols}).map(col => lightRandomly()));
   }
 
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+    return board.reduce((isBoardOff,nextRow) => {
+      return isBoardOff && nextRow.reduce((isRowOff,nextLight) => {
+        return isRowOff && !nextLight;
+      }, true);
+    }, true);
   }
 
-  function flipLightsAround(coord) {
+  function flipLightsAround(x,y) {
     setBoard(oldBoard => {
-      const [y, x] = coord.split("-").map(Number);
-
       const flipLight = (y, x, boardCopy) => {
-        // if this coord is actually on board, flip it
-
+        // if this coord is actually on the board, flip it
         if (x >= 0 && x < cols && y >= 0 && y < rows) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
       };
 
       // TODO: Make a (deep) copy of the oldBoard
+      const newBoard = oldBoard.map(row => [...row]);
 
       // TODO: in the copy, flip this light and the lights around it
+      flipLight(y,   x, newBoard);
+      flipLight(y+1, x, newBoard);
+      flipLight(y, x+1, newBoard);
+      flipLight(y-1, x, newBoard);
+      flipLight(y, x-1, newBoard);
 
       // TODO: return the copy
+      return newBoard;
     });
   }
 
   // if the game is won, just show a winning msg & render nothing else
-
-  // TODO
-
-  // make table board
-
-  // TODO
+  return hasWon()
+    ? <h2 className="Board">You Won!</h2>
+    : (
+      // make table board
+      <table className="Board">
+        {board.map((row,y) => 
+          <tr>
+            {row.map((isLit,x) => <Light x={x} y={y} isLit={isLit} flipLightsAroundMe={() => flipLightsAround(x,y)} key={[x,y]} />)}
+          </tr>
+        )}
+      </table>
+    )
 }
 
 export default Board;

@@ -14,8 +14,8 @@ import "./Light.css";
  *
  **/
 
-function Light({ flipLightsAroundMe, isLit }) {
-  const classes = `Light ${isLit ? "lit" : ""}`;
+function Light({ isLit, flipLightsAroundMe }) {
+  const classes = `Light ${isLit ? "Light-lit" : ""}`;
   return <td className={classes} onClick={flipLightsAroundMe} />;
 }
 
