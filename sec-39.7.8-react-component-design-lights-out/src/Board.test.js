@@ -83,3 +83,10 @@ it('toggles the correct lights when upper right light in a 3x3 board is clicked'
   expectLightToBeOn(3,2);
   expectLightToBeOn(3,3);
 });
+
+it('shows the winner message when all the lights are off', () => {
+  const {getByText} = render(<Board rows={3} cols={3} chanceLightStartsOn={0} />);
+  const winner = getByText("You Won!");
+  expect(winner).toHaveClass("Board");
+  expect(winner).toHaveTextContent("You Won!");
+});

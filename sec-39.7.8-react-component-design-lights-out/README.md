@@ -29,6 +29,6 @@ Light: Shows the light
     - How to make the initial board configuration predictable?
       - `<Board chanceLightStartsOn=1>` so all lights are guaranteed to be on.
   - [x] Clicking a light toggles the correct lights
-  - [ ] Checks for a win and shows the winner message
+  - [x] Checks for a win and shows the winner message
 - [ ] Improve Our CSS
 - [ ] Ensure A Game Is Winnable
