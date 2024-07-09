@@ -1,0 +1,24 @@
+React Forms Exercises
+=====================
+
+- [ ] Part 1: Color Box Maker
+  - [ ] Write Tests
+- [ ] Part 2: Todo App
+  - [ ] Write Tests
+
+## Todo App Further Study Items
+
+- [ ] Ability to edit todos
+- [ ] Mark as Complete button
+- [ ] Convert the Mark as Complete button to a toggle
+- [ ] Style the app with fancy CSS
+- [ ] Save/Load todos to/from localStorage
+
+## React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
