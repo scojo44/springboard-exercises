@@ -1,0 +1,62 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BoxList Tests > matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="BoxList"
+  >
+    <h1>
+      Color Box Maker
+    </h1>
+    <form
+      class="NewBoxForm"
+    >
+      <p>
+        <label
+          for="color"
+        >
+          Color: 
+        </label>
+        <input
+          id="color"
+          name="color"
+          type="text"
+          value=""
+        />
+      </p>
+      <p>
+        <label
+          for="width"
+        >
+          Width: 
+        </label>
+        <input
+          id="width"
+          name="width"
+          type="text"
+          value=""
+        />
+      </p>
+      <p>
+        <label
+          for="height"
+        >
+          Height: 
+        </label>
+        <input
+          id="height"
+          name="height"
+          type="text"
+          value=""
+        />
+      </p>
+      <button
+        type="submit"
+      >
+        Add Box
+      </button>
+    </form>
+    <ul />
+  </div>
+</DocumentFragment>
+`;
