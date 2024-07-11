@@ -3,12 +3,12 @@ import Task from './Task'
 import TaskEdit from './TaskEdit'
 import './Todo.css'
 
-function Todo({id, task, remove, update, editing = false}) {
+function Todo({id, task, remove, update, completed = false, editing = false}) {
   return (
     <li className='Todo'>
       {editing
-      ? <TaskEdit id={id} task={task} update={update} />
-      : <Task id={id} task={task} remove={remove} update={update} />
+      ? <TaskEdit id={id} task={task} update={update} completed={completed} />
+      : <Task id={id} task={task} remove={remove} update={update} completed={completed} />
       }
     </li>
   )

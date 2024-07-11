@@ -9,7 +9,7 @@ React Forms Exercises
 ## Todo App Further Study Items
 
 - [x] Ability to edit todos
-- [ ] Mark as Complete button
+- [x] Mark as Complete button
 - [ ] Convert the Mark as Complete button to a toggle
 - [ ] Style the app with fancy CSS
 - [ ] Store todos in localStorage

@@ -6,7 +6,7 @@ import './TodoList.css'
 
 function TodoList() {
   function addTask({task}) {
-    setTasks(tasks => [...tasks, {id: uuid(), task}]);
+    setTasks(tasks => [...tasks, {id: uuid(), task, completed: false}]);
   }
 
   function removeTask(id) {
@@ -16,10 +16,11 @@ function TodoList() {
   /** editing is true: Show the todo edit UI
    * editing is false: Update the task from the edit form
    */
-  function updateTask(id, task, editing) {
+  function updateTask(id, task, completed, editing = false) {
     setTasks(tasks => tasks.map(t => {
       if(t.id === id) {
         t.task = task;
+        t.completed = completed;
         t.editing = editing;
       }
       return t;
@@ -27,7 +28,7 @@ function TodoList() {
   }
 
   const [tasks, setTasks] = useState([]);
-  const todos = tasks.map(t => <Todo id={t.id} task={t.task} remove={removeTask} update={updateTask} editing={t.editing} key={t.id} />);
+  const todos = tasks.map(t => <Todo id={t.id} task={t.task} remove={removeTask} update={updateTask} completed={t.completed} editing={t.editing} key={t.id} />);
 
   return (
     <div className='TodoList'>
