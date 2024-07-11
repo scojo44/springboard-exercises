@@ -11,8 +11,8 @@ React Forms Exercises
 - [x] Ability to edit todos
 - [x] Mark as Complete button
 - [x] Convert the Mark as Complete button to a toggle
-- [ ] Style the app with fancy CSS
-- [ ] Store todos in localStorage
+- [ ] Style the app with fancy CSS and SASS
+- [x] Store todos in localStorage
 
 ## React + Vite
 
