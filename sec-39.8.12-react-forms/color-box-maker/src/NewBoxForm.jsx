@@ -4,7 +4,7 @@ const EMPTY_FORM = {
   color: '',
   width: '',
   height: ''
-}
+};
 
 const NewBoxForm = ({addBox}) => {
   function handleSubmit(e) {
@@ -20,7 +20,7 @@ const NewBoxForm = ({addBox}) => {
 
     setFormData(data => {
       return {
-        ...formData,
+        ...data,
         [name]: value
       };
     })

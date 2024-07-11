@@ -16,6 +16,7 @@ describe('NewBoxForm Tests', () => {
     const color = getByLabelText('Color:');
     const width = getByLabelText('Width:');
     const height = getByLabelText('Height:');
+
     expect(color).toBeInTheDocument();
     expect(width).toBeInTheDocument();
     expect(height).toBeInTheDocument();
@@ -31,10 +32,12 @@ describe('NewBoxForm Tests', () => {
     const width = getByLabelText('Width:');
     const height = getByLabelText('Height:');
     const button = getByText('Add Box');
+
     fireEvent.change(color, {target: {value: 'pink'}});
     fireEvent.change(width, {target: {value: '1em'}});
     fireEvent.change(height, {target: {value: '1em'}});
     fireEvent.click(button);
+
     expect(addBox).toHaveBeenCalled();
     expect(newBox).toEqual({
       color: 'pink',

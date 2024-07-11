@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Todo Tests > matches snapshot 1`] = `
+<DocumentFragment>
+  <li
+    class="Todo"
+  >
+    Learn React
+    <button>
+      X
+    </button>
+  </li>
+</DocumentFragment>
+`;

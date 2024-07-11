@@ -13,9 +13,7 @@ const BoxList = () => {
   }
 
   const [boxes, setBoxes] = useState([]);
-  const boxLIs = boxes.map(({id, width, height, color}) => (
-    <Box id={id} width={width} height={height} color={color} key={id} removeMe={removeBox} />
-  ));
+  const boxLIs = boxes.map(b => <Box id={b.id} width={b.width} height={b.height} color={b.color} key={b.id} removeMe={removeBox} />);
 
   return (
     <div className="BoxList">

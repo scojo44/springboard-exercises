@@ -1,10 +1,10 @@
 React Forms Exercises
 =====================
 
-- [ ] Part 1: Color Box Maker
-  - [ ] Write Tests
-- [ ] Part 2: Todo App
-  - [ ] Write Tests
+- [x] Part 1: Color Box Maker
+  - [x] Write Tests
+- [x] Part 2: Todo App
+  - [x] Write Tests
 
 ## Todo App Further Study Items
 
