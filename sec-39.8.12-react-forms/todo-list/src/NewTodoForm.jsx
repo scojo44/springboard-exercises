@@ -29,7 +29,7 @@ const NewTodoForm = ({addTask}) => {
   return (
     <form onSubmit={handleSubmit} className="NewTodoForm">
       <p>
-        <label htmlFor="task">Task: </label>
+        <label htmlFor="task">New Task: </label>
         <input type="text" id="task" name="task" value={formData.task} onChange={handleChange} />
       </p>
       <button type="submit">Add Todo</button>

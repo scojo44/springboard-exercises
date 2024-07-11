@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TaskEdit Tests > matches snapshot 1`] = `
+<DocumentFragment>
+  <form
+    class="TaskEdit"
+  >
+    <input
+      id="edit"
+      name="edit"
+      type="text"
+      value="Learn Svelte"
+    />
+    <button>
+      Save
+    </button>
+  </form>
+</DocumentFragment>
+`;

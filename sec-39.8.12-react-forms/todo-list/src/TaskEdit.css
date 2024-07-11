@@ -1,0 +1,6 @@
+.TaskEdit {
+  display: flex;
+}
+.TaskEdit input {
+  flex: 1;
+}

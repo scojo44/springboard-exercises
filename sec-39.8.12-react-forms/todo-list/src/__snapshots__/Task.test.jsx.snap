@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Task Tests > matches snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    Learn Docker
+  </div>
+  <div>
+    <button>
+      Edit
+    </button>
+  </div>
+  <div>
+    <button>
+      X
+    </button>
+  </div>
+</DocumentFragment>
+`;

@@ -1,6 +1,17 @@
 .Todo {
   list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: .5rem;
 }
-.Todo button {
-  margin-left: 1rem;
+.Todo div:first-child {
+  flex: 1;
+  text-align: left;
+}
+.Todo div:last-child {
+  margin-left: 3rem;
+}
+.Todo div {
+  margin: 0 1rem;
 }

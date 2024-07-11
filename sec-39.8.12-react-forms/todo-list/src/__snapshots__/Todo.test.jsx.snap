@@ -5,10 +5,19 @@ exports[`Todo Tests > matches snapshot 1`] = `
   <li
     class="Todo"
   >
-    Learn React
-    <button>
-      X
-    </button>
+    <div>
+      Learn React
+    </div>
+    <div>
+      <button>
+        Edit
+      </button>
+    </div>
+    <div>
+      <button>
+        X
+      </button>
+    </div>
   </li>
 </DocumentFragment>
 `;

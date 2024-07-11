@@ -3,30 +3,24 @@ import Todo from './Todo';
 
 describe('Todo Tests', () => {
   it('renders without crashing', () => {
-    render(<Todo id={1} task="Learn React" removeMe={x => true} />);
+    render(<Todo id={1} task="Learn React" />);
   });
 
   it('matches snapshot', () => {
-    const {asFragment} = render(<Todo id={1} task="Learn React" removeMe={x => true} />);
+    const {asFragment} = render(<Todo id={1} task="Learn React" />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('shows a task with a remove button', () => {
-    const {getByText} = render(<Todo id={1} task="Learn React" removeMe={x => true} />);
+  it('shows a task', () => {
+    const {getByText} = render(<Todo id={1} task="Learn React" remove={x => x} update={x => x} />);
     const task = getByText('Learn React');
-    const button = getByText('X');
-
     expect(task).toBeInTheDocument();
-    expect(button).toBeInTheDocument();
   });
 
-  it('should call the passed remove function', () => {
-    const remove = vitest.fn();
-    const {getByText} = render(<Todo id={1} task="Learn React" removeMe={remove} />);
-    const button = getByText('X');
+  it('shows a task in editing mode', () => {
+    const {getByText} = render(<Todo id={1} task="Learn React" editing={true} />);
+    const button = getByText('Save');
 
     expect(button).toBeInTheDocument();
-    fireEvent.click(button);
-    expect(remove).toHaveBeenCalled();
   });
 });

@@ -12,7 +12,7 @@ exports[`TodoList Tests > matches snapshot 1`] = `
         <label
           for="task"
         >
-          Task: 
+          New Task: 
         </label>
         <input
           id="task"

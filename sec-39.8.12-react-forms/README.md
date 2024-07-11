@@ -8,11 +8,11 @@ React Forms Exercises
 
 ## Todo App Further Study Items
 
-- [ ] Ability to edit todos
+- [x] Ability to edit todos
 - [ ] Mark as Complete button
 - [ ] Convert the Mark as Complete button to a toggle
 - [ ] Style the app with fancy CSS
-- [ ] Save/Load todos to/from localStorage
+- [ ] Store todos in localStorage
 
 ## React + Vite
 
