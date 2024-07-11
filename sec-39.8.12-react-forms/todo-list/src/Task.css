@@ -1,4 +1,4 @@
-.Task.done {
+.Task .done {
   text-decoration: line-through;
   color: gray;
 }

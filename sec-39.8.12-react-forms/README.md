@@ -10,7 +10,7 @@ React Forms Exercises
 
 - [x] Ability to edit todos
 - [x] Mark as Complete button
-- [ ] Convert the Mark as Complete button to a toggle
+- [x] Convert the Mark as Complete button to a toggle
 - [ ] Style the app with fancy CSS
 - [ ] Store todos in localStorage
 

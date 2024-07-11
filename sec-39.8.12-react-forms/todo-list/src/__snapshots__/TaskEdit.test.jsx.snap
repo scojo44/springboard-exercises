@@ -5,12 +5,14 @@ exports[`TaskEdit Tests > matches snapshot 1`] = `
   <form
     class="TaskEdit"
   >
-    <input
-      id="edit"
-      name="edit"
-      type="text"
-      value="Learn Svelte"
-    />
+    <div>
+      <input
+        id="edit"
+        name="edit"
+        type="text"
+        value="Learn Svelte"
+      />
+    </div>
     <button>
       Save
     </button>

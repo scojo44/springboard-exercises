@@ -37,6 +37,26 @@ describe('TodoList - Add/Remove Todo Tests', () => {
     expect(todo).toHaveTextContent('Learn TypeScript');
   })
 
+  it('should make it through the toggle process', () => {
+    const {getByText, getByLabelText} = createTodo();
+    const label = getByText('Learn TypeScript');
+    const checkbox = getByLabelText('Learn TypeScript');
+
+    // New task should not be marked as done
+    expect(checkbox).not.toBeChecked();
+    expect(label).not.toHaveClass('done');
+
+    // Check the box to mark as completed
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
+    expect(label).toHaveClass('done');
+
+    // Check the box again to unmark as completed
+    fireEvent.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+    expect(label).not.toHaveClass('done');
+  });
+
   it('should make it through the task edit process', () => {
     const {container, getByText, queryByText, getByDisplayValue} = createTodo();
     const editButton = getByText('Edit');

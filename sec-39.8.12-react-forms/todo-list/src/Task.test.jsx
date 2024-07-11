@@ -22,6 +22,16 @@ describe('Task Tests', () => {
     expect(removeButton).toBeInTheDocument();
   });
 
+  it('should call the passed update function when the checkbox is clicked', () => {
+    const update = vitest.fn();
+    const {getByLabelText} = render(<Task id={1} task="Learn Docker" update={update} completed={false} />);
+    const checkbox = getByLabelText('Learn Docker');
+
+    expect(checkbox).toBeInTheDocument();
+    fireEvent.click(checkbox);
+    expect(update).toHaveBeenCalledWith(1, "Learn Docker", true);
+  });
+
   it('should call the passed update function when Edit is clicked', () => {
     const update = vitest.fn();
     const {getByText} = render(<Task id={1} task="Learn Docker" update={update} completed={false} />);

@@ -5,19 +5,17 @@ exports[`NewTodoForm Tests > matches snapshot 1`] = `
   <form
     class="NewTodoForm"
   >
-    <p>
-      <label
-        for="task"
-      >
-        New Task: 
-      </label>
-      <input
-        id="task"
-        name="task"
-        type="text"
-        value=""
-      />
-    </p>
+    <label
+      for="task"
+    >
+      New Task: 
+    </label>
+    <input
+      id="task"
+      name="task"
+      type="text"
+      value=""
+    />
     <button
       type="submit"
     >

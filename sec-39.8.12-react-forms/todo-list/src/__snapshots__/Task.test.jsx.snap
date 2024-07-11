@@ -2,8 +2,19 @@
 
 exports[`Task Tests > matches snapshot 1`] = `
 <DocumentFragment>
-  <div>
-    Learn Docker
+  <div
+    class="Task"
+  >
+    <input
+      id="toggle-1"
+      type="checkbox"
+    />
+    <label
+      class=""
+      for="toggle-1"
+    >
+      Learn Docker
+    </label>
   </div>
   <div>
     <button>

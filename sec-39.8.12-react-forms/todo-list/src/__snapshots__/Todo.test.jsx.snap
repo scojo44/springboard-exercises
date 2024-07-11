@@ -5,8 +5,19 @@ exports[`Todo Tests > matches snapshot 1`] = `
   <li
     class="Todo"
   >
-    <div>
-      Learn React
+    <div
+      class="Task"
+    >
+      <input
+        id="toggle-1"
+        type="checkbox"
+      />
+      <label
+        class=""
+        for="toggle-1"
+      >
+        Learn React
+      </label>
     </div>
     <div>
       <button>

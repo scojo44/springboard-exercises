@@ -13,17 +13,19 @@ function Task({id, task, remove, update, completed }) {
   }
 
   /** Mark the task as completed */
-  function doneClicked(e) {
-    update(id, task, true);
+  function doneChanged(e) {
+    update(id, task, e.target.checked);
   }
 
-  const cssClass = 'Task' + (completed? ' done' : '');
+  const checkboxID = "toggle-" + id;
 
   return (
     <>
-      <div className={cssClass}>{task}</div>
+      <div className="Task">
+        <input type="checkbox" id={checkboxID} checked={completed} onChange={doneChanged} />
+        <label htmlFor={checkboxID} className={completed? ' done' : ''}>{task}</label>
+      </div>
       <div><button onClick={editClicked}>Edit</button></div>
-      <div><button onClick={doneClicked} disabled={completed}>Mark as Completed</button></div>
       <div><button onClick={removeClicked}>X</button></div>
     </>
   )
