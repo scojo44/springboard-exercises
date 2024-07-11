@@ -4,6 +4,7 @@ import './TaskEdit.css'
 function TaskEdit({id, task, update, completed}) {
   /** Send the updated task to the parent */
   function handleSubmit(e) {
+    e.preventDefault();
     update(id, newTask, completed, false);
     setNewTask(() => '');
   }
@@ -17,7 +18,7 @@ function TaskEdit({id, task, update, completed}) {
   return (
     <form onSubmit={handleSubmit} className='TaskEdit'>
       <div><input type="text" name="edit" id="edit" value={newTask} onChange={handleChange} /></div>
-      <button>Save</button>
+      <button type="submit">Save</button>
     </form>
   )
 }

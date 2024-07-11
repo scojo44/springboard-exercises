@@ -4,23 +4,22 @@ import Todo from './Todo'
 import NewTodoForm from './NewTodoForm'
 import './TodoList.css'
 
-const TASKS_STORAGE_KEY = '39.8.12 Task List'
+export const TASKS_STORAGE_KEY = '39.8.12 Task List'
 
 function TodoList() {
-  function saveTasks(updatedTasks) {
+  function saveTasks([...updatedTasks]) {
     localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(updatedTasks));
+    setTasks(() => updatedTasks);
   }
 
   function addTask({task}) {
     tasks.push({id: uuid(), task, completed: false});
     saveTasks(tasks);
-    setTasks(() => [...tasks]);
   }
 
   function removeTask(id) {
     const newTasks = tasks.filter(t => t.id !== id);
     saveTasks(newTasks);
-    setTasks(() => [...newTasks]);
   }
 
   /** editing is true: Show the todo edit UI
@@ -35,9 +34,7 @@ function TodoList() {
       }
       return t;
     });
-
     saveTasks(newTasks);
-    setTasks(() => newTasks);
   }
 
   const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem(TASKS_STORAGE_KEY)) || []);

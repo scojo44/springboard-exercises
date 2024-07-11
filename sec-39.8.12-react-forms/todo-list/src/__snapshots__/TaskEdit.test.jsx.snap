@@ -13,7 +13,9 @@ exports[`TaskEdit Tests > matches snapshot 1`] = `
         value="Learn Svelte"
       />
     </div>
-    <button>
+    <button
+      type="submit"
+    >
       Save
     </button>
   </form>
