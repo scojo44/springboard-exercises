@@ -22,6 +22,16 @@ describe('Task Tests', () => {
     expect(removeButton).toBeInTheDocument();
   });
 
+  it('should call the passed update function when Edit is clicked', () => {
+    const update = vitest.fn();
+    const {getByText} = render(<Task id={1} task="Learn Docker" update={update} completed={false} />);
+    const button = getByText('Edit');
+
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(update).toHaveBeenCalledWith(1, "Learn Docker", false, true);
+  });
+
   it('should call the passed remove function when X is clicked', () => {
     const remove = vitest.fn();
     const {getByText} = render(<Task id={1} task="Learn Docker" remove={remove} />);
@@ -30,15 +40,5 @@ describe('Task Tests', () => {
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
     expect(remove).toHaveBeenCalledWith(1);
-  });
-
-  it('should call the passed update function when Edit is clicked', () => {
-    const update = vitest.fn();
-    const {getByText} = render(<Task id={1} task="Learn Docker" update={update} />);
-    const button = getByText('Edit');
-
-    expect(button).toBeInTheDocument();
-    fireEvent.click(button);
-    expect(update).toHaveBeenCalledWith(1, "Learn Docker", true);
   });
 });

@@ -14,18 +14,18 @@ describe('TodoList Tests', () => {
 
 describe('TodoList - Add/Remove Todo Tests', () => {
   function createTodo() {
-  const {container, getByText, queryByText, getByLabelText, getByDisplayValue} = render(<TodoList />);
-  const task = getByLabelText('New Task:');
-  const button = getByText('Add Todo');
-  
-  // Confirm no todos displayed
-  expect(container.querySelectorAll('.Todo').length).toBe(0);
-  
-  // Create a todo
-  fireEvent.change(task, {target: {value: 'Learn TypeScript'}});
-  fireEvent.click(button);
-  
-  return {container, getByText, queryByText, getByLabelText, getByDisplayValue};
+    const {container, getByText, queryByText, getByLabelText, getByDisplayValue} = render(<TodoList />);
+    const task = getByLabelText('New Task:');
+    const button = getByText('Add Todo');
+    
+    // Confirm no todos displayed
+    expect(container.querySelectorAll('.Todo').length).toBe(0);
+    
+    // Create a todo
+    fireEvent.change(task, {target: {value: 'Learn TypeScript'}});
+    fireEvent.click(button);
+    
+    return {container, getByText, queryByText, getByLabelText, getByDisplayValue};
   }
   
   it('creates a new todo and adds it to the list', () => {
@@ -36,8 +36,8 @@ describe('TodoList - Add/Remove Todo Tests', () => {
     expect(container.querySelector('.TodoList ul')).toContainElement(todo);
     expect(todo).toHaveTextContent('Learn TypeScript');
   })
-  
-  it('should make it through the update process', () => {
+
+  it('should make it through the task edit process', () => {
     const {container, getByText, queryByText, getByDisplayValue} = createTodo();
     const editButton = getByText('Edit');
 
@@ -59,7 +59,7 @@ describe('TodoList - Add/Remove Todo Tests', () => {
     const todo = container.querySelector('.Todo');
     expect(todo).toHaveTextContent('Learn Next.js');
   });
-  
+
   it('removes the new todo when the X button is clicked', () => {
     const {container, getByText} = createTodo();
     const removeButton = getByText('X');
