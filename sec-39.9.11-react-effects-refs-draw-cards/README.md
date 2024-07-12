@@ -7,4 +7,4 @@ React Effects and Refs Exercise
 ## Further Study Items
 
 - [x] Style the app
-- [ ] Change it so pressing the button makes the app start drawing a card every second
+- [x] Change it so pressing the button makes the app start drawing a card every second

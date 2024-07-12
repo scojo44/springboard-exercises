@@ -7,10 +7,11 @@ import './CardTable.css'
 const CARDS_API_URL = "https://deckofcardsapi.com/api/deck";
 
 function CardTable() {
-  const deck = useRef();
+  const deck = useRef(null);
+  const drawIntervalID = useRef(null);
   const [hand, setHand] = useState([]);
-  const [shuffle, setShuffle] = useState(false);
-  const [alert, setAlert] = useState(null);
+  const [shuffling, setShuffling] = useState(false);
+  const [drawing, setDrawing] = useState(false);
 
   useEffect(function getNewDeck() {
     axios.get(`${CARDS_API_URL}/new/shuffle/?deck_count=1&jokers_enabled=true`).then(res => {
@@ -21,56 +22,80 @@ function CardTable() {
     });
   }, []);
 
-  /** Shuffle the deck when the shuffle state flag is true */
-  useEffect(function shuffleDeck() {
-    if(!shuffle) return
+  useEffect(function startDrawing() {
+    if(drawing) {
+      drawIntervalID.current = setInterval(drawCard, 1000);
+    }
 
-    axios.get(`${CARDS_API_URL}/${deck.current.deck_id}/shuffle/`).then(res => {
-      deck.current = res.data;
-      setShuffle(false);
-      setAlert({})
-    })
-    .catch(e => {
-      console.error(e);
-    });
-  }, [shuffle]);
+    return function stopDrawing() {
+      clearInterval(drawIntervalID.current);
+      drawIntervalID.current = null;
+    }
+  }, [drawing]);
 
   return (
     <div className='CardTable'>
       <p>
-        <button onClick={drawClicked} disabled={deck.current.remaining === 0}>Draw</button>
-        <button onClick={shuffleClicked} disabled={hand.length === 0}>Shuffle</button>
+        <button onClick={drawClicked} disabled={deck.current?.remaining === 0}>Draw One Card</button>
+        <button onClick={drawStartStopClicked} disabled={!drawing && deck.current?.remaining === 0}>{drawing? 'Stop' : 'Start'} Drawing Cards</button>
+        <button onClick={shuffleClicked} disabled={shuffling || hand.length === 0}>Shuffle</button>
       </p>
       <ul>
         {hand.map((card, i) => <Card suit={card.suit} rank={card.value} face={card.image} index={i} key={card.code} />)}
       </ul>
-      {alert && <Alert category={alert.category} message={alert.message} />}
+      {deck.current?.remaining == 0 && <Alert category="error" message="No more cards left to draw!" />}
     </div>
   )
 
-  /** Clear the drawn cards and trigger a reshuffling of the deck */
-  function shuffleClicked(e) {
-    setHand([]);
-    setShuffle(true);
+  /** Shuffle the deck when the shuffle state flag is true */
+  async function shuffleDeck() {
+    try {
+      setShuffling(true);
+      const res = await axios.get(`${CARDS_API_URL}/${deck.current.deck_id}/shuffle/`);
+      deck.current = res.data;
+      setHand([]);
+    }
+    catch(e) {
+      console.error(e);
+    }
+    finally {
+      setShuffling(false);
+    }
   }
 
   /** Draw a card */
-  function drawClicked(e) {
+  async function drawCard() {
+    // Skip if out of cards
     if(deck.current.remaining === 0) {
-      setAlert(() => ({
-        message: 'No more cards left to draw!',
-        category: 'error'
-      }));
+      setDrawing(false);
       return
     }
+
     // Draw a new card from the deck
-    axios.get(`${CARDS_API_URL}/${deck.current.deck_id}/draw/?count=1`).then(res => {
-      setHand(() => [...hand, ...res.data.cards]);
+    try {
+      const res = await axios.get(`${CARDS_API_URL}/${deck.current.deck_id}/draw/?count=1`);
       deck.current.remaining = res.data.remaining;
-    })
-    .catch(e => {
+      setHand((hand) => [...hand, ...res.data.cards]);
+    }
+    catch(e) {
+      setDrawing(false);
       console.error(e);
-    });
+    }
+  }
+
+  /** Clear the drawn cards and trigger a reshuffling of the deck */
+  async function shuffleClicked(e) {
+    await shuffleDeck();
+  }
+
+  /** Draw a card */
+  async function drawClicked(e) {
+    await drawCard(1);
+  }
+
+  /** Start or stop drawing cards on a timer */
+  function drawStartStopClicked(e) {
+    setDrawing(() => !drawing);
   }
 }
 
