@@ -1,0 +1,11 @@
+.CardTable {
+  background-color: cornflowerblue;
+}
+.CardTable button {
+  background-color: mediumpurple;
+  color: white;
+}
+.CardTable ul {
+  position: relative;
+  height: 320px;
+}

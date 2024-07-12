@@ -1,0 +1,13 @@
+.Alert {
+  width: 80%;
+  padding: .5rem;
+  margin: 1rem auto;
+  border-radius: 1rem;
+}
+.Alert.success {
+  background-color: lightgreen;
+}
+.Alert.error {
+  background-color: white;
+  color: red;
+}

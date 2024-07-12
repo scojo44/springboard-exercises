@@ -1,7 +1,7 @@
 React Effects and Refs Exercise
 ===============================
 
-- [ ] Part 1: Click to Draw
+- [x] Part 1: Click to Draw
 - [ ] Part 2: Shuffle The Deck
 
 ## Further Study Items
