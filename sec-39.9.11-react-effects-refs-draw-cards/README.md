@@ -2,9 +2,9 @@ React Effects and Refs Exercise
 ===============================
 
 - [x] Part 1: Click to Draw
-- [ ] Part 2: Shuffle The Deck
+- [x] Part 2: Shuffle The Deck
 
 ## Further Study Items
 
-- [ ] Style the app
+- [x] Style the app
 - [ ] Change it so pressing the button makes the app start drawing a card every second
