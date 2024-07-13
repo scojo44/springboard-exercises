@@ -54,6 +54,7 @@ function CardTable() {
       const res = await axios.get(`${CARDS_API_URL}/${deck.current.deck_id}/shuffle/`);
       deck.current = res.data;
       setHand([]);
+      setDrawing(false);
     }
     catch(e) {
       console.error(e);
