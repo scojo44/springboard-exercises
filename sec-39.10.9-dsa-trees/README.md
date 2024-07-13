@@ -1,7 +1,7 @@
 DSA Trees Exercises
 ===================
 
-- [ ] Trees
+- [x] Trees
 - [ ] Binary Trees
 
 ## Further Study Items
