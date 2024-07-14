@@ -78,3 +78,51 @@ describe("numGreater", function() {
     expect(emptyTree.numGreater(0)).toEqual(0);
   });
 });
+
+describe("Recursive sumValues", function() {
+  it("sums simple trees", function() {
+    expect(smallTree.sumValuesR()).toEqual(3);
+  });
+
+  it("sums more complicated trees", function() {
+    expect(largeTree.sumValuesR()).toEqual(36);
+  });
+
+  it("sums up an empty tree", function() {
+    expect(emptyTree.sumValuesR()).toEqual(0);
+  });
+});
+
+describe("Recursive countEvens", function() {
+  it("counts nodes in simple trees", function() {
+    expect(smallTree.countEvensR()).toEqual(1);
+  });
+
+  it("counts Treenodes in more complicated trees", function() {
+    expect(largeTree.countEvensR()).toEqual(4);
+  });
+
+  it("counts empty", function() {
+    expect(emptyTree.countEvensR()).toEqual(0);
+  });
+});
+
+describe("Recursive numGreater", function() {
+  it("counts nodes in small trees", function() {
+    expect(smallTree.numGreaterR(0)).toEqual(2);
+    expect(smallTree.numGreaterR(1)).toEqual(1);
+    expect(smallTree.numGreaterR(2)).toEqual(0);
+    expect(smallTree.numGreaterR(3)).toEqual(0);
+  });
+
+  it("counts nodes in larger trees", function() {
+    expect(largeTree.numGreaterR(0)).toEqual(8);
+    expect(largeTree.numGreaterR(4)).toEqual(4);
+    expect(largeTree.numGreaterR(8)).toEqual(0);
+  });
+
+  it("counts nodes in an empty  tree", function() {
+    expect(emptyTree.numGreaterR(0)).toEqual(0);
+  });
+});
+

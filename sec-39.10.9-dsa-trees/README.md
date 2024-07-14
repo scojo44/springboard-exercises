@@ -17,4 +17,4 @@ DSA Trees Exercises
 
 ## Other Items
 
-- [ ] Make recursive versions of the tree methods
+- [x] Make recursive versions of the tree methods
