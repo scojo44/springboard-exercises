@@ -2,7 +2,7 @@ DSA Trees Exercises
 ===================
 
 - [x] Trees
-- [ ] Binary Trees
+- [x] Binary Trees
 
 ## Further Study Items
 
@@ -17,4 +17,4 @@ DSA Trees Exercises
 
 ## Other Items
 
-- [ ] Make recursive versions
+- [ ] Make recursive versions of the tree methods
