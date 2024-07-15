@@ -1,34 +1,32 @@
-import React, { useState } from "react";
-import {v1 as uuid} from "uuid";
-import axios from "axios";
+import React from "react";
+import useAxios from './hooks/useAxios';
 import PlayingCard from "./PlayingCard";
 import "./PlayingCardList.css";
 
 /* Renders a list of playing cards.
  * Can also add a new card at random. */
 function CardTable() {
-  const [cards, setCards] = useState([]);
-  const addCard = async () => {
-    const response = await axios.get(
-      "https://deckofcardsapi.com/api/deck/new/draw/"
-    );
-    setCards(cards => [...cards, { ...response.data, id: uuid() }]);
-  };
+  let [cards, error, drawCard, isLoading] = useAxios("https://deckofcardsapi.com/api/deck/new/draw/");
+
+  function handleClick() {
+    if(!isLoading) drawCard();
+  }
+
   return (
     <div className="PlayingCardList">
       <h3>Pick a card, any card!</h3>
       <div>
-        <button onClick={addCard}>Add a playing card!</button>
+        <button onClick={handleClick}>Add a playing card!</button>
       </div>
       <div className="PlayingCardList-card-area">
-        {cards.map(cardData => (
-          <PlayingCard key={cardData.id} front={cardData.cards[0].image} />
+        {cards.map(card => (
+          <PlayingCard key={card.id} front={card.cards[0].image} />
         ))}
+        {isLoading && <PlayingCard key="LoadingCard" faceUp={false} />}
       </div>
+      {error && <p>{error.name}: {error.message}</p>}
     </div>
   );
 }
-
-CardTable.defaultProps = {};
 
 export default CardTable;
