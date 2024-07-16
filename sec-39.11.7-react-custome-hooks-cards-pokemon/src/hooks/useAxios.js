@@ -13,14 +13,17 @@ const useAxios = (apiURL) => {
       // Add a slash before path if the base API URL disn't end with one
      return apiURL.endsWith('/')? path : '/' + path;
     });
-    setIsLoading(loading => true);
+    setIsLoading(loading => true); // Trigger API call effect
+  }
+
+  function clearCards() {
+    setCards(cards => []);
   }
 
   useEffect(() => {
     async function getCard() {
       try {
         const res = await axios.get(apiURL + apiPath);
-        console.log('===== fripperies ====', res.data);
         setCards(cards => [...cards, { ...res.data, id: uuid() }]);
         setError(e => null);
       }
@@ -35,7 +38,7 @@ const useAxios = (apiURL) => {
     if(isLoading) getCard(); // Setting isLoading to true triggers the API request
   }, [isLoading]);
 
-  return [cards, error, drawCard, isLoading];
+  return [cards, error, drawCard, clearCards, isLoading];
 }
 
 export default useAxios;
