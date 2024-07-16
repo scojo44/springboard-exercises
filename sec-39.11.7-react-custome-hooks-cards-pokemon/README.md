@@ -2,9 +2,9 @@ React Custom Hooks Cards/Pokemon
 ================================
 
 - [x] Step One: Read the Code
-- [ ] Step Two: useFlip
-- [ ] Step Three: useAxios in PlayingCardList
-- [ ] Step Four: useAxios in PokeDex
+- [x] Step Two: useFlip
+- [x] Step Three: useAxios in PlayingCardList
+- [x] Step Four: useAxios in PokeDex
 
 ## Further Study Items
 
