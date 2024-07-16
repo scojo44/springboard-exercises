@@ -9,8 +9,8 @@ React Custom Hooks Cards/Pokemon
 ## Further Study Items
 
 - [x] Removing response data
-- [ ] Minimizing state
-- [ ] useLocalStorage hook
+- [x] Minimizing state
+- [x] useLocalStorage hook
 
 ## Other Items
 

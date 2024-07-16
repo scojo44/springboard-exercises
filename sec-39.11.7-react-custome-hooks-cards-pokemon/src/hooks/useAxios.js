@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {v4 as uuid} from "uuid";
+import useLocalStorageState from "./useLocalStorageState";
 
-const useAxios = (apiURL, formatData) => {
-  const [cards, setCards] = useState([]);
+const useAxios = (storageKey, apiURL, formatData = x => x) => {
+  const [cards, setCards] = useLocalStorageState(storageKey);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiPath, setApiPath] = useState('');
