@@ -1,12 +1,12 @@
 .PokemonCard {
+  display: inline-block;
   background-color: #ffcb05;
   border-radius: 8px;
   border: 5px solid #3d7dca;
   box-sizing: border-box;
   color: #003a70;
-  width: 40%;
-  display: inline-block;
-  height: 106px;
+  width: 14rem;
+  height: 7lh;
 }
 
 .PokemonCard img {

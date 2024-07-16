@@ -2,19 +2,24 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {v4 as uuid} from "uuid";
 
-const useAxios = (url) => {
+const useAxios = (apiURL) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiPath, setApiPath] = useState('');
 
-  function drawCard() {
+  function drawCard(path = '') {
+    setApiPath(() => {
+      // Add a slash before path if the base API URL disn't end with one
+     return apiURL.endsWith('/')? path : '/' + path;
+    });
     setIsLoading(loading => true);
   }
 
   useEffect(() => {
     async function getCard() {
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(apiURL + apiPath);
         console.log('===== fripperies ====', res.data);
         setCards(cards => [...cards, { ...res.data, id: uuid() }]);
         setError(e => null);
