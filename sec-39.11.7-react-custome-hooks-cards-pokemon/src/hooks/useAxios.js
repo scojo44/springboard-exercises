@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {v4 as uuid} from "uuid";
 
-const useAxios = (apiURL) => {
+const useAxios = (apiURL, formatData) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,12 @@ const useAxios = (apiURL) => {
     async function getCard() {
       try {
         const res = await axios.get(apiURL + apiPath);
-        setCards(cards => [...cards, { ...res.data, id: uuid() }]);
+        const formattedCard = formatData? formatData(res.data) : res.data;
+
+        setCards(cards => [...cards, {
+          ...formattedCard,
+          id: uuid()
+        }]);
         setError(e => null);
       }
       catch(error) {
