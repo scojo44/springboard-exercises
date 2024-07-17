@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {v4 as uuid} from "uuid";
 import useLocalStorageState from "./useLocalStorageState";
@@ -31,7 +31,6 @@ const useAxios = (storageKey, apiURL, formatData = x => x) => {
           ...formattedCard,
           id: uuid()
         }]);
-        setError(e => null);
       }
       catch(error) {
         setError(e => ({...error}));
@@ -42,7 +41,7 @@ const useAxios = (storageKey, apiURL, formatData = x => x) => {
     }
 
     if(isLoading) getCard(); // Setting isLoading to true triggers the API request
-  }, [isLoading]);
+  }, [isLoading, apiURL, apiPath, formatData, setCards]);
 
   return [cards, error, drawCard, clearCards, isLoading];
 }
