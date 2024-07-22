@@ -3,7 +3,7 @@ React Router Vending Machine
 
 ## Further Study
 
-- [ ] Site-wide Navigation Bar
+- [x] Site-wide Navigation Bar
 
 # React + Vite
 

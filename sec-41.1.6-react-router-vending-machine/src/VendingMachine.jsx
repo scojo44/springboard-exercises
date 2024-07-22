@@ -1,6 +1,7 @@
 import React from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './Home'
+import NavBar from './NavBar'
 import PibbXtra from './drinks/PibbXtra'
 import DrPepper from './drinks/DrPepper'
 import RCCola from './drinks/RCCola'
@@ -14,8 +15,9 @@ import './VendingMachine.css'
 function VendingMachine() {
   return (
     <div className="VendingMachine">
-      <h1>React Router Vending Machine</h1>
       <BrowserRouter>
+        <NavBar />
+        <h1>React Router Vending Machine</h1>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pibbxtra" element={<PibbXtra />} />

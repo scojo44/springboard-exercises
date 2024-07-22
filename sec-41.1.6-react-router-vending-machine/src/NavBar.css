@@ -1,0 +1,16 @@
+.NavBar {
+  list-style-type: none;
+  background-color: rgba(0,0,0,60%);
+}
+.NavBar li {
+  display: inline-block;
+  margin: .5rem;
+}
+.NavBar .active img {
+  transform: scale(1.2);
+  transition: transform .2s ease-in-out;
+}
+.NavBar img {
+  height: 10vh;
+  max-height: 100px;
+}
