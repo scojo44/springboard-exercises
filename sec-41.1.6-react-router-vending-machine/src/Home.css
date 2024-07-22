@@ -1,0 +1,11 @@
+.Home {
+  list-style-type: none;
+}
+.Home li {
+  display: inline-block;
+  margin: .5rem;
+}
+.Home img {
+  width: 20vw;
+  max-width: 250px;
+}
