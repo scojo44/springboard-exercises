@@ -1,0 +1,11 @@
+.DogList {
+  text-align: center;
+}
+.DogList li {
+  display: inline-block;
+  list-style-type: none;
+  width: 10rem;
+}
+.DogList img {
+  width: 5rem;
+}

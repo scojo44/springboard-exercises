@@ -1,18 +1,23 @@
 React Router Patterns
 =====================
 
-- [ ] Dog Finder
+Built with React Router 6
+- `<Routes>` instead of `<Switch>`
+- `<Route path='/' element={<Home>}>` instead of `<Route path='/component'><Component/></Route>`
+- `<Navigate>` instead of `<Redirect>`
+
+- [x] Dog Finder
 - [ ] Color Factory
 
 ## Further Study Items
 
-- [ ] Write Tests
-  - [ ] Dog Finder
-  - [ ] Color Factory
-- [ ] Save colors to localStorage
-- [ ] Style the apps
-  - [ ] Dog Finder
-  - [ ] Color Factory
+- [ ] Dog Finder
+  - [ ] Write Tests
+  - [x] Style the apps
+- [ ] Color Factory
+  - [ ] Save colors to localStorage
+  - [ ] Write Tests
+  - [ ] Style the apps
 - [ ] React Router Calculator
   - [ ] Bonus: Do with one math component
 

@@ -1,0 +1,17 @@
+.NavBar {
+  display: flex;
+  background-color: darkblue;
+  padding: .5rem 0;
+}
+.NavBar a,
+.NavBar a:visited,
+.NavBar a:link {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0 1rem;
+}
+.NavBar div {
+  text-align: right;
+  flex: 1;
+}

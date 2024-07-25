@@ -1,0 +1,11 @@
+.DogDetails {
+  display: flex;
+}
+.DogDetails img {
+  margin-right: 1.5rem;
+  max-width: 640px;
+  width: 50vw;
+}
+.DogDetails info {
+  flex: 1;
+}
