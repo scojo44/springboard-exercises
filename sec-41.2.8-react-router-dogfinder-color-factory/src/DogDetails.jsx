@@ -17,7 +17,7 @@ const DogDetails = ({dogs}) => {
         <p>Age: {dog.age}</p>
         <fieldset>
           <legend>Fun Facts</legend>
-          <ul>{dog.facts.map(fact => <li>{fact}</li>)}</ul>
+          <ul>{dog.facts.map((fact,i) => <li key={i}>{fact}</li>)}</ul>
         </fieldset>
       </div>
     </section>
