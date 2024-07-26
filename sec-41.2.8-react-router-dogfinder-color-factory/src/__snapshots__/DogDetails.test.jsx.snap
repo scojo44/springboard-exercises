@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DogDetails Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <section
+    class="DogDetails"
+  >
+    <div>
+      <img
+        alt="Photo of Duke"
+        src="/duke.jpg"
+      />
+    </div>
+    <div
+      class="info"
+    >
+      <h1>
+        Duke
+      </h1>
+      <p>
+        Age: 3
+      </p>
+      <fieldset>
+        <legend>
+          Fun Facts
+        </legend>
+        <ul>
+          <li>
+            Duke believes that ball is life.
+          </li>
+          <li>
+            Duke likes snow.
+          </li>
+          <li>
+            Duke enjoys pawing other dogs.
+          </li>
+        </ul>
+      </fieldset>
+    </div>
+  </section>
+</DocumentFragment>
+`;

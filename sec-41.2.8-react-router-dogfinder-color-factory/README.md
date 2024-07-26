@@ -11,8 +11,8 @@ Built with React Router 6
 
 ## Further Study Items
 
-- [ ] Dog Finder
-  - [ ] Write Tests
+- [x] Dog Finder
+  - [x] Write Tests
   - [x] Style the apps
 - [ ] Color Factory
   - [ ] Save colors to localStorage

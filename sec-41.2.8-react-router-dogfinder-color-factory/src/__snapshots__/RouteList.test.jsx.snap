@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RouteList Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="DogList"
+  >
+    <h1>
+      All Dogs
+    </h1>
+    <ul>
+      <li>
+        <a
+          href="/dogs/whiskey"
+        >
+          <img
+            alt="Photo of Whiskey"
+            src="whiskey.jpg"
+          />
+        </a>
+        <br />
+        Whiskey
+      </li>
+      <li>
+        <a
+          href="/dogs/duke"
+        >
+          <img
+            alt="Photo of Duke"
+            src="duke.jpg"
+          />
+        </a>
+        <br />
+        Duke
+      </li>
+      <li>
+        <a
+          href="/dogs/perry"
+        >
+          <img
+            alt="Photo of Perry"
+            src="perry.jpg"
+          />
+        </a>
+        <br />
+        Perry
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;

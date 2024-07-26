@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavBar Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <nav
+    class="NavBar"
+  >
+    <a
+      class=""
+      href="/dogs"
+    >
+      Dog Finder
+    </a>
+    <div>
+      <a
+        class=""
+        href="/dogs/whiskey"
+      >
+        Whiskey
+      </a>
+      <a
+        class=""
+        href="/dogs/duke"
+      >
+        Duke
+      </a>
+      <a
+        class=""
+        href="/dogs/perry"
+      >
+        Perry
+      </a>
+    </div>
+  </nav>
+</DocumentFragment>
+`;
