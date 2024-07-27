@@ -13,11 +13,11 @@ Built with React Router 6
 
 - [x] Dog Finder
   - [x] Write Tests
-  - [x] Style the apps
+  - [x] Style the app
 - [ ] Color Factory
-  - [ ] Save colors to localStorage
+  - [x] Save colors to localStorage
   - [ ] Write Tests
-  - [ ] Style the apps
+  - [ ] Style the app
 - [ ] React Router Calculator
   - [ ] Bonus: Do with one math component
 

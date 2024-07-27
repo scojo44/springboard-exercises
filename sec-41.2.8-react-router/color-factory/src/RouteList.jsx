@@ -1,11 +1,12 @@
-import React, {useState} from "react"
+import React from "react"
 import {Routes, Route, Navigate} from 'react-router-dom'
+import useLocalStorageState from "./hooks/useLocalStorageState"
 import ColorList from "./ColorList"
 import Color from "./Color"
 import NewColorForm from "./NewColorForm"
 
 function RouteList() {
-  const [colors, setColors] = useState([]);
+  const [colors, setColors] = useLocalStorageState('41.2.8-ColorFactory', []);
 
   return (
     <Routes>
