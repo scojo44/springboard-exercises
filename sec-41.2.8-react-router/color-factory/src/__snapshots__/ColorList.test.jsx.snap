@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ColorList Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="ColorList"
+  >
+    <p>
+      <a
+        href="/new"
+      >
+        Add a new color
+      </a>
+    </p>
+    <menu>
+      <li>
+        <a
+          href="/purple"
+        >
+          purple
+        </a>
+      </li>
+    </menu>
+  </div>
+</DocumentFragment>
+`;

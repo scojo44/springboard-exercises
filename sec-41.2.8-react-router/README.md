@@ -16,7 +16,7 @@ Built with React Router 6
   - [x] Style the app
 - [ ] Color Factory
   - [x] Save colors to localStorage
-  - [ ] Write Tests
+  - [x] Write Tests
   - [ ] Style the app
 - [ ] React Router Calculator
   - [ ] Bonus: Do with one math component

@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`App Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <h1>
+    Color Factory
+  </h1>
+  <div
+    class="ColorList"
+  >
+    <p>
+      <a
+        href="/colors/new"
+      >
+        Add a new color
+      </a>
+    </p>
+    <menu />
+  </div>
+  <p>
+    <a
+      href="/colors"
+    >
+      Home
+    </a>
+  </p>
+</DocumentFragment>
+`;

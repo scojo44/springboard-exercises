@@ -1,6 +1,5 @@
 import {render} from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import RouteList from './RouteList'
 import DogDetails from './DogDetails'
 import {dogs} from './dogs.json'
 

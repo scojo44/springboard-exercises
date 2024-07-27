@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NewColorForm Tests > Matches snapshot 1`] = `
+<DocumentFragment>
+  <form
+    class="NewColorForm"
+  >
+    <p>
+      <label
+        for="name"
+      >
+        Color Name: 
+      </label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        value=""
+      />
+    </p>
+    <p>
+      <label
+        for="value"
+      >
+        Color Value: 
+      </label>
+      <input
+        id="value"
+        name="value"
+        type="color"
+        value=""
+      />
+    </p>
+    <p>
+      <button
+        type="submit"
+      >
+        Add Color
+      </button>
+    </p>
+  </form>
+</DocumentFragment>
+`;
