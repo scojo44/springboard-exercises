@@ -18,8 +18,8 @@ Built with React Router 6
   - [x] Save colors to localStorage
   - [x] Write Tests
   - [x] Style the app
-- [ ] React Router Calculator
-  - [ ] Bonus: Do with one math component
+- [x] React Router Calculator
+  - [x] Bonus: Do with one math component
 
 ## React + Vite
 
