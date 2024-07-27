@@ -7,7 +7,7 @@ Built with React Router 6
 - `<Navigate>` instead of `<Redirect>`
 
 - [x] Dog Finder
-- [ ] Color Factory
+- [x] Color Factory
 
 ## Further Study Items
 
