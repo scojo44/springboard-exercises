@@ -1,0 +1,16 @@
+.NewColorForm {
+  margin: 1rem;
+}
+.NewColorForm input {
+  color: white;
+  background-color: #444;
+  border: 3px inset #444;
+}
+.NewColorForm button {
+  color: white;
+  background-color: #444;
+  font-weight: bold;
+  padding: .3rem .5rem;
+  border: 3px outset #444;
+  border-radius: .5rem;
+}

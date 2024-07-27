@@ -1,5 +1,6 @@
 import React from "react"
 import {useParams, Navigate} from 'react-router-dom'
+import './Color.css'
 
 function ColorList({colors}) {
   const color = colors.find(c => c.name === useParams().color);
@@ -7,9 +8,9 @@ function ColorList({colors}) {
   if(!color) return <Navigate to="/colors" />;
 
   return (
-    <p className="Color" style={{backgroundColor: color.value}}>
+    <h2 className="Color" style={{backgroundColor: color.value}}>
       {color.name}
-    </p>
+    </h2>
   );
 }
 

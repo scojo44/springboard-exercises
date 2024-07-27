@@ -4,9 +4,8 @@ import RouteList from './RouteList'
 
 const App = () => (
   <>
-    <h1>Color Factory</h1>
+    <h1><Link to="/colors">Color Factory</Link></h1>
     <RouteList />
-    <p><Link to="/colors">Home</Link></p>
   </>
 );
 

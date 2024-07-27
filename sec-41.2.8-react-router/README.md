@@ -14,10 +14,10 @@ Built with React Router 6
 - [x] Dog Finder
   - [x] Write Tests
   - [x] Style the app
-- [ ] Color Factory
+- [x] Color Factory
   - [x] Save colors to localStorage
   - [x] Write Tests
-  - [ ] Style the app
+  - [x] Style the app
 - [ ] React Router Calculator
   - [ ] Bonus: Do with one math component
 
