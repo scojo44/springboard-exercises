@@ -7,6 +7,7 @@ import "./JokeList.css";
 
 function JokeList({numJokesToGet = 5}) {
   const [jokes, error, getJokes, updatedJokes, isLoading] = useJokesAPI(numJokesToGet);
+  const disableNewJokes = jokes.length === jokes.filter(j => j.locked).length;
 
   return (
     isLoading
@@ -14,13 +15,19 @@ function JokeList({numJokesToGet = 5}) {
          <i className="fas fa-4x fa-spinner fa-spin" />
       </div>
     : <div className="JokeList">
-        <button className="JokeList-getmore" onClick={getJokes}>Get New Jokes</button>
+        <button className="JokeList-getmore" onClick={getJokes} disabled={disableNewJokes}>Get New Jokes</button>
         {error && <p className="JokeList-error">{error}</p>}
         {jokes.map(j => 
-          <Joke text={j.joke} key={j.id} id={j.id} votes={j.votes} vote={vote} resetVotes={resetVotes} />
+          <Joke joke={j} key={j.id} vote={vote} resetVotes={resetVotes} toggleLock={toggleLock} />
         )}
       </div>
   );
+
+  function toggleLock(id) {
+    updatedJokes(jokes.map(j =>
+      j.id === id? {...j, locked: !j.locked} : j
+    ));
+  }
 
   function vote(id, delta) {
     updatedJokes(jokes.map(j =>

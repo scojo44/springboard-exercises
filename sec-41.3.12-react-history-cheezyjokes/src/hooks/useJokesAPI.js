@@ -5,10 +5,10 @@ import useLocalStorageState from './useLocalStorageState'
 const useJokesAPI = (jokeCount = 1, trimData = x => x) => {
   const [jokes, setJokes] = useLocalStorageState('41.3.12-Jokes');
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Don't load jokes at startup
 
   function getJokes() {
-    setJokes(() => []);
+    setJokes(jokes => jokes.filter(j => j.locked)); // Clear unlocked jokes
     setIsLoading(() => true); // Trigger API call effect
   }
 
@@ -19,10 +19,10 @@ const useJokesAPI = (jokeCount = 1, trimData = x => x) => {
   useEffect(() => {
     async function callJokesAPI() {
       // Load jokes one at a time, adding not-yet-seen jokes
-      let jokes = [];
-      let seenJokes = new Set();
+      const newJokes = [];
+      const seenJokes = new Set(jokes.map(j => j.id)); // Add locked jokes to duplicate checker
 
-      while (jokes.length < jokeCount) {
+      while (newJokes.length + jokes.length < jokeCount) {
         try {
           const res = await axios.get("https://icanhazdadjoke.com", {
             headers: { Accept: "application/json" }
@@ -31,7 +31,12 @@ const useJokesAPI = (jokeCount = 1, trimData = x => x) => {
 
           if(!seenJokes.has(joke.id)) {
             seenJokes.add(joke.id);
-            jokes.push({...joke, votes: 0});
+            newJokes.push({
+              id: joke.id,
+              text: joke.joke, // Change the key for the joke itself
+              votes: 0,
+              locked: false
+            });
           } else {
             console.log("duplicate found!", joke.id, joke.joke);
           }
@@ -41,7 +46,7 @@ const useJokesAPI = (jokeCount = 1, trimData = x => x) => {
         }
       }
 
-      setJokes(() => [...jokes]);
+      setJokes(() => [...jokes, ...newJokes]);
       setError(() => null);
       setIsLoading(() => false);
     }
