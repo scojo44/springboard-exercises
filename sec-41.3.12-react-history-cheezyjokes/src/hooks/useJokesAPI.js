@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import useLocalStorageState from './useLocalStorageState'
 
 const useJokesAPI = (jokeCount = 1, trimData = x => x) => {
-  const [jokes, setJokes] = useState();
+  const [jokes, setJokes] = useLocalStorageState('41.3.12-Jokes');
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   function getJokes() {
     setJokes(() => []);
