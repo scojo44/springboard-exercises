@@ -17,7 +17,7 @@ function JokeList({numJokesToGet = 5}) {
         <button className="JokeList-getmore" onClick={getJokes}>Get New Jokes</button>
         {error && <p className="JokeList-error">{error}</p>}
         {jokes.map(j => 
-          <Joke text={j.joke} key={j.id} id={j.id} votes={j.votes} vote={vote} />
+          <Joke text={j.joke} key={j.id} id={j.id} votes={j.votes} vote={vote} resetVotes={resetVotes} />
         )}
       </div>
   );
@@ -25,6 +25,12 @@ function JokeList({numJokesToGet = 5}) {
   function vote(id, delta) {
     updatedJokes(jokes.map(j =>
       j.id === id? {...j, votes: j.votes + delta} : j
+    ));
+  }
+
+  function resetVotes(id) {
+    updatedJokes(jokes.map(j =>
+      j.id === id? {...j, votes: 0} : j
     ));
   }
 }

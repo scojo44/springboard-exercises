@@ -4,7 +4,7 @@ React History - CheeZJokes
 ## Further Study
 
 - [x] Store jokes and votes in localStorage
-- [ ] Button to reset vote counts
+- [x] Button to reset vote counts
 - [ ] Lock button to keep jokes after requesting new jokes
 
 ## Other Items

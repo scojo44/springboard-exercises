@@ -3,7 +3,7 @@ import "./Joke.css";
 
 /** A single joke, along with vote up/down buttons. */
 
-function Joke({id, vote, votes, text}) {
+function Joke({id, votes, vote, resetVotes, text}) {
   return (
     <div className="Joke">
       <div className="Joke-votearea">
@@ -13,6 +13,10 @@ function Joke({id, vote, votes, text}) {
 
         <button onClick={evt => vote(id, -1)}>
           <i className="fas fa-thumbs-down" />
+        </button>
+
+        <button onClick={evt => resetVotes(id)}>
+          <i className="fas fa-broom" />
         </button>
 
         {votes}
